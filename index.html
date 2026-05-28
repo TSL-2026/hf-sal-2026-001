@@ -8,6 +8,12 @@
 -->
 <html lang="en">
 <head>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#e63946">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="HF Case Studio">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png"> 
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="author" content="Ghanshyam Acharya">
@@ -153,7 +159,18 @@
     <div class="modal-footer"><button class="btn-primary" onclick="CaseLibrary.createBlankCase()">Create</button><button class="btn-secondary" onclick="UI.closeModal('template-modal')">Cancel</button></div>
   </div>
 </div>
-
+<script>
+  // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').then(reg => {
+        console.log('Service Worker registered:', reg);
+      }).catch(err => {
+        console.error('Service Worker registration failed:', err);
+      });
+    });
+  }
+</script>
 <script src="js/utils.js"></script>
 <script src="js/case-library.js"></script>
 <script src="js/pdf-processor.js"></script>
