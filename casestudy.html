@@ -658,7 +658,7 @@
         id: 1,
         title: "The Maintenance Override",
         framework: "Dirty Dozen (Gordon Dupont)",
-        scenario: "During a C-Check in September 1997, a technician measures the jackscrew end-play at its maximum allowable limit (0.040 inches). The technician recommends replacement. However, the part is not in stock. The aircraft is already two days behind schedule. A supervisor overrides the technician and signs the aircraft back to service.",
+        scenario: "During a C-Check in September 1997, a technician measures the jackscrew end-play at its maximum allowable limit (0.040 inches). The technician recommends replacement. However, the replacement part is not in stock. The aircraft is already two days behind schedule. A maintenance supervisor, facing pressure to return the aircraft to service, overrides the technician's recommendation and signs the aircraft back to active service.",
         question: "Which Dirty Dozen factors were most clearly at work in the supervisor's decision to override the technician?",
         options: [
           { text: "Pressure, Lack of Resources, and Norms", correct: true, points: 100 },
@@ -667,7 +667,7 @@
           { text: "Lack of Knowledge and Communication Breakdown", correct: false, points: 0 }
         ],
         correctAnswer: "Pressure, Lack of Resources, and Norms",
-        explanation: "The supervisor faced schedule pressure (aircraft already late), lack of resources (part not in stock), and norms (deferral had become standard practice at the airline).",
+        explanation: "The supervisor faced schedule pressure (aircraft already late), lack of resources (replacement part not in stock), and norms (deferral had become standard practice at the airline).",
         wearLevel: 0.033,
         integrity: 78,
         pointsPossible: 100
@@ -684,7 +684,7 @@
           { text: "5 layers including design flaw and pilot error", correct: false, points: 0 },
           { text: "Only the FAA regulatory layer failed", correct: false, points: 0 }
         ],
-        correctAnswer: "4 layers: Regulatory, Organizational, Supervisory, and Inspection",
+        correctAnswer: "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)",
         explanation: "Multiple layers failed: Regulatory (approved dangerous interval), Organizational (normalized deferral), Supervisory (overrode concern), Inspection (signed off without verification).",
         wearLevel: 0.055,
         integrity: 50,
@@ -694,7 +694,7 @@
         id: 3,
         title: "The Supervisor's Rational Choice",
         framework: "Safety Differently (Sidney Dekker)",
-        scenario: "The supervisor who overrode the technician's recommendation was not acting maliciously. From his perspective, the aircraft was already late, the part wasn't available, and previous deferrals had never caused an accident.",
+        scenario: "The supervisor who overrode the technician's recommendation was not acting maliciously. From his perspective, the aircraft was already late, the part was not available, and previous deferrals had never caused an accident.",
         question: "What does Dekker mean by 'human error is a symptom, not a cause'? Apply this to the supervisor's decision.",
         options: [
           { text: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time", correct: true, points: 100 },
@@ -702,7 +702,7 @@
           { text: "Only the technician is responsible for the accident", correct: false, points: 0 },
           { text: "Human error cannot be prevented, so we should accept it", correct: false, points: 0 }
         ],
-        correctAnswer: "The supervisor's decision was locally rational given the pressures, resources, and information available",
+        correctAnswer: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time",
         explanation: "Dekker argues that blaming individuals hides systemic causes. The supervisor's override made sense given schedule pressure, parts unavailability, and no prior failures from deferrals.",
         wearLevel: 0.082,
         integrity: 22,
@@ -720,7 +720,7 @@
           { text: "The organization had excellent safety culture", correct: false, points: 0 },
           { text: "Only the technician is responsible for not speaking up again", correct: false, points: 0 }
         ],
-        correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous",
+        correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement",
         explanation: "Edmondson's research shows that when psychological safety is absent, people choose silence over speaking up, even about serious safety concerns.",
         wearLevel: 0.095,
         integrity: 10,
@@ -733,12 +733,12 @@
         scenario: "The maintenance task card was signed and certified as complete. The lubrication was documented as performed. Yet the jackscrew failed catastrophically due to inadequate lubrication over years.",
         question: "What is the gap between 'work-as-imagined' and 'work-as-done' in this accident?",
         options: [
-          { text: "Work-as-imagined assumes ideal conditions; work-as-done happened under pressure, fatigue, and parts shortage", correct: true, points: 100 },
+          { text: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage", correct: true, points: 100 },
           { text: "The paperwork was forged", correct: false, points: 0 },
           { text: "The technicians were not trained properly", correct: false, points: 0 },
           { text: "There is no gap - compliance equals safety", correct: false, points: 0 }
         ],
-        correctAnswer: "Work-as-imagined assumes ideal conditions; work-as-done happened under pressure, fatigue, and parts shortage",
+        correctAnswer: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage",
         explanation: "Conklin teaches that work-as-imagined (the procedure) and work-as-done (reality) always differ. The signature looked the same, but the safety outcome was completely different.",
         wearLevel: 0.115,
         integrity: 0,
@@ -992,7 +992,7 @@
       container.innerHTML = `
         <div>
           <div class="wear-card">
-            <div class="wear-title">🔧 JACKSCREW ACME THREAD TELEMETRY <span class="timer-display">⏱️ Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}</span></div>
+            <div class="wear-title">🔧 JACKSCREW ACME THREAD TELEMETRY <span class="timer-display" id="session-timer-display">⏱️ Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}</span></div>
             <div class="svg-container" id="thread-svg-container"></div>
             <div class="wear-stats">
               <div class="wear-stat">
@@ -1322,60 +1322,87 @@
         format: 'a4'
       });
       
-      // Certificate design
+      // Background color
       doc.setFillColor(10, 42, 58);
       doc.rect(0, 0, 297, 210, 'F');
       
-      // Border
-      doc.setDrawColor(69, 179, 255);
+      // Decorative top bar
+      doc.setFillColor(69, 179, 255);
+      doc.rect(0, 0, 297, 6, 'F');
+      
+      // Decorative bottom bar
+      doc.setFillColor(69, 179, 255);
+      doc.rect(0, 204, 297, 6, 'F');
+      
+      // Outer border
+      doc.setDrawColor(255, 209, 102);
       doc.setLineWidth(1.5);
       doc.rect(10, 10, 277, 190);
       
-      doc.setDrawColor(255, 209, 102);
+      // Inner border
+      doc.setDrawColor(69, 179, 255);
       doc.setLineWidth(0.5);
       doc.rect(13, 13, 271, 184);
+      
+      // Airline Name
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(69, 179, 255);
+      doc.text('SITA AIR LTD', 148.5, 28, { align: 'center' });
       
       // Title
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(28);
       doc.setTextColor(255, 209, 102);
-      doc.text('CERTIFICATE OF COMPLETION', 148.5, 50, { align: 'center' });
+      doc.text('CERTIFICATE OF COMPLETION', 148.5, 55, { align: 'center' });
+      
+      // Decorative line
+      doc.setDrawColor(255, 209, 102);
+      doc.setLineWidth(0.5);
+      doc.line(60, 62, 237, 62);
       
       // Subtitle
+      doc.setFontSize(11);
+      doc.setTextColor(69, 179, 255);
+      doc.text('NCAR Part 145 Human Factors Training', 148.5, 75, { align: 'center' });
+      
+      // Recipient section
+      doc.setFontSize(14);
+      doc.setTextColor(255, 255, 255);
+      doc.text('This certificate is presented to', 148.5, 100, { align: 'center' });
+      
+      // Participant Name
+      doc.setFontSize(26);
+      doc.setTextColor(255, 209, 102);
+      doc.text(currentPlayer.name, 148.5, 120, { align: 'center' });
+      
+      // Course completion text
+      doc.setFontSize(11);
+      doc.setTextColor(255, 255, 255);
+      doc.text('for successful completion of the', 148.5, 140, { align: 'center' });
+      
       doc.setFontSize(12);
       doc.setTextColor(69, 179, 255);
-      doc.text('NCAR Part 145 Human Factors Training', 148.5, 65, { align: 'center' });
-      
-      // Recipient
-      doc.setFontSize(18);
-      doc.setTextColor(255, 255, 255);
-      doc.text('This certificate is presented to', 148.5, 95, { align: 'center' });
-      
-      doc.setFontSize(24);
-      doc.setTextColor(255, 209, 102);
-      doc.text(currentPlayer.name, 148.5, 115, { align: 'center' });
-      
-      // Course
-      doc.setFontSize(12);
-      doc.setTextColor(255, 255, 255);
-      doc.text('for successful completion of the Flight 261 Human Factors Case Study', 148.5, 135, { align: 'center' });
+      doc.text('Flight 261 Human Factors Case Study', 148.5, 152, { align: 'center' });
       
       // Grade
-      doc.setFontSize(14);
-      doc.setTextColor(69, 179, 255);
-      doc.text(`Grade: ${grade.name} (${currentPlayer.score}/500 points)`, 148.5, 155, { align: 'center' });
+      doc.setFontSize(13);
+      doc.setTextColor(255, 209, 102);
+      const gradeText = grade.name === 'Completed with Distinction' ? 'DISTINCTION' : 
+                        grade.name === 'Completed' ? 'COMPLETED' : 'ATTENDED';
+      doc.text(`${gradeText} - ${currentPlayer.score}/500 points`, 148.5, 168, { align: 'center' });
       
       // Date
-      doc.setFontSize(10);
+      doc.setFontSize(9);
       doc.setTextColor(123, 138, 155);
-      const today = new Date().toLocaleDateString();
-      doc.text(`Date: ${today}`, 148.5, 175, { align: 'center' });
+      const today = new Date().toLocaleDateString('en-GB');
+      doc.text(`Issue Date: ${today}`, 148.5, 183, { align: 'center' });
       
       // Footer
-      doc.setFontSize(8);
+      doc.setFontSize(7);
       doc.setTextColor(123, 138, 155);
-      doc.text('This certifies that the participant has demonstrated understanding of human factors principles', 148.5, 195, { align: 'center' });
-      doc.text('including Dirty Dozen, Swiss Cheese, Dekker, Edmondson, and Conklin frameworks.', 148.5, 200, { align: 'center' });
+      doc.text('This certifies that the participant has demonstrated understanding of human factors principles', 148.5, 196, { align: 'center' });
+      doc.text('including Dirty Dozen, Swiss Cheese, Dekker, Edmondson, and Conklin frameworks.', 148.5, 201, { align: 'center' });
       
       doc.save(`Certificate_${currentPlayer.name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
     }
