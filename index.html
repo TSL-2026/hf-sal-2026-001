@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Case-Study | Human Factor Refresher Training</title>
+<title>Human Factor Refresher Training | Sita Air Ltd</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,7 +30,7 @@
   }
   
   .join-container {
-    max-width: 540px;
+    max-width: 580px;
     width: 100%;
     position: relative;
     z-index: 1;
@@ -63,6 +63,26 @@
     font-size: 0.6rem;
     color: #ffd166;
     margin-top: 0.5rem;
+  }
+  
+  /* Info Banner */
+  .info-banner {
+    background: rgba(69, 179, 255, 0.08);
+    border: 1px solid rgba(69, 179, 255, 0.25);
+    border-radius: 16px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+  }
+  .info-banner h3 {
+    color: #45b3ff;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+  }
+  .info-banner p {
+    font-size: 0.8rem;
+    color: #c0c8d8;
+    line-height: 1.5;
   }
   
   .card {
@@ -188,7 +208,12 @@
     transform: translateY(2px);
     box-shadow: 0 3px 0 #0d3b5e;
   }
-  .btn-icon { font-size: 1.4rem; }
+  .btn-icon { font-size: 1.4rem; animation: pulse 1.5s infinite; }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
   
   .participants-section { margin-top: 1.5rem; }
   .participants-title {
@@ -247,17 +272,26 @@
     color: #45b3ff;
   }
   
+  .facilitator-info {
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(69, 179, 255, 0.2);
+    font-size: 0.7rem;
+    text-align: center;
+  }
+  .facilitator-info a {
+    color: #ffd166;
+    text-decoration: none;
+  }
+  .facilitator-info a:hover {
+    text-decoration: underline;
+  }
+  
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
   }
   .card { animation: fadeInUp 0.5s ease; }
-  
-  @keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.7; }
-  }
-  .btn-icon { animation: pulse 1.5s infinite; }
 </style>
 </head>
 <body>
@@ -266,6 +300,12 @@
     <h1>CASE-STUDY</h1>
     <div class="subtitle">Human Factor Refresher Training</div>
     <div class="training-badge">✈️ Sita Air Ltd | 29 May 2026</div>
+  </div>
+  
+  <!-- Training Information Banner -->
+  <div class="info-banner">
+    <h3>📋 About This Training</h3>
+    <p>This interactive case study examines the Alaska Airlines Flight 261 accident through multiple human factors frameworks. You will analyze maintenance decisions, identify systemic failures, and earn certification points based on your answers.</p>
   </div>
   
   <div class="card">
@@ -300,6 +340,13 @@
         <div class="empty-message">⏳ Waiting for participants to join...</div>
       </div>
     </div>
+    
+    <!-- Facilitator & Developer Info -->
+    <div class="facilitator-info">
+      <span>🎓 Facilitator & Developer: </span>
+      <a href="https://gsacharya.com" target="_blank" rel="noopener noreferrer">Ghanshyam Acharya</a>
+      <span> | NCAR Part 145 | 2026</span>
+    </div>
   </div>
   
   <div class="footer">
@@ -333,7 +380,6 @@ document.getElementById('session-code').textContent = SESSION_CODE;
 
 // Load existing participants
 let joinedParticipants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
-let selectedValue = null;
 
 // Populate dropdown WITHOUT auto-refresh interference
 function populateDropdown() {
@@ -488,7 +534,7 @@ setInterval(() => {
   const newParticipants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
   if (JSON.stringify(joinedParticipants) !== JSON.stringify(newParticipants)) {
     joinedParticipants = newParticipants;
-    populateDropdown(); // This preserves selection
+    populateDropdown();
     renderParticipants();
   }
 }, 3000);
