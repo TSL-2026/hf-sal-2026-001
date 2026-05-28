@@ -207,9 +207,14 @@
     }
     
     .dossier-framework {
-      font-size: 0.65rem;
+      font-size: 0.7rem;
       color: #45b3ff;
       font-family: monospace;
+      background: rgba(69, 179, 255, 0.1);
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      white-space: normal;
+      word-break: keep-all;
     }
     
     .dossier-title {
@@ -344,6 +349,28 @@
       font-style: italic;
     }
     
+    .insight-factors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.5rem;
+    }
+    
+    .insight-factor {
+      font-size: 0.6rem;
+      background: rgba(69, 179, 255, 0.15);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+    }
+    
+    .correct-answer {
+      font-size: 0.7rem;
+      color: #ffd166;
+      margin-top: 0.3rem;
+      padding-top: 0.3rem;
+      border-top: 1px solid rgba(255, 209, 102, 0.2);
+    }
+    
     .privacy-note {
       font-size: 0.6rem;
       color: #7b8a9b;
@@ -384,11 +411,15 @@
       gap: 0.5rem;
       font-size: 0.7rem;
       margin-bottom: 0.5rem;
+      flex-wrap: wrap;
     }
     
     .chart-bar-label {
-      width: 100px;
+      width: 140px;
       flex-shrink: 0;
+      font-size: 0.7rem;
+      white-space: normal;
+      word-break: keep-all;
     }
     
     .chart-bar-fill {
@@ -430,7 +461,6 @@
       text-align: center;
     }
     
-    /* Success message that fades */
     .success-message {
       position: fixed;
       bottom: 30px;
@@ -511,7 +541,7 @@
           { text: "5 layers including design flaw and pilot error", correct: false, points: 0 },
           { text: "Only the FAA regulatory layer failed", correct: false, points: 0 }
         ],
-        correctAnswer: "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)",
+        correctAnswer: "4 layers: Regulatory, Organizational, Supervisory, and Inspection",
         explanation: "Multiple layers failed: Regulatory (approved dangerous interval), Organizational (normalized deferral), Supervisory (overrode concern), Inspection (signed off without verification).",
         wearLevel: 0.055,
         integrity: 50,
@@ -529,7 +559,7 @@
           { text: "Only the technician is responsible for the accident", correct: false, points: 0 },
           { text: "Human error cannot be prevented, so we should accept it", correct: false, points: 0 }
         ],
-        correctAnswer: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time",
+        correctAnswer: "The supervisor's decision was locally rational given the pressures, resources, and information available",
         explanation: "Dekker argues that blaming individuals hides systemic causes. The supervisor's override made sense given schedule pressure, parts unavailability, and no prior failures from deferrals.",
         wearLevel: 0.082,
         integrity: 22,
@@ -547,7 +577,7 @@
           { text: "The organization had excellent safety culture", correct: false, points: 0 },
           { text: "Only the technician is responsible for not speaking up again", correct: false, points: 0 }
         ],
-        correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement",
+        correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous",
         explanation: "Edmondson's research shows that when psychological safety is absent, people choose silence over speaking up, even about serious safety concerns.",
         wearLevel: 0.095,
         integrity: 10,
@@ -560,12 +590,12 @@
         scenario: "The maintenance task card was signed and certified as complete. The lubrication was documented as performed. Yet the jackscrew failed catastrophically due to inadequate lubrication over years.",
         question: "What is the gap between 'work-as-imagined' and 'work-as-done' in this accident?",
         options: [
-          { text: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage", correct: true, points: 100 },
+          { text: "Work-as-imagined assumes ideal conditions; work-as-done happened under pressure, fatigue, and parts shortage", correct: true, points: 100 },
           { text: "The paperwork was forged", correct: false, points: 0 },
           { text: "The technicians were not trained properly", correct: false, points: 0 },
           { text: "There is no gap - compliance equals safety", correct: false, points: 0 }
         ],
-        correctAnswer: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage",
+        correctAnswer: "Work-as-imagined assumes ideal conditions; work-as-done happened under pressure, fatigue, and parts shortage",
         explanation: "Conklin teaches that work-as-imagined (the procedure) and work-as-done (reality) always differ. The signature looked the same, but the safety outcome was completely different.",
         wearLevel: 0.115,
         integrity: 0,
@@ -575,8 +605,8 @@
     
     // Grading thresholds (out of 500)
     const GRADING = {
-      distinction: 400,  // 80% of 500
-      completed: 350,    // 70% of 500
+      distinction: 400,
+      completed: 350,
       attended: 0
     };
     
@@ -595,10 +625,9 @@
       div.className = 'success-message';
       div.textContent = message;
       document.body.appendChild(div);
-      setTimeout(() => div.remove(), 2000);
+      setTimeout(() => div.remove(), 3000);
     }
     
-    // Global state
     let currentPlayer = null;
     let allPlayers = [];
     let currentCardIndex = 0;
@@ -672,7 +701,6 @@
     }
     
     function renderParticipantView(container) {
-      // Check if all 5 cards completed
       if (currentCardIndex >= DOSSIER_CARDS.length) {
         const finalScore = currentPlayer.score || 0;
         const grade = getGrade(finalScore);
@@ -726,7 +754,7 @@
           <div class="dossier-card">
             <div class="dossier-header">
               <span class="dossier-number">Question ${currentCardIndex + 1}/${totalCards}</span>
-              <span class="dossier-framework">Framework: ${card.framework}</span>
+              <span class="dossier-framework">${card.framework}</span>
             </div>
             <div class="dossier-title">${card.title}</div>
             <div class="dossier-scenario">${card.scenario}</div>
@@ -744,7 +772,7 @@
             </div>
             
             <button class="btn-submit" onclick="submitResponse(${currentCardIndex})">✈️ SUBMIT RESPONSE →</button>
-            <div class="scoring-info">💡 Each question worth ${card.pointsPossible} points (${totalCards} questions × 100 = 500 total points)</div>
+            <div class="scoring-info">💡 Each question worth ${card.pointsPossible} points (5 questions × 100 = 500 total points)</div>
           </div>
         </div>
         
@@ -832,16 +860,16 @@
               <span class="insight-factor">Score: ${insight.pointsEarned}/${insight.pointsPossible} pts</span>
               <span class="insight-factor" style="background: rgba(255, 209, 102, 0.15); color: #ffd166;">Total: ${insight.totalScore} pts ${grade.icon}</span>
             </div>
+            ${!insight.isCorrect ? `<div class="correct-answer">📌 Correct answer: ${insight.correctAnswerText}</div>` : ''}
           </div>
         `;
       }).join('');
     }
     
     function renderFacilitatorView(container) {
-      // Calculate analytics
       const frameworkStats = {};
       DOSSIER_CARDS.forEach(card => {
-        frameworkStats[card.framework] = { total: 0, correct: 0 };
+        frameworkStats[card.framework] = { total: 0, correct: 0, fullName: card.framework };
       });
       
       sessionResponses.forEach(resp => {
@@ -868,7 +896,7 @@
               <span class="dossier-framework">500 Points | 5 Frameworks</span>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
               <div>
                 <h4 style="margin-bottom: 0.75rem;">🎯 Framework Performance</h4>
                 <div class="analytics-chart">
@@ -876,9 +904,9 @@
                     const percentage = stats.total > 0 ? (stats.correct / stats.total) * 100 : 0;
                     return `
                       <div class="chart-bar">
-                        <span class="chart-bar-label">${framework.substring(0, 25)}</span>
-                        <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${percentage}%; background: ${percentage >= 80 ? '#2ec4b6' : percentage >= 60 ? '#ffd166' : '#e63946'};"></div></div>
-                        <span style="width: 40px;">${stats.correct}/${stats.total}</span>
+                        <span class="chart-bar-label">${escapeHtml(framework)}</span>
+                        <div style="flex: 1; min-width: 100px;"><div class="chart-bar-fill" style="width: ${percentage}%; background: ${percentage >= 80 ? '#2ec4b6' : percentage >= 60 ? '#ffd166' : '#e63946'};"></div></div>
+                        <span style="width: 40px; text-align: right;">${stats.correct}/${stats.total}</span>
                       </div>
                     `;
                   }).join('')}
@@ -890,9 +918,9 @@
                 <div class="analytics-chart">
                   ${participantResults.map(p => `
                     <div class="chart-bar">
-                      <span class="chart-bar-label">${escapeHtml(p.name.substring(0, 15))}</span>
-                      <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${(p.score / 500) * 100}%; background: ${p.grade.class === 'grade-distinction' ? '#2ec4b6' : p.grade.class === 'grade-completed' ? '#45b3ff' : '#e63946'};"></div></div>
-                      <span style="width: 60px;">${p.score} pts</span>
+                      <span class="chart-bar-label">${escapeHtml(p.name.substring(0, 20))}</span>
+                      <div style="flex: 1; min-width: 100px;"><div class="chart-bar-fill" style="width: ${(p.score / 500) * 100}%; background: ${p.grade.class === 'grade-distinction' ? '#2ec4b6' : p.grade.class === 'grade-completed' ? '#45b3ff' : '#e63946'};"></div></div>
+                      <span style="width: 60px; text-align: right;">${p.score} pts</span>
                       <span class="grade-badge ${p.grade.class}" style="font-size: 0.6rem;">${p.grade.icon}</span>
                     </div>
                   `).join('')}
@@ -902,25 +930,30 @@
             </div>
             
             <div style="margin-top: 1.5rem;">
-              <h4 style="margin-bottom: 0.75rem;">📝 All Participant Responses</h4>
+              <h4 style="margin-bottom: 0.75rem;">📝 All Participant Responses (With Correct Answers)</h4>
               <div style="max-height: 400px; overflow-y: auto;">
                 ${sessionResponses.length === 0 ? '<div class="waiting">No responses submitted yet</div>' : ''}
-                ${sessionResponses.map(resp => `
-                  <div class="insight-item" style="margin-bottom: 0.75rem;">
-                    <div class="insight-name">${escapeHtml(resp.playerName)} • ${resp.cardFramework}</div>
-                    <div class="insight-text">${escapeHtml(resp.selectedAnswer)}</div>
-                    <div class="insight-factors">
-                      <span class="insight-factor">${resp.isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>
-                      <span class="insight-factor">${resp.pointsEarned}/${resp.pointsPossible} pts</span>
+                ${sessionResponses.map(resp => {
+                  const card = DOSSIER_CARDS.find(c => c.id === resp.cardId);
+                  return `
+                    <div class="insight-item" style="margin-bottom: 0.75rem;">
+                      <div class="insight-name">${escapeHtml(resp.playerName)} • ${resp.cardFramework}</div>
+                      <div class="insight-text">📝 <strong>Their answer:</strong> ${escapeHtml(resp.selectedAnswer)}</div>
+                      <div class="insight-factors">
+                        <span class="insight-factor">${resp.isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>
+                        <span class="insight-factor">${resp.pointsEarned}/${resp.pointsPossible} pts</span>
+                      </div>
+                      ${!resp.isCorrect && card ? `<div class="correct-answer" style="background: rgba(69, 179, 255, 0.1); padding: 0.3rem; margin-top: 0.3rem; border-radius: 8px;">📌 <strong>Correct answer:</strong> ${card.correctAnswer}</div>` : ''}
+                      ${!resp.isCorrect && card ? `<div style="font-size: 0.65rem; color: #7b8a9b; margin-top: 0.3rem;">📖 ${card.explanation}</div>` : ''}
                     </div>
-                  </div>
-                `).join('')}
+                  `;
+                }).join('')}
               </div>
             </div>
             
             <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-              <button class="btn-warning" onclick="resetAllProgress()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🔄 Reset All Progress</button>
-              <button class="btn-warning" onclick="clearAllResponses()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🗑️ Clear All Responses</button>
+              <button onclick="resetAllProgress()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🔄 Reset All Progress</button>
+              <button onclick="clearAllResponses()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🗑️ Clear All Responses</button>
             </div>
           </div>
         </div>
@@ -941,17 +974,14 @@
       const isCorrect = selectedOption.correct;
       const pointsEarned = isCorrect ? card.pointsPossible : 0;
       
-      // Update player score
       currentPlayer.score = (currentPlayer.score || 0) + pointsEarned;
       
-      // Update in allPlayers array
       const playerIndex = allPlayers.findIndex(p => p.id === currentPlayer.id);
       if (playerIndex !== -1) {
         allPlayers[playerIndex].score = currentPlayer.score;
         localStorage.setItem('hf-participants', JSON.stringify(allPlayers));
       }
       
-      // Save progress
       submittedCards.push({
         cardId: card.id,
         cardTitle: card.title,
@@ -967,7 +997,6 @@
         completedAt: new Date().toISOString()
       }));
       
-      // Add to session responses
       sessionResponses.push({
         playerId: currentPlayer.id,
         playerName: currentPlayer.name,
@@ -978,22 +1007,20 @@
         isCorrect: isCorrect,
         pointsEarned: pointsEarned,
         pointsPossible: card.pointsPossible,
+        correctAnswerText: card.correctAnswer,
         totalScore: currentPlayer.score,
         timestamp: new Date().toISOString()
       });
       localStorage.setItem('hf-session-responses', JSON.stringify(sessionResponses));
       
       updateScoreDisplay();
-      
-      // Move to next card
       currentCardIndex++;
       renderMainContent();
       
-      // Show success message (no alert popup)
       if (isCorrect) {
         showSuccessMessage(`✓ Correct! +${pointsEarned} points`);
       } else {
-        showSuccessMessage(`✗ Incorrect. The correct answer was: ${card.correctAnswer}`);
+        showSuccessMessage(`✗ Incorrect. The correct answer is: ${card.correctAnswer}`);
       }
     }
     
@@ -1088,7 +1115,6 @@
       }
     }
     
-    // Initialize
     loadPlayer();
     loadSessionData();
     setInterval(refreshData, 3000);
