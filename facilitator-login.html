@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Facilitator Login | Case-Study</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: linear-gradient(135deg, #0a2a3a 0%, #0d1b2a 50%, #1b263b 100%);
+    color: #e0e1dd;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    position: relative;
+  }
+  
+  body::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 10% 20%, rgba(69, 179, 255, 0.05) 1%, transparent 1%);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+  
+  .login-container {
+    max-width: 420px;
+    width: 100%;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .logo {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+  
+  .logo h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    background: linear-gradient(135deg, #ffffff 0%, #45b3ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  
+  .logo p {
+    font-family: monospace;
+    font-size: 0.65rem;
+    color: #ffd166;
+    margin-top: 0.25rem;
+  }
+  
+  .card {
+    background: rgba(27, 38, 59, 0.7);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(69, 179, 255, 0.2);
+    border-radius: 28px;
+    padding: 2rem;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.3);
+  }
+  
+  .card h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.8rem;
+    color: #ffffff;
+    text-align: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .card-sub {
+    text-align: center;
+    font-size: 0.7rem;
+    color: #7b8a9b;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid rgba(69, 179, 255, 0.2);
+  }
+  
+  .input-group {
+    margin-bottom: 1.25rem;
+  }
+  
+  .input-group label {
+    display: block;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: #ffd166;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+  }
+  
+  .input-group input {
+    width: 100%;
+    padding: 0.9rem 1rem;
+    background: rgba(13, 27, 42, 0.8);
+    border: 1px solid rgba(69, 179, 255, 0.3);
+    border-radius: 14px;
+    color: #e0e1dd;
+    font-size: 0.95rem;
+    outline: none;
+    transition: all 0.2s;
+  }
+  
+  .input-group input:focus {
+    border-color: #45b3ff;
+    box-shadow: 0 0 0 3px rgba(69, 179, 255, 0.2);
+  }
+  
+  .btn {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    letter-spacing: 0.08em;
+    padding: 0.9rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.2s;
+    background: linear-gradient(135deg, #45b3ff 0%, #1a6bc3 100%);
+    color: white;
+  }
+  
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(69, 179, 255, 0.3);
+  }
+  
+  .error-message {
+    background: rgba(230, 57, 70, 0.15);
+    border: 1px solid rgba(230, 57, 70, 0.3);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #e63946;
+    display: none;
+  }
+  
+  .footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.6rem;
+    color: #5a6e84;
+  }
+  
+  .footer a {
+    color: #5a6e84;
+    text-decoration: none;
+  }
+  
+  .footer a:hover {
+    color: #ffd166;
+  }
+</style>
+</head>
+<body>
+<div class="login-container">
+  <div class="logo">
+    <h1>CASE-STUDY</h1>
+    <p>Human Factor Refresher Training</p>
+  </div>
+  
+  <div class="card">
+    <h2>🔐 Facilitator Access</h2>
+    <div class="card-sub">Authorized Personnel Only</div>
+    
+    <div class="error-message" id="error-message">
+      ❌ Invalid credentials. Please try again.
+    </div>
+    
+    <div class="input-group">
+      <label>📧 FACILITATOR ID</label>
+      <input type="text" id="facilitator-id" placeholder="Enter your ID" autocomplete="off">
+    </div>
+    
+    <div class="input-group">
+      <label>🔑 ACCESS CODE</label>
+      <input type="password" id="access-code" placeholder="Enter access code">
+    </div>
+    
+    <button class="btn" onclick="authenticate()">▶ LOGIN TO DASHBOARD</button>
+  </div>
+  
+  <div class="footer">
+    <a href="index.html">← Back to Join Page</a> • HF-SAL-R29052026
+  </div>
+</div>
+
+<script>
+// ============================================
+// FACILITATOR CREDENTIALS (CHANGE THESE)
+// ============================================
+const FACILITATOR_CREDENTIALS = {
+  id: "facilitator",
+  code: "SAL2026"
+};
+
+function authenticate() {
+  const enteredId = document.getElementById('facilitator-id').value.trim();
+  const enteredCode = document.getElementById('access-code').value.trim();
+  
+  if (enteredId === FACILITATOR_CREDENTIALS.id && enteredCode === FACILITATOR_CREDENTIALS.code) {
+    // Set session flag
+    sessionStorage.setItem('facilitator-authenticated', 'true');
+    sessionStorage.setItem('facilitator-login-time', new Date().toISOString());
+    
+    // Redirect to facilitator dashboard
+    window.location.href = 'facilitator.html';
+  } else {
+    const errorEl = document.getElementById('error-message');
+    errorEl.style.display = 'block';
+    
+    // Clear password field
+    document.getElementById('access-code').value = '';
+    
+    // Auto-hide error after 3 seconds
+    setTimeout(() => {
+      errorEl.style.display = 'none';
+    }, 3000);
+  }
+}
+
+// Check if already logged in
+if (sessionStorage.getItem('facilitator-authenticated') === 'true') {
+  window.location.href = 'facilitator.html';
+}
+
+// Allow Enter key to submit
+document.getElementById('access-code').addEventListener('keypress', function(e) {
+  if (e.key === 'Enter') {
+    authenticate();
+  }
+});
+</script>
+</body>
+</html>
