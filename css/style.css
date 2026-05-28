@@ -1,0 +1,643 @@
+/*
+  File: styles.css
+  Path: /css/styles.css
+  Purpose: All styling for the application - layouts, cards, modals, game interface, and responsive design
+  Developer: Ghanshyam Acharya, 2026
+  Description: HF Case Study Game - Human Factors Training Platform
+*/
+
+:root {
+  --black: #0a0a0a;
+  --dark: #111318;
+  --panel: #1a1d24;
+  --border: #2a2e3a;
+  --muted: #4a5068;
+  --text: #d8dce8;
+  --dim: #8890aa;
+  --white: #f0f2f8;
+  --red: #e63946;
+  --amber: #f4a261;
+  --green: #2ec4b6;
+  --blue: #4361ee;
+  --gold: #ffd166;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--black);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* Layout */
+.app-container {
+  display: flex;
+  min-height: 100vh;
+}
+
+.sidebar {
+  width: 300px;
+  background: var(--dark);
+  border-right: 1px solid var(--border);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+}
+
+.main {
+  flex: 1;
+  padding: 1.5rem;
+  overflow-y: auto;
+  max-height: 100vh;
+}
+
+/* Screens */
+.screen {
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.screen.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Typography */
+h1, h2, h3, h4 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-weight: normal;
+  letter-spacing: 0.02em;
+}
+
+h1 {
+  font-size: 2rem;
+  color: var(--white);
+}
+
+h1 span {
+  color: var(--red);
+}
+
+h2 {
+  font-size: 1.6rem;
+  margin-bottom: 1rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+  color: var(--dim);
+  margin-bottom: 0.75rem;
+}
+
+.logo-sub {
+  font-size: 0.65rem;
+  color: var(--muted);
+  margin-top: -0.25rem;
+}
+
+/* Buttons */
+.btn {
+  font-family: 'Bebas Neue', sans-serif;
+  letter-spacing: 0.08em;
+  font-size: 0.9rem;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  cursor: pointer;
+  transition: all 0.15s;
+  border-radius: 6px;
+  display: inline-block;
+  text-align: center;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  margin-bottom: 0.5rem;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #ff4d5a;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background: transparent;
+  color: var(--dim);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--text);
+  color: var(--text);
+}
+
+.btn-success {
+  background: var(--green);
+  color: var(--black);
+}
+
+.btn-sm {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.75rem;
+}
+
+/* Upload Zone */
+.upload-zone {
+  border: 2px dashed var(--border);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  margin: 1rem 0;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.upload-zone:hover {
+  border-color: var(--red);
+  background: rgba(230, 57, 70, 0.05);
+}
+
+.upload-zone.drag-over {
+  border-color: var(--green);
+  background: rgba(46, 196, 182, 0.1);
+}
+
+.upload-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+}
+
+.upload-hint {
+  font-size: 0.7rem;
+  color: var(--muted);
+  margin-top: 0.5rem;
+}
+
+/* Progress */
+.progress-bar {
+  height: 4px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+  margin: 1rem 0;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--green);
+  width: 0%;
+  transition: width 0.3s;
+}
+
+.progress-text {
+  font-size: 0.8rem;
+  color: var(--dim);
+  text-align: center;
+}
+
+/* Preview Cards */
+.cards-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.preview-card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.preview-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.preview-card-category {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.55rem;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.preview-card-points {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: var(--gold);
+}
+
+.preview-card-title {
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+
+.preview-card-question {
+  font-size: 0.75rem;
+  color: var(--dim);
+  margin-bottom: 0.5rem;
+}
+
+.edit-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 0.7rem;
+}
+
+.edit-btn:hover {
+  color: var(--green);
+}
+
+/* Case List */
+.case-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.case-item {
+  padding: 0.75rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.case-item:hover {
+  border-color: var(--red);
+  background: rgba(230, 57, 70, 0.05);
+}
+
+.case-item.active {
+  border-color: var(--green);
+  background: rgba(46, 196, 182, 0.08);
+}
+
+.case-item-title {
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 0.2rem;
+}
+
+.case-item-year {
+  font-size: 0.65rem;
+  color: var(--muted);
+}
+
+/* Game Elements */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.game-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.player-dropdown {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 0.75rem;
+}
+
+.score-bar {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.score-chip {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.3rem 0.8rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+}
+
+.game-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+}
+
+.tab-btn {
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 0.4rem 1rem;
+  cursor: pointer;
+  font-family: monospace;
+  font-size: 0.75rem;
+  border-radius: 4px;
+}
+
+.tab-btn.active {
+  background: var(--panel);
+  color: var(--green);
+}
+
+.cards-grid-game {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: 1rem;
+}
+
+.card-game {
+  aspect-ratio: 2/3;
+  background: linear-gradient(145deg, #1a1a2e, #0a0a15);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.15s;
+}
+
+.card-game:hover:not(.used) {
+  transform: translateY(-4px);
+  border-color: var(--red);
+}
+
+.card-game.used {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+.card-game-category {
+  font-size: 0.5rem;
+  font-family: monospace;
+  color: var(--muted);
+  text-transform: uppercase;
+}
+
+.card-game-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  color: var(--white);
+  margin: 0.5rem 0;
+}
+
+.card-game-points {
+  font-size: 0.7rem;
+  color: var(--gold);
+  margin-top: auto;
+  text-align: right;
+}
+
+/* Frameworks */
+.framework-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.framework-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+}
+
+.framework-name {
+  font-family: 'Bebas Neue', sans-serif;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+}
+
+.framework-desc {
+  font-size: 0.7rem;
+  color: var(--dim);
+}
+
+/* Log */
+.log-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.log-entry {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+
+.log-entry-header {
+  display: flex;
+  justify-content: space-between;
+  padding: 0.75rem;
+  background: var(--dark);
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+.log-entry-body {
+  padding: 0.75rem;
+  display: none;
+  font-size: 0.75rem;
+  border-top: 1px solid var(--border);
+}
+
+.log-entry-body.open {
+  display: block;
+}
+
+/* Modals */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-overlay.open {
+  display: flex;
+}
+
+.modal {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  max-width: 600px;
+  width: 90%;
+  max-height: 85vh;
+  overflow-y: auto;
+}
+
+.modal-header {
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+}
+
+.modal-input {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+}
+
+.modal-textarea {
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  background: var(--dark);
+  border: 1px solid var(--border);
+  color: var(--text);
+  border-radius: 4px;
+  resize: vertical;
+}
+
+/* Results */
+.results-container {
+  max-width: 500px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.podium {
+  margin: 2rem 0;
+}
+
+.podium-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.podium-item.first {
+  border-color: var(--gold);
+  background: rgba(255, 209, 102, 0.1);
+}
+
+.podium-rank {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.5rem;
+}
+
+.results-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+/* Flash Animation */
+.points-flash {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 4rem;
+  color: var(--gold);
+  pointer-events: none;
+  z-index: 2000;
+  animation: flashAnim 1s forwards;
+}
+
+@keyframes flashAnim {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0.5); }
+  30% { opacity: 1; transform: translate(-50%, -50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%, -50%) scale(0.8) translateY(-40px); }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 3px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .app-container {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+    max-height: 280px;
+  }
+  
+  .main {
+    max-height: calc(100vh - 280px);
+  }
+  
+  .cards-grid-game {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  }
+}
