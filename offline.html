@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<!--
+  File: offline.html
+  Path: /offline.html
+  Purpose: Offline fallback page - shown when user is offline and requested page isn't cached
+  Developer: Ghanshyam Acharya, 2026
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Offline - HF Case Studio</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    background: linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 100%);
+    color: #d8dce8;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+  }
+  .offline-container {
+    text-align: center;
+    max-width: 500px;
+  }
+  .offline-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+  }
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 3rem;
+    color: #e63946;
+    margin-bottom: 1rem;
+  }
+  p {
+    color: #8890aa;
+    margin-bottom: 1.5rem;
+    line-height: 1.6;
+  }
+  .btn {
+    display: inline-block;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    padding: 0.8rem 2rem;
+    background: #e63946;
+    color: white;
+    text-decoration: none;
+    border-radius: 6px;
+    letter-spacing: 0.08em;
+    transition: all 0.15s;
+  }
+  .btn:hover {
+    background: #ff4d5a;
+    transform: translateY(-2px);
+  }
+  .note {
+    font-size: 0.7rem;
+    color: #4a5068;
+    margin-top: 2rem;
+  }
+</style>
+</head>
+<body>
+<div class="offline-container">
+  <div class="offline-icon">📡</div>
+  <h1>OFFLINE MODE</h1>
+  <p>You're currently offline. Previously loaded cases are still available, but you'll need an internet connection to upload new PDFs or access online resources.</p>
+  <button class="btn" onclick="location.reload()">Try Again</button>
+  <p class="note">HF Case Studio v1.0 | Developer: Ghanshyam Acharya, 2026</p>
+</div>
+</body>
+</html>
