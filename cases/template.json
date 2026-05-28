@@ -1,0 +1,39 @@
+{
+  "title": "Example Case Study Title",
+  "year": "2024",
+  "scenario": "Describe the incident here. Include what happened, when, where, and the immediate causes. Then describe the organizational and systemic factors that contributed.",
+  "cards": [
+    {
+      "category": "Scenario",
+      "title": "The Incident",
+      "points": 1,
+      "question": "Summarize the key events that led to this incident.",
+      "hint": "What happened? When? What were the immediate causes?",
+      "modelAnswer": "[Facilitator: Complete based on case materials]"
+    },
+    {
+      "category": "Dirty Dozen",
+      "title": "Identify Factors",
+      "points": 2,
+      "question": "Which Dirty Dozen factors contributed to this incident? Provide specific evidence.",
+      "hint": "Review: Communication, Complacency, Knowledge, Distraction, Teamwork, Fatigue, Resources, Pressure, Assertiveness, Stress, Awareness, Norms",
+      "modelAnswer": "[Facilitator: Complete based on case materials]"
+    },
+    {
+      "category": "Swiss Cheese",
+      "title": "Failed Layers",
+      "points": 2,
+      "question": "Identify at least three defensive layers that failed in this incident.",
+      "hint": "Consider design, regulation, organization, supervision, technical execution",
+      "modelAnswer": "[Facilitator: Complete based on case materials]"
+    },
+    {
+      "category": "Wildcard",
+      "title": "Root Cause Analysis",
+      "points": 3,
+      "question": "Using any human factors framework, explain why this incident occurred and what could prevent recurrence.",
+      "hint": "Go beyond the individual to systemic factors",
+      "modelAnswer": "[Facilitator: Complete based on case materials]"
+    }
+  ]
+}
