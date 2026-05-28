@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--
+  File: index.html
+  Path: /index.html
+  Purpose: Main entry point - loads all CSS/JS, defines HTML structure, and initializes the application
+  Developer: Ghanshyam Acharya, 2026
+  Description: HF Case Study Game - Human Factors Training Platform for EASA/NCAR Part 145
+-->
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="author" content="Ghanshyam Acharya">
+<meta name="year" content="2026">
+<meta name="description" content="Human Factors Training Platform - Case study card game for aviation maintenance training">
+<title>HF Case Studio | Human Factors Learning Platform</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/styles.css">
+<!-- Third-party libraries -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body>
+<div class="app-container">
+  <!-- SIDEBAR - Navigation & Case Library -->
+  <aside class="sidebar">
+    <div class="logo">
+      <h1>HF<span>CASE</span></h1>
+      <p class="logo-sub">Human Factors Learning Platform</p>
+      <p class="logo-sub" style="font-size:0.55rem;">Developer: Ghanshyam Acharya, 2026</p>
+    </div>
+    
+    <div class="sidebar-buttons">
+      <button class="btn btn-primary btn-block" onclick="UI.showUploadModal()">📄 Upload PDF</button>
+      <button class="btn btn-secondary btn-block" onclick="CaseLibrary.exportCurrent()">💾 Export Case JSON</button>
+      <button class="btn btn-secondary btn-block" onclick="CaseLibrary.importFromFile()">📂 Import Case JSON</button>
+      <button class="btn btn-secondary btn-block" onclick="UI.showTemplateModal()">📝 New Blank Case</button>
+    </div>
+    
+    <div class="case-library-section">
+      <h3>📚 Case Library</h3>
+      <div class="case-list" id="case-list"></div>
+    </div>
+    
+    <div class="sidebar-footer">
+      <p>EASA/NCAR Part 145<br>Human Factors Training</p>
+    </div>
+  </aside>
+  
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <!-- Screen: Builder (Create/Edit Cases) -->
+    <div id="screen-builder" class="screen active">
+      <div class="builder-container">
+        <h2>📄 Create / Edit Case Study</h2>
+        <div class="upload-zone" id="upload-zone">
+          <div class="upload-icon">📑</div>
+          <div>Click or drag PDF here</div>
+          <div class="upload-hint">Supports: accident reports, NTSB summaries, investigation documents</div>
+        </div>
+        <input type="file" id="pdf-input" accept=".pdf" style="display: none;">
+        
+        <div id="extraction-progress" style="display: none;">
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+          <p id="progress-text" class="progress-text">Extracting text...</p>
+        </div>
+        
+        <div id="generated-preview" style="display: none;">
+          <div class="preview-header">
+            <h3>Preview & Edit</h3>
+            <div class="preview-actions">
+              <button class="btn-sm btn-secondary" onclick="CaseEditor.regenerateQuestions()">🔄 Regenerate</button>
+              <button class="btn-sm btn-success" onclick="CaseLibrary.saveCurrent()">💾 Save to Library</button>
+            </div>
+          </div>
+          <div id="preview-scenario" class="preview-card"></div>
+          <h4>Cards</h4>
+          <div id="preview-cards" class="cards-preview"></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Screen: Game (Play the Case Study) -->
+    <div id="screen-game" class="screen">
+      <div class="game-header">
+        <h2 id="game-title">Loading...</h2>
+        <div class="game-controls">
+          <select id="game-player-select" class="player-dropdown"></select>
+          <button class="btn-sm btn-secondary" onclick="Game.addPlayer()">+ Add</button>
+        </div>
+      </div>
+      <div class="score-bar" id="game-score-bar"></div>
+      <div class="game-tabs">
+        <button class="tab-btn active" data-tab="cards" onclick="UI.switchGameTab('cards')">📇 Cards</button>
+        <button class="tab-btn" data-tab="frameworks" onclick="UI.switchGameTab('frameworks')">📚 Frameworks</button>
+        <button class="tab-btn" data-tab="log" onclick="UI.switchGameTab('log')">📋 Log</button>
+        <button class="tab-btn" data-tab="results" onclick="Game.endSession()">🏁 End</button>
+      </div>
+      <div id="game-tab-cards" class="cards-grid-game"></div>
+      <div id="game-tab-frameworks" class="framework-grid" style="display: none;"></div>
+      <div id="game-tab-log" class="log-container" style="display: none;"></div>
+    </div>
+    
+    <!-- Screen: Results -->
+    <div id="screen-results" class="screen">
+      <div class="results-container">
+        <h2>🎯 Session Complete</h2>
+        <div id="results-podium" class="podium"></div>
+        <div class="results-buttons">
+          <button class="btn btn-secondary" onclick="Game.downloadPDF()">📄 Download PDF</button>
+          <button class="btn btn-primary" onclick="UI.showBuilder()">🏠 Back to Builder</button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- MODALS -->
+<div id="edit-modal" class="modal-overlay">
+  <div class="modal">
+    <div class="modal-header"><h3>Edit Card</h3><button onclick="UI.closeModal('edit-modal')">✕</button></div>
+    <div class="modal-body">
+      <label>Category</label><input type="text" id="edit-category" class="modal-input">
+      <label>Title</label><input type="text" id="edit-title" class="modal-input">
+      <label>Points</label><input type="number" id="edit-points" class="modal-input">
+      <label>Question</label><textarea id="edit-question" rows="3" class="modal-textarea"></textarea>
+      <label>Hint</label><textarea id="edit-hint" rows="2" class="modal-textarea"></textarea>
+      <label>Model Answer</label><textarea id="edit-model" rows="4" class="modal-textarea"></textarea>
+    </div>
+    <div class="modal-footer"><button class="btn-primary" onclick="CaseEditor.saveCardEdit()">Save</button><button class="btn-secondary" onclick="UI.closeModal('edit-modal')">Cancel</button></div>
+  </div>
+</div>
+
+<div id="addplayer-modal" class="modal-overlay">
+  <div class="modal" style="max-width:400px;">
+    <div class="modal-header"><h3>Add Participant</h3><button onclick="UI.closeModal('addplayer-modal')">✕</button></div>
+    <div class="modal-body">
+      <input type="text" id="new-player-name" placeholder="Name" class="modal-input">
+      <input type="email" id="new-player-email" placeholder="Email" class="modal-input">
+    </div>
+    <div class="modal-footer"><button class="btn-primary" onclick="Game.addPlayerFromModal()">Add</button><button class="btn-secondary" onclick="UI.closeModal('addplayer-modal')">Cancel</button></div>
+  </div>
+</div>
+
+<div id="template-modal" class="modal-overlay">
+  <div class="modal" style="max-width:500px;">
+    <div class="modal-header"><h3>New Blank Case</h3><button onclick="UI.closeModal('template-modal')">✕</button></div>
+    <div class="modal-body">
+      <label>Case Title</label><input type="text" id="new-case-title" class="modal-input" placeholder="e.g., Boeing 737 MAX">
+      <label>Year</label><input type="text" id="new-case-year" class="modal-input" placeholder="e.g., 2018">
+      <label>Scenario Description</label><textarea id="new-case-scenario" rows="6" class="modal-textarea" placeholder="Describe the incident..."></textarea>
+    </div>
+    <div class="modal-footer"><button class="btn-primary" onclick="CaseLibrary.createBlankCase()">Create</button><button class="btn-secondary" onclick="UI.closeModal('template-modal')">Cancel</button></div>
+  </div>
+</div>
+
+<script src="js/utils.js"></script>
+<script src="js/case-library.js"></script>
+<script src="js/pdf-processor.js"></script>
+<script src="js/game-engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
