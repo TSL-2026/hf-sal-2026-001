@@ -14,7 +14,6 @@
       min-height: 100vh;
     }
     
-    /* Header */
     .header {
       background: rgba(13, 27, 42, 0.95);
       backdrop-filter: blur(10px);
@@ -60,6 +59,18 @@
       color: #45b3ff;
     }
     
+    .grade-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      padding: 0.2rem 0.5rem;
+      border-radius: 20px;
+      margin-left: 0.5rem;
+    }
+    
+    .grade-attended { background: rgba(230, 57, 70, 0.2); color: #e63946; border: 1px solid rgba(230, 57, 70, 0.3); }
+    .grade-completed { background: rgba(69, 179, 255, 0.2); color: #45b3ff; border: 1px solid rgba(69, 179, 255, 0.3); }
+    .grade-distinction { background: rgba(46, 196, 182, 0.2); color: #2ec4b6; border: 1px solid rgba(46, 196, 182, 0.3); }
+    
     .exit-btn {
       background: transparent;
       border: 1px solid #7b8a9b;
@@ -71,7 +82,6 @@
       margin-top: 0.2rem;
     }
     
-    /* Score Bar */
     .score-bar {
       display: flex;
       gap: 0.5rem;
@@ -96,7 +106,6 @@
       color: #ffd166;
     }
     
-    /* Main Layout */
     .main-grid {
       display: grid;
       grid-template-columns: 1fr 320px;
@@ -110,7 +119,6 @@
       }
     }
     
-    /* Thread Wear Visualizer */
     .wear-card {
       background: rgba(27, 38, 59, 0.7);
       backdrop-filter: blur(10px);
@@ -175,7 +183,6 @@
       transition: width 0.5s ease;
     }
     
-    /* Dossier Card */
     .dossier-card {
       background: rgba(27, 38, 59, 0.7);
       backdrop-filter: blur(10px);
@@ -220,39 +227,43 @@
       margin-bottom: 1.25rem;
     }
     
-    .prompt-label {
-      font-size: 0.7rem;
+    .question-label {
+      font-size: 0.75rem;
+      font-weight: 600;
       color: #ffd166;
       margin-bottom: 0.5rem;
     }
     
-    .factors-grid {
+    .options-grid {
       display: flex;
-      flex-wrap: wrap;
+      flex-direction: column;
       gap: 0.5rem;
       margin-bottom: 1.25rem;
     }
     
-    .factor-checkbox {
+    .option-radio {
       display: flex;
       align-items: center;
-      gap: 0.4rem;
+      gap: 0.5rem;
       background: rgba(13, 27, 42, 0.5);
-      padding: 0.4rem 0.8rem;
-      border-radius: 30px;
-      font-size: 0.75rem;
+      padding: 0.6rem 1rem;
+      border-radius: 12px;
       cursor: pointer;
       transition: all 0.2s;
     }
     
-    .factor-checkbox:hover {
-      background: rgba(69, 179, 255, 0.2);
+    .option-radio:hover {
+      background: rgba(69, 179, 255, 0.15);
     }
     
-    .factor-checkbox input {
+    .option-radio input {
       accent-color: #45b3ff;
-      width: 14px;
-      height: 14px;
+      width: 16px;
+      height: 16px;
+    }
+    
+    .option-text {
+      font-size: 0.85rem;
     }
     
     textarea {
@@ -264,7 +275,7 @@
       padding: 0.8rem;
       font-size: 0.85rem;
       resize: vertical;
-      min-height: 90px;
+      min-height: 80px;
       margin-bottom: 1rem;
     }
     
@@ -308,7 +319,6 @@
       font-size: 2rem;
     }
     
-    /* Sidebar */
     .sidebar-card {
       background: rgba(27, 38, 59, 0.7);
       backdrop-filter: blur(10px);
@@ -352,18 +362,13 @@
       font-style: italic;
     }
     
-    .insight-factors {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.3rem;
-      margin-top: 0.5rem;
-    }
-    
-    .insight-factor {
+    .privacy-note {
       font-size: 0.6rem;
-      background: rgba(69, 179, 255, 0.15);
-      padding: 0.15rem 0.5rem;
-      border-radius: 12px;
+      color: #7b8a9b;
+      text-align: center;
+      padding: 0.5rem;
+      border-top: 1px solid rgba(69, 179, 255, 0.2);
+      margin-top: 0.5rem;
     }
     
     .waiting {
@@ -376,7 +381,6 @@
       display: none;
     }
     
-    /* Facilitator specific */
     .facilitator-only {
       display: none;
     }
@@ -392,22 +396,16 @@
       margin-top: 1rem;
     }
     
-    .chart-bars {
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      margin-top: 0.75rem;
-    }
-    
     .chart-bar {
       display: flex;
       align-items: center;
       gap: 0.5rem;
       font-size: 0.7rem;
+      margin-bottom: 0.5rem;
     }
     
     .chart-bar-label {
-      width: 110px;
+      width: 100px;
       flex-shrink: 0;
     }
     
@@ -416,55 +414,6 @@
       background: linear-gradient(90deg, #45b3ff, #1a6bc3);
       border-radius: 10px;
       transition: width 0.3s ease;
-    }
-    
-    .stage-buttons {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    
-    .stage-btn {
-      flex: 1;
-      background: rgba(13, 27, 42, 0.5);
-      border: 1px solid rgba(69, 179, 255, 0.3);
-      padding: 0.5rem;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      text-align: center;
-    }
-    
-    .stage-btn.active {
-      background: rgba(69, 179, 255, 0.2);
-      border-color: #45b3ff;
-      color: #45b3ff;
-    }
-    
-    .timer-display {
-      font-size: 1.8rem;
-      font-weight: 700;
-      font-family: monospace;
-      color: #ffd166;
-      text-align: center;
-    }
-    
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-      margin-top: 1rem;
-    }
-    
-    .btn-warning {
-      background: rgba(230, 57, 70, 0.2);
-      border: 1px solid rgba(230, 57, 70, 0.3);
-      color: #e63946;
-      padding: 0.4rem;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      cursor: pointer;
-      flex: 1;
-      text-align: center;
     }
     
     .mode-toggle {
@@ -482,6 +431,21 @@
       border-radius: 30px;
       font-size: 0.7rem;
       cursor: pointer;
+    }
+    
+    .scoring-info {
+      font-size: 0.65rem;
+      color: #7b8a9b;
+      margin-top: 0.5rem;
+      text-align: center;
+    }
+    
+    .grade-container {
+      background: rgba(13, 27, 42, 0.5);
+      border-radius: 12px;
+      padding: 0.75rem;
+      margin-top: 1rem;
+      text-align: center;
     }
   </style>
 </head>
@@ -508,58 +472,118 @@
 
   <script>
     // ============================================
-    // DOSSIER CARDS - Complete Flight 261 Analysis
+    // COMPLETE DOSSIER CARDS - 500 Points Total
+    // Covers Dirty Dozen, Swiss Cheese, Dekker, Edmondson, Conklin
     // ============================================
     const DOSSIER_CARDS = [
       {
         id: 1,
-        title: "The C-Check Pressure & Override",
-        framework: "Swiss Cheese & Conklin Theory",
-        scenario: "During a routine C-Check in September 1997, a technician measures the jackscrew end-play at its maximum allowable limit (0.040 inches). The technician recommends replacing the entire jackscrew assembly. However, the replacement part is not in stock. The aircraft is already two days behind schedule. A maintenance supervisor, facing pressure to return the aircraft to service, overrides the technician's recommendation and signs the aircraft back to active service.",
-        prompt: "What organizational pressure or system override have you observed in your workplace when parts are delayed or schedules are tight?",
-        factors: ["Pressure", "Lack of Resources", "Norms", "Lack of Assertiveness", "Complacency", "Communication Breakdown"],
-        targetFactors: ["Pressure", "Lack of Resources", "Lack of Assertiveness"],
+        title: "The Maintenance Override",
+        framework: "Dirty Dozen (Gordon Dupont)",
+        scenario: "During a C-Check in September 1997, a technician measures the jackscrew end-play at its maximum allowable limit (0.040 inches). The technician recommends replacement. However, the part is not in stock. The aircraft is already two days behind schedule. A supervisor overrides the technician and signs the aircraft back to service.",
+        question: "Which Dirty Dozen factors were most clearly at work in the supervisor's decision to override the technician?",
+        options: [
+          { text: "Pressure, Lack of Resources, and Norms", correct: true, points: 100 },
+          { text: "Fatigue, Distraction, and Stress", correct: false, points: 0 },
+          { text: "Complacency and Lack of Teamwork only", correct: false, points: 0 },
+          { text: "Lack of Knowledge and Communication Breakdown", correct: false, points: 0 }
+        ],
+        correctAnswer: "Pressure, Lack of Resources, and Norms",
+        explanation: "The supervisor faced schedule pressure (aircraft already late), lack of resources (part not in stock), and norms (deferral had become standard practice at the airline).",
         wearLevel: 0.033,
         integrity: 78,
-        pointsPossible: 150
+        pointsPossible: 100
       },
       {
         id: 2,
-        title: "The Approved Extension Cycle",
-        framework: "Hollnagel's Variability & Normalization of Deviance",
-        scenario: "The FAA approved an extension of the jackscrew lubrication interval from 650 to 2,550 flight hours - a nearly 4x increase. Over the following years, this extension became the organizational standard. Technicians treated the extended interval as routine compliance rather than critical protection against physical abrasion. Each successful flight without incident reinforced the new normal.",
-        prompt: "Can you identify a task or procedure in your routine where complete compliance on paper masks an actual degradation in safety margins?",
-        factors: ["Complacency", "Norms", "Lack of Knowledge", "Lack of Communication", "Stress", "Distraction"],
-        targetFactors: ["Complacency", "Norms"],
+        title: "The Failed Layers of Defense",
+        framework: "Swiss Cheese Model (James Reason)",
+        scenario: "The jackscrew lubrication interval had been extended from 650 to 2,550 flight hours with FAA approval. The supervisor overrode the replacement recommendation. The technician did not escalate further. The inspection sign-off was completed without physical verification of the thread condition.",
+        question: "According to Reason's Swiss Cheese Model, how many defensive layers failed in this accident? Name the specific holes in each layer.",
+        options: [
+          { text: "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)", correct: true, points: 100 },
+          { text: "2 layers: Only the technician and supervisor failed", correct: false, points: 0 },
+          { text: "5 layers including design flaw and pilot error", correct: false, points: 0 },
+          { text: "Only the FAA regulatory layer failed", correct: false, points: 0 }
+        ],
+        correctAnswer: "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)",
+        explanation: "Multiple layers failed: Regulatory (approved dangerous interval), Organizational (normalized deferral), Supervisory (overrode concern), Inspection (signed off without verification).",
         wearLevel: 0.055,
         integrity: 50,
-        pointsPossible: 150
+        pointsPossible: 100
       },
       {
         id: 3,
-        title: "The Silent Defense Line",
-        framework: "Amy Edmondson's Psychological Safety",
-        scenario: "The technician who identified the end-play issue spoke up once but was dismissed by the supervisor. Having raised the concern and been overruled, the technician did not escalate further. The organizational culture made compliance easier than challenge. Speaking up felt futile and potentially career-limiting. Silence became the rational choice.",
-        prompt: "When you believe an unsafe sign-off is imminent, what structural barrier makes you hesitate to escalate?",
-        factors: ["Lack of Assertiveness", "Norms", "Pressure", "Lack of Teamwork", "Complacency", "Stress"],
-        targetFactors: ["Lack of Assertiveness", "Norms", "Pressure"],
+        title: "The Supervisor's Rational Choice",
+        framework: "Safety Differently (Sidney Dekker)",
+        scenario: "The supervisor who overrode the technician's recommendation was not acting maliciously. From his perspective, the aircraft was already late, the part wasn't available, and previous deferrals had never caused an accident.",
+        question: "What does Dekker mean by 'human error is a symptom, not a cause'? Apply this to the supervisor's decision.",
+        options: [
+          { text: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time", correct: true, points: 100 },
+          { text: "The supervisor was lazy and should be fired", correct: false, points: 0 },
+          { text: "Only the technician is responsible for the accident", correct: false, points: 0 },
+          { text: "Human error cannot be prevented, so we should accept it", correct: false, points: 0 }
+        ],
+        correctAnswer: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time",
+        explanation: "Dekker argues that blaming individuals hides systemic causes. The supervisor's override made sense given schedule pressure, parts unavailability, and no prior failures from deferrals.",
         wearLevel: 0.082,
         integrity: 22,
-        pointsPossible: 150
+        pointsPossible: 100
       },
       {
         id: 4,
-        title: "The Stripped Reality",
-        framework: "Dekker's Local Rationality & The Broken System",
-        scenario: "On 31 January 2000, at 31,000 feet over the Pacific Ocean, the final remaining thread shear forces strip the acme nut completely. The horizontal stabilizer jams, rendering aircraft pitch unrecoverable. The aircraft plunges into the ocean. All 88 people on board perish. The maintenance system had accepted 100% compliance on paper, while ignoring the physical reality of cumulative degradation.",
-        prompt: "When the system is broken long before anyone picks up a tool, how should maintenance organizations safeguard their engineers and the flying public?",
-        factors: ["Norms", "Complacency", "Lack of Knowledge", "Lack of Resources", "Lack of Teamwork", "Fatigue"],
-        targetFactors: ["Norms", "Complacency", "Lack of Resources"],
+        title: "The Silent Technician",
+        framework: "Psychological Safety (Amy Edmondson)",
+        scenario: "The technician raised the concern once, was overruled, and did not escalate further. No safety report was filed. The organization had a history of valuing schedule compliance over safety concerns.",
+        question: "Using Edmondson's framework, what does this tell us about psychological safety at Alaska Airlines?",
+        options: [
+          { text: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement", correct: true, points: 100 },
+          { text: "The technician was simply afraid of the supervisor", correct: false, points: 0 },
+          { text: "The organization had excellent safety culture", correct: false, points: 0 },
+          { text: "Only the technician is responsible for not speaking up again", correct: false, points: 0 }
+        ],
+        correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement",
+        explanation: "Edmondson's research shows that when psychological safety is absent, people choose silence over speaking up, even about serious safety concerns.",
+        wearLevel: 0.095,
+        integrity: 10,
+        pointsPossible: 100
+      },
+      {
+        id: 5,
+        title: "The Gap Between Paper and Reality",
+        framework: "Work-as-Done (Todd Conklin)",
+        scenario: "The maintenance task card was signed and certified as complete. The lubrication was documented as performed. Yet the jackscrew failed catastrophically due to inadequate lubrication over years.",
+        question: "What is the gap between 'work-as-imagined' and 'work-as-done' in this accident?",
+        options: [
+          { text: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage", correct: true, points: 100 },
+          { text: "The paperwork was forged", correct: false, points: 0 },
+          { text: "The technicians were not trained properly", correct: false, points: 0 },
+          { text: "There is no gap - compliance equals safety", correct: false, points: 0 }
+        ],
+        correctAnswer: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage",
+        explanation: "Conklin teaches that work-as-imagined (the procedure) and work-as-done (reality) always differ. The signature looked the same, but the safety outcome was completely different.",
         wearLevel: 0.115,
         integrity: 0,
-        pointsPossible: 150
+        pointsPossible: 100
       }
     ];
+    
+    // Grading thresholds (out of 500)
+    const GRADING = {
+      distinction: 400,  // 80% of 500
+      completed: 350,    // 70% of 500
+      attended: 0
+    };
+    
+    function getGrade(score) {
+      if (score >= GRADING.distinction) {
+        return { name: "Completed with Distinction", class: "grade-distinction", icon: "🏆" };
+      } else if (score >= GRADING.completed) {
+        return { name: "Completed", class: "grade-completed", icon: "✅" };
+      } else {
+        return { name: "Attended", class: "grade-attended", icon: "📋" };
+      }
+    }
     
     // Global state
     let currentPlayer = null;
@@ -569,7 +593,6 @@
     let isFacilitatorMode = false;
     let sessionResponses = [];
     
-    // Load player from localStorage
     function loadPlayer() {
       const saved = localStorage.getItem('hf-current-player');
       if (!saved) {
@@ -582,11 +605,12 @@
     }
     
     function updateScoreDisplay() {
-      document.getElementById('player-score').textContent = `Score: ${currentPlayer.score || 0} pts`;
+      const score = currentPlayer.score || 0;
+      const grade = getGrade(score);
+      document.getElementById('player-score').innerHTML = `Score: ${score} pts <span class="grade-badge ${grade.class}">${grade.icon} ${grade.name}</span>`;
     }
     
     function loadSessionData() {
-      // Load all participants
       allPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
       const updatedPlayer = allPlayers.find(p => p.id === currentPlayer.id);
       if (updatedPlayer) {
@@ -594,7 +618,6 @@
         updateScoreDisplay();
       }
       
-      // Load submitted cards for this player
       const saved = localStorage.getItem(`dossier-progress-${currentPlayer.id}`);
       if (saved) {
         const progress = JSON.parse(saved);
@@ -602,7 +625,6 @@
         currentCardIndex = submittedCards.length;
       }
       
-      // Load all session responses (for facilitator view)
       sessionResponses = JSON.parse(localStorage.getItem('hf-session-responses') || '[]');
       
       renderScoreBar();
@@ -615,11 +637,15 @@
         container.innerHTML = '<div class="score-chip">Waiting for participants...</div>';
         return;
       }
-      container.innerHTML = allPlayers.map(p => `
-        <div class="score-chip ${p.id === currentPlayer.id ? 'active' : ''}">
-          ${escapeHtml(p.name)}: ${p.score} pts
-        </div>
-      `).join('');
+      container.innerHTML = allPlayers.map(p => {
+        const grade = getGrade(p.score);
+        return `
+          <div class="score-chip ${p.id === currentPlayer.id ? 'active' : ''}">
+            ${escapeHtml(p.name)}: ${p.score} pts
+            <span class="grade-badge ${grade.class}" style="font-size: 0.55rem; margin-left: 0.3rem;">${grade.icon}</span>
+          </div>
+        `;
+      }).join('');
     }
     
     function renderMainContent() {
@@ -633,25 +659,27 @@
     }
     
     function renderParticipantView(container) {
-      // Check if all cards completed
       if (currentCardIndex >= DOSSIER_CARDS.length) {
+        const finalScore = currentPlayer.score || 0;
+        const grade = getGrade(finalScore);
         container.innerHTML = `
           <div class="dossier-card" style="grid-column: 1/-1;">
             <div class="complete-card">
               <div class="complete-icon">✓</div>
               <h2 style="margin-bottom: 0.5rem;">Dossier Complete!</h2>
-              <p style="color: #7b8a9b; margin-bottom: 1rem;">You have completed all 4 case study cards.</p>
-              <div style="background: rgba(69, 179, 255, 0.1); padding: 1rem; border-radius: 12px;">
-                <span style="color: #ffd166;">Final Score: ${currentPlayer.score} / 600 points</span>
+              <p style="color: #7b8a9b; margin-bottom: 1rem;">You have completed all 5 framework cards.</p>
+              <div style="background: rgba(69, 179, 255, 0.1); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
+                <div style="font-size: 1.5rem; font-weight: 700; color: #ffd166;">${finalScore} / 500 points</div>
+                <div class="grade-badge ${grade.class}" style="font-size: 0.9rem; margin-top: 0.5rem;">${grade.icon} ${grade.name}</div>
               </div>
-              <p style="margin-top: 1rem; font-size: 0.75rem; color: #7b8a9b;">The facilitator will now lead the debrief discussion.</p>
+              <p style="font-size: 0.75rem; color: #7b8a9b;">The facilitator will now lead the debrief discussion.</p>
             </div>
           </div>
           <div class="sidebar-card">
             <div class="sidebar-title">📋 Completed Cards</div>
             ${DOSSIER_CARDS.map((card, idx) => `
               <div style="padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(46, 196, 182, 0.1); border-radius: 8px;">
-                <strong>Card ${idx + 1}:</strong> ${card.title}<br>
+                <strong>${card.framework}</strong><br>
                 <span style="font-size: 0.65rem; color: #2ec4b6;">✓ Completed</span>
               </div>
             `).join('')}
@@ -664,70 +692,73 @@
       
       container.innerHTML = `
         <div>
-          <!-- Thread Wear Visualizer -->
           <div class="wear-card">
             <div class="wear-title">🔧 JACKSCREW ACME THREAD TELEMETRY</div>
-            <div class="svg-container" id="thread-svg-container">
-              <!-- SVG will be rendered here -->
-            </div>
+            <div class="svg-container" id="thread-svg-container"></div>
             <div class="wear-stats">
               <div class="wear-stat">
                 <div class="wear-stat-label">End-Play Measurement</div>
-                <div class="wear-stat-value" id="wear-value">${card.wearLevel.toFixed(3)} in</div>
+                <div class="wear-stat-value">${card.wearLevel.toFixed(3)} in</div>
               </div>
               <div class="wear-stat">
                 <div class="wear-stat-label">Thread Integrity</div>
-                <div class="wear-stat-value" id="integrity-value">${card.integrity}%</div>
-                <div class="integrity-bar"><div class="integrity-fill" id="integrity-fill" style="width: ${card.integrity}%; background: ${card.integrity > 60 ? '#2ec4b6' : card.integrity > 20 ? '#ffd166' : '#e63946'};"></div></div>
+                <div class="wear-stat-value">${card.integrity}%</div>
+                <div class="integrity-bar"><div class="integrity-fill" style="width: ${card.integrity}%; background: ${card.integrity > 60 ? '#2ec4b6' : card.integrity > 20 ? '#ffd166' : '#e63946'};"></div></div>
               </div>
             </div>
           </div>
           
-          <!-- Dossier Card -->
           <div class="dossier-card">
             <div class="dossier-header">
-              <span class="dossier-number">Dossier ${currentCardIndex + 1}/${DOSSIER_CARDS.length}</span>
+              <span class="dossier-number">Card ${currentCardIndex + 1}/${DOSSIER_CARDS.length}</span>
               <span class="dossier-framework">Framework: ${card.framework}</span>
             </div>
             <div class="dossier-title">${card.title}</div>
             <div class="dossier-scenario">${card.scenario}</div>
             
-            <div class="prompt-label">📝 Step 1: Identify Active Dirty Dozen Factors</div>
-            <div class="factors-grid" id="factors-grid">
-              ${card.factors.map(factor => `
-                <label class="factor-checkbox">
-                  <input type="checkbox" name="factor" value="${factor}">
-                  <span>${factor}</span>
+            <div class="question-label">📝 QUESTION (${card.pointsPossible} points):</div>
+            <div class="dossier-scenario" style="background: rgba(69, 179, 255, 0.1); margin-bottom: 1rem;">${card.question}</div>
+            
+            <div class="options-grid" id="options-grid">
+              ${card.options.map((opt, idx) => `
+                <label class="option-radio">
+                  <input type="radio" name="answer" value="${idx}" data-points="${opt.points}" data-correct="${opt.correct}">
+                  <span class="option-text">${escapeHtml(opt.text)}</span>
                 </label>
               `).join('')}
             </div>
             
-            <div class="prompt-label">💭 Step 2: Operational Insight</div>
-            <textarea id="reflection-input" placeholder="${card.prompt}"></textarea>
-            
-            <button class="btn-submit" onclick="submitCard(${currentCardIndex})">✈️ SUBMIT DOSSIER →</button>
+            <button class="btn-submit" onclick="submitCard(${currentCardIndex})">✈️ SUBMIT RESPONSE →</button>
+            <div class="scoring-info">💡 Each question worth ${card.pointsPossible} points. Select the best answer.</div>
           </div>
         </div>
         
-        <!-- Sidebar -->
         <div>
           <div class="sidebar-card">
-            <div class="sidebar-title">📡 LIVE CREW INSIGHTS</div>
+            <div class="sidebar-title">📡 LIVE PARTICIPANT INSIGHTS</div>
             <div class="insight-feed" id="insight-feed">
-              <div class="waiting">Waiting for crew insights...</div>
+              <div class="waiting">Waiting for participant responses...</div>
             </div>
+            <div class="privacy-note">👥 All participants can see each other's progress to encourage collaborative learning</div>
           </div>
           <div class="sidebar-card">
-            <div class="sidebar-title">📊 PROGRESS</div>
+            <div class="sidebar-title">📊 YOUR PROGRESS</div>
             <div style="margin-bottom: 0.5rem;">
               <div style="font-size: 0.7rem; color: #7b8a9b;">Cards Completed</div>
               <div style="font-size: 1.2rem; font-weight: 700;">${submittedCards.length}/${DOSSIER_CARDS.length}</div>
             </div>
             <div style="margin-bottom: 0.5rem;">
               <div style="font-size: 0.7rem; color: #7b8a9b;">Current Score</div>
-              <div style="font-size: 1.2rem; font-weight: 700; color: #ffd166;">${currentPlayer.score} pts</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: #ffd166;">${currentPlayer.score || 0} / 500 pts</div>
             </div>
             <div class="integrity-bar"><div class="integrity-fill" style="width: ${(submittedCards.length / DOSSIER_CARDS.length) * 100}%; background: #45b3ff;"></div></div>
+            <div class="grade-container">
+              <div style="font-size: 0.6rem; color: #7b8a9b;">Grade Thresholds:</div>
+              <div style="display: flex; justify-content: space-between; font-size: 0.6rem;">
+                <span>⬇️ 350 = Completed</span>
+                <span>400+ = 🏆 Distinction</span>
+              </div>
+            </div>
           </div>
         </div>
       `;
@@ -741,26 +772,20 @@
       if (!container) return;
       
       const wearRatio = Math.min(1, Math.max(0, card.wearLevel / 0.12));
-      const threadOpacity = Math.max(0.2, 1 - wearRatio);
       const nutColor = card.integrity > 60 ? '#2ec4b6' : card.integrity > 20 ? '#ffd166' : '#e63946';
       
       container.innerHTML = `
         <svg width="100%" height="100" viewBox="0 0 500 80" xmlns="http://www.w3.org/2000/svg">
-          <!-- Shaft -->
           <rect x="10" y="30" width="480" height="20" fill="#27272a" stroke="#52525b" stroke-width="1" />
-          
-          <!-- Threads (damaged based on wear level) -->
           ${Array.from({ length: 15 }, (_, i) => {
             const x = 25 + (i * 30);
             const threadHeight = 12 * (1 - wearRatio * 0.7);
             const threadColor = wearRatio > 0.7 ? '#e63946' : wearRatio > 0.4 ? '#ffd166' : '#d4d4d8';
             return `
-              <path d="M ${x} 30 L ${x + 8} ${18 + (15 - threadHeight)} L ${x + 22} ${18 + (15 - threadHeight)} L ${x + 30} 30 Z" fill="${threadColor}" stroke="#71717a" stroke-width="0.5" opacity="${threadOpacity}" />
-              <path d="M ${x} 50 L ${x + 8} ${62 + (15 - threadHeight)} L ${x + 22} ${62 + (15 - threadHeight)} L ${x + 30} 50 Z" fill="${threadColor}" stroke="#71717a" stroke-width="0.5" opacity="${threadOpacity}" />
+              <path d="M ${x} 30 L ${x + 8} ${18 + (15 - threadHeight)} L ${x + 22} ${18 + (15 - threadHeight)} L ${x + 30} 30 Z" fill="${threadColor}" stroke="#71717a" stroke-width="0.5" opacity="${1 - wearRatio * 0.5}" />
+              <path d="M ${x} 50 L ${x + 8} ${62 + (15 - threadHeight)} L ${x + 22} ${62 + (15 - threadHeight)} L ${x + 30} 50 Z" fill="${threadColor}" stroke="#71717a" stroke-width="0.5" opacity="${1 - wearRatio * 0.5}" />
             `;
           }).join('')}
-          
-          <!-- Acme Nut -->
           <g transform="translate(200, 15)">
             <rect x="0" y="0" width="100" height="50" fill="rgba(69, 179, 255, 0.05)" stroke="${nutColor}" stroke-width="2" rx="4" />
             <text x="50" y="28" fill="${nutColor}" font-size="9" font-family="monospace" text-anchor="middle">ACME NUT</text>
@@ -777,97 +802,104 @@
       const recentInsights = [...sessionResponses].reverse().slice(0, 8);
       
       if (recentInsights.length === 0) {
-        container.innerHTML = '<div class="waiting">No insights yet. Submit your first dossier to share with the crew.</div>';
+        container.innerHTML = '<div class="waiting">No responses yet. Submit your first answer to share with the group.</div>';
         return;
       }
       
-      container.innerHTML = recentInsights.map(insight => `
-        <div class="insight-item">
-          <div class="insight-name">${escapeHtml(insight.playerName)} • Card ${insight.cardId}</div>
-          <div class="insight-text">"${escapeHtml(insight.reflection.substring(0, 120))}${insight.reflection.length > 120 ? '...' : ''}"</div>
-          <div class="insight-factors">
-            ${insight.selectedFactors.map(f => `<span class="insight-factor">${escapeHtml(f)}</span>`).join('')}
+      container.innerHTML = recentInsights.map(insight => {
+        const grade = getGrade(insight.totalScore);
+        return `
+          <div class="insight-item">
+            <div class="insight-name">${escapeHtml(insight.playerName)} • ${insight.cardFramework}</div>
+            <div class="insight-text">Answered Card ${insight.cardId}: ${insight.isCorrect ? '✓ Correct' : '✗ Incorrect'}</div>
+            <div class="insight-factors">
+              <span class="insight-factor">Score: ${insight.pointsEarned}/${insight.pointsPossible} pts</span>
+              <span class="insight-factor" style="background: rgba(255, 209, 102, 0.15); color: #ffd166;">Total: ${insight.totalScore} pts ${grade.icon}</span>
+            </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
     
     function renderFacilitatorView(container) {
       // Calculate analytics
-      const factorCounts = {};
-      sessionResponses.forEach(resp => {
-        resp.selectedFactors.forEach(f => {
-          factorCounts[f] = (factorCounts[f] || 0) + 1;
-        });
+      const frameworkStats = {};
+      DOSSIER_CARDS.forEach(card => {
+        frameworkStats[card.framework] = { total: 0, correct: 0 };
       });
       
-      const sortedFactors = Object.entries(factorCounts).sort((a, b) => b[1] - a[1]);
-      const maxCount = Math.max(...Object.values(factorCounts), 1);
-      
-      // Participant stats
-      const participantStats = {};
-      allPlayers.forEach(p => {
-        participantStats[p.name] = { score: p.score, cardsCompleted: 0 };
-      });
       sessionResponses.forEach(resp => {
-        if (participantStats[resp.playerName]) {
-          participantStats[resp.playerName].cardsCompleted++;
+        if (frameworkStats[resp.cardFramework]) {
+          frameworkStats[resp.cardFramework].total++;
+          if (resp.isCorrect) frameworkStats[resp.cardFramework].correct++;
         }
       });
+      
+      const participantResults = [];
+      allPlayers.forEach(p => {
+        const playerResponses = sessionResponses.filter(r => r.playerId === p.id);
+        const totalScore = playerResponses.reduce((sum, r) => sum + r.pointsEarned, 0);
+        const grade = getGrade(totalScore);
+        participantResults.push({ name: p.name, score: totalScore, grade, responses: playerResponses.length });
+      });
+      participantResults.sort((a, b) => b.score - a.score);
       
       container.innerHTML = `
         <div style="grid-column: 1/-1;">
           <div class="dossier-card">
             <div class="dossier-header">
               <span class="dossier-number">📊 FACILITATOR ANALYTICS DASHBOARD</span>
-              <span class="dossier-framework">Live Session Data</span>
+              <span class="dossier-framework">500 Points | 5 Frameworks</span>
             </div>
             
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
-              <!-- Dirty Dozen Analysis -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
+              <!-- Framework Performance -->
               <div>
-                <h4 style="margin-bottom: 0.75rem;">🎯 Dirty Dozen Identification</h4>
+                <h4 style="margin-bottom: 0.75rem;">🎯 Framework Performance</h4>
                 <div class="analytics-chart">
-                  ${sortedFactors.slice(0, 6).map(([factor, count]) => `
-                    <div class="chart-bar">
-                      <span class="chart-bar-label">${factor}</span>
-                      <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${(count / maxCount) * 100}%;"></div></div>
-                      <span style="width: 30px; text-align: right;">${count}</span>
-                    </div>
-                  `).join('')}
-                  ${sortedFactors.length === 0 ? '<div class="waiting">Waiting for submissions...</div>' : ''}
+                  ${Object.entries(frameworkStats).map(([framework, stats]) => {
+                    const percentage = stats.total > 0 ? (stats.correct / stats.total) * 100 : 0;
+                    return `
+                      <div class="chart-bar">
+                        <span class="chart-bar-label">${framework.substring(0, 25)}</span>
+                        <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${percentage}%; background: ${percentage >= 80 ? '#2ec4b6' : percentage >= 60 ? '#ffd166' : '#e63946'};"></div></div>
+                        <span style="width: 40px;">${stats.correct}/${stats.total}</span>
+                      </div>
+                    `;
+                  }).join('')}
                 </div>
               </div>
               
-              <!-- Participant Progress -->
+              <!-- Participant Leaderboard -->
               <div>
-                <h4 style="margin-bottom: 0.75rem;">👥 Participant Progress</h4>
+                <h4 style="margin-bottom: 0.75rem;">👥 Participant Results (500 pts max)</h4>
                 <div class="analytics-chart">
-                  ${Object.entries(participantStats).map(([name, stats]) => `
+                  ${participantResults.map(p => `
                     <div class="chart-bar">
-                      <span class="chart-bar-label">${name.substring(0, 15)}</span>
-                      <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${(stats.cardsCompleted / DOSSIER_CARDS.length) * 100}%; background: #ffd166;"></div></div>
-                      <span style="width: 60px; text-align: right;">${stats.score} pts</span>
+                      <span class="chart-bar-label">${escapeHtml(p.name.substring(0, 15))}</span>
+                      <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${(p.score / 500) * 100}%; background: ${p.grade.class === 'grade-distinction' ? '#2ec4b6' : p.grade.class === 'grade-completed' ? '#45b3ff' : '#e63946'};"></div></div>
+                      <span style="width: 60px;">${p.score} pts</span>
+                      <span class="grade-badge ${p.grade.class}" style="font-size: 0.6rem;">${p.grade.icon}</span>
                     </div>
                   `).join('')}
-                  ${Object.keys(participantStats).length === 0 ? '<div class="waiting">No participants joined yet</div>' : ''}
+                  ${participantResults.length === 0 ? '<div class="waiting">No participants have joined yet</div>' : ''}
                 </div>
               </div>
             </div>
             
-            <!-- All Reflections Wall -->
+            <!-- All Responses -->
             <div style="margin-top: 1.5rem;">
-              <h4 style="margin-bottom: 0.75rem;">📝 All Crew Reflections</h4>
+              <h4 style="margin-bottom: 0.75rem;">📝 All Participant Responses</h4>
               <div style="max-height: 400px; overflow-y: auto;">
-                ${sessionResponses.length === 0 ? '<div class="waiting">No reflections submitted yet</div>' : ''}
+                ${sessionResponses.length === 0 ? '<div class="waiting">No responses submitted yet</div>' : ''}
                 ${sessionResponses.map(resp => `
                   <div class="insight-item" style="margin-bottom: 0.75rem;">
-                    <div class="insight-name">${escapeHtml(resp.playerName)} • Card ${resp.cardId}: ${escapeHtml(resp.cardTitle)}</div>
-                    <div class="insight-text">"${escapeHtml(resp.reflection)}"</div>
+                    <div class="insight-name">${escapeHtml(resp.playerName)} • ${resp.cardFramework}</div>
+                    <div class="insight-text">${escapeHtml(resp.selectedAnswer)}</div>
                     <div class="insight-factors">
-                      ${resp.selectedFactors.map(f => `<span class="insight-factor">${escapeHtml(f)}</span>`).join('')}
+                      <span class="insight-factor">${resp.isCorrect ? '✓ Correct' : '✗ Incorrect'}</span>
+                      <span class="insight-factor">${resp.pointsEarned}/${resp.pointsPossible} pts</span>
                     </div>
-                    <div style="font-size: 0.6rem; color: #ffd166; margin-top: 0.3rem;">+${resp.pointsEarned} pts</div>
                   </div>
                 `).join('')}
               </div>
@@ -875,8 +907,8 @@
             
             <!-- Session Control -->
             <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
-              <button class="stage-btn" onclick="resetAllProgress()">🔄 Reset All Progress</button>
-              <button class="btn-warning" onclick="clearAllResponses()">🗑️ Clear All Responses</button>
+              <button class="btn-warning" onclick="resetAllProgress()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🔄 Reset All Progress</button>
+              <button class="btn-warning" onclick="clearAllResponses()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🗑️ Clear All Responses</button>
             </div>
           </div>
         </div>
@@ -886,30 +918,16 @@
     async function submitCard(cardIndex) {
       const card = DOSSIER_CARDS[cardIndex];
       
-      // Get selected factors
-      const selectedCheckboxes = document.querySelectorAll('#factors-grid input:checked');
-      const selectedFactors = Array.from(selectedCheckboxes).map(cb => cb.value);
-      
-      if (selectedFactors.length === 0) {
-        alert('Please select at least one Dirty Dozen factor.');
+      const selectedRadio = document.querySelector('input[name="answer"]:checked');
+      if (!selectedRadio) {
+        alert('Please select an answer before submitting.');
         return;
       }
       
-      const reflection = document.getElementById('reflection-input').value.trim();
-      if (!reflection) {
-        alert('Please provide your operational insight.');
-        return;
-      }
-      
-      // Calculate points
-      let matchCount = 0;
-      selectedFactors.forEach(f => {
-        if (card.targetFactors.includes(f)) {
-          matchCount++;
-        }
-      });
-      
-      const pointsEarned = Math.min(card.pointsPossible, (matchCount * 40) + 60);
+      const selectedIndex = parseInt(selectedRadio.value);
+      const selectedOption = card.options[selectedIndex];
+      const isCorrect = selectedOption.correct;
+      const pointsEarned = isCorrect ? card.pointsPossible : 0;
       
       // Update player score
       currentPlayer.score = (currentPlayer.score || 0) + pointsEarned;
@@ -925,9 +943,11 @@
       submittedCards.push({
         cardId: card.id,
         cardTitle: card.title,
-        selectedFactors: selectedFactors,
-        reflection: reflection,
-        pointsEarned: pointsEarned
+        cardFramework: card.framework,
+        selectedAnswer: selectedOption.text,
+        isCorrect: isCorrect,
+        pointsEarned: pointsEarned,
+        pointsPossible: card.pointsPossible
       });
       
       localStorage.setItem(`dossier-progress-${currentPlayer.id}`, JSON.stringify({
@@ -941,9 +961,12 @@
         playerName: currentPlayer.name,
         cardId: card.id,
         cardTitle: card.title,
-        selectedFactors: selectedFactors,
-        reflection: reflection,
+        cardFramework: card.framework,
+        selectedAnswer: selectedOption.text,
+        isCorrect: isCorrect,
         pointsEarned: pointsEarned,
+        pointsPossible: card.pointsPossible,
+        totalScore: currentPlayer.score,
         timestamp: new Date().toISOString()
       });
       localStorage.setItem('hf-session-responses', JSON.stringify(sessionResponses));
@@ -954,8 +977,12 @@
       currentCardIndex++;
       renderMainContent();
       
-      // Show success message
-      alert(`✓ Dossier submitted! +${pointsEarned} points earned.`);
+      // Show feedback
+      if (isCorrect) {
+        alert(`✓ Correct! +${pointsEarned} points.\n\n${card.explanation}`);
+      } else {
+        alert(`✗ Incorrect. The correct answer was:\n\n${card.correctAnswer}\n\n${card.explanation}`);
+      }
     }
     
     function toggleMode() {
@@ -976,7 +1003,6 @@
     
     function resetAllProgress() {
       if (confirm('⚠️ Reset all participant progress? This will clear all scores and submissions.')) {
-        // Clear all dossier progress
         const keys = Object.keys(localStorage);
         keys.forEach(key => {
           if (key.startsWith('dossier-progress-')) {
@@ -985,7 +1011,6 @@
         });
         localStorage.removeItem('hf-session-responses');
         
-        // Reset current player score
         currentPlayer.score = 0;
         const playerIndex = allPlayers.findIndex(p => p.id === currentPlayer.id);
         if (playerIndex !== -1) {
@@ -1023,7 +1048,6 @@
       return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
     }
     
-    // Refresh data periodically
     function refreshData() {
       const updatedPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
       const updatedPlayer = updatedPlayers.find(p => p.id === currentPlayer.id);
