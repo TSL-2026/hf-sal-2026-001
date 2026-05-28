@@ -20,7 +20,6 @@
     position: relative;
   }
   
-  /* Subtle background pattern */
   body::before {
     content: '';
     position: absolute;
@@ -37,7 +36,6 @@
     z-index: 1;
   }
   
-  /* Logo / Title Section */
   .logo { text-align: center; margin-bottom: 1.5rem; }
   .logo h1 { 
     font-family: 'Bebas Neue', sans-serif; 
@@ -47,7 +45,6 @@
     background-clip: text;
     color: transparent;
     letter-spacing: 0.05em;
-    text-shadow: 0 2px 10px rgba(69, 179, 255, 0.2);
   }
   .logo .subtitle { 
     font-family: 'IBM Plex Mono', monospace; 
@@ -68,14 +65,13 @@
     margin-top: 0.5rem;
   }
   
-  /* Main Card - Glass morphism */
   .card {
     background: rgba(27, 38, 59, 0.7);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(69, 179, 255, 0.2);
     border-radius: 28px;
     padding: 2rem;
-    box-shadow: 0 25px 45px rgba(0,0,0,0.3), 0 0 0 1px rgba(69, 179, 255, 0.1) inset;
+    box-shadow: 0 25px 45px rgba(0,0,0,0.3);
   }
   
   .card h2 {
@@ -93,7 +89,6 @@
     border-bottom: 1px solid rgba(69, 179, 255, 0.2);
   }
   
-  /* Session Code */
   .session-code {
     background: rgba(27, 38, 59, 0.8);
     border: 1px solid rgba(69, 179, 255, 0.3);
@@ -107,14 +102,13 @@
     color: #7b8a9b; 
     letter-spacing: 0.15em; 
     text-transform: uppercase;
-    font-family: 'IBM Plex Mono', monospace;
+    font-family: monospace;
   }
   .session-code-value { 
-    font-family: 'IBM Plex Mono', monospace; 
+    font-family: monospace; 
     font-size: 1.1rem; 
     font-weight: 600; 
     color: #45b3ff; 
-    letter-spacing: 0.05em;
     background: rgba(0,0,0,0.3);
     display: inline-block;
     padding: 0.2rem 0.8rem;
@@ -122,7 +116,6 @@
     margin-top: 0.25rem;
   }
   
-  /* Form */
   .input-group { margin-bottom: 1.5rem; }
   .input-group label {
     display: block;
@@ -155,7 +148,6 @@
     box-shadow: 0 0 0 3px rgba(255, 209, 102, 0.2);
   }
   
-  /* Role Badge */
   .role-badge {
     display: inline-block;
     font-size: 0.6rem;
@@ -167,7 +159,6 @@
   .role-participant { background: rgba(69, 179, 255, 0.15); color: #45b3ff; border: 1px solid rgba(69,179,255,0.3); }
   .role-observer { background: rgba(255, 209, 102, 0.15); color: #ffd166; border: 1px solid rgba(255,209,102,0.3); }
   
-  /* Button - Push to Start */
   .btn {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.4rem;
@@ -197,12 +188,8 @@
     transform: translateY(2px);
     box-shadow: 0 3px 0 #0d3b5e;
   }
-  .btn-icon {
-    font-size: 1.4rem;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,0.3));
-  }
+  .btn-icon { font-size: 1.4rem; }
   
-  /* Participants Section */
   .participants-section { margin-top: 1.5rem; }
   .participants-title {
     font-size: 0.65rem;
@@ -232,7 +219,6 @@
   .participant-name { font-weight: 500; color: #ffffff; }
   .participant-status { font-size: 0.7rem; color: #45b3ff; }
   
-  /* Footer */
   .footer {
     text-align: center;
     margin-top: 1.5rem;
@@ -242,12 +228,25 @@
   .footer a { color: #5a6e84; text-decoration: none; transition: color 0.2s; }
   .footer a:hover { color: #ffd166; }
   
-  /* Scrollbar */
-  .participants-list::-webkit-scrollbar { width: 4px; }
-  .participants-list::-webkit-scrollbar-track { background: #1b263b; border-radius: 10px; }
-  .participants-list::-webkit-scrollbar-thumb { background: #45b3ff; border-radius: 10px; }
+  .empty-message {
+    text-align: center;
+    padding: 1rem;
+    color: #5a6e84;
+    font-style: italic;
+    font-size: 0.8rem;
+  }
   
-  /* Animations */
+  .info-message {
+    background: rgba(69, 179, 255, 0.1);
+    border: 1px solid rgba(69, 179, 255, 0.3);
+    border-radius: 12px;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 0.75rem;
+    color: #45b3ff;
+  }
+  
   @keyframes fadeInUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
@@ -258,18 +257,7 @@
     0%, 100% { opacity: 1; }
     50% { opacity: 0.7; }
   }
-  .btn-icon {
-    animation: pulse 1.5s infinite;
-  }
-  
-  /* Empty state message styling */
-  .empty-message {
-    text-align: center;
-    padding: 1rem;
-    color: #5a6e84;
-    font-style: italic;
-    font-size: 0.8rem;
-  }
+  .btn-icon { animation: pulse 1.5s infinite; }
 </style>
 </head>
 <body>
@@ -284,6 +272,10 @@
     <div class="session-code">
       <div class="session-code-label">SESSION CODE</div>
       <div class="session-code-value" id="session-code">HF-SAL-R29052026</div>
+    </div>
+    
+    <div class="info-message" id="info-message">
+      ℹ️ Select your name from the dropdown below to join the session
     </div>
     
     <div class="input-group">
@@ -305,16 +297,16 @@
         <span id="participant-count">0 joined</span>
       </div>
       <div class="participants-list" id="participants-list">
-        <div class="empty-message">Waiting for participants to join...</div>
+        <div class="empty-message">⏳ Waiting for participants to join...</div>
       </div>
     </div>
   </div>
   
   <div class="footer">
-  <a href="facilitator-login.html">🔐 FACILITATOR LOGIN</a> • 
-  <span id="online-status">🟢 Online</span> • 
-  HF-SAL-R29052026
-</div>
+    <a href="facilitator-login.html">🔐 FACILITATOR LOGIN</a> • 
+    <span id="online-status">🟢 Online</span> • 
+    HF-SAL-R29052026
+  </div>
 </div>
 
 <script>
@@ -334,19 +326,23 @@ const PARTICIPANTS_LIST = [
   { name: "CAAN Representative", role: "observer", email: "caan@caan.gov.np" }
 ];
 
-// Session code - Fixed as per your requirement
+// Session code
 const SESSION_CODE = "HF-SAL-R29052026";
 localStorage.setItem('hf-session-id', SESSION_CODE);
 document.getElementById('session-code').textContent = SESSION_CODE;
 
 // Load existing participants
 let joinedParticipants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+let selectedValue = null;
 
-// Populate dropdown with available participants (not already joined)
+// Populate dropdown WITHOUT auto-refresh interference
 function populateDropdown() {
   const select = document.getElementById('player-select');
   const joinedNames = joinedParticipants.map(p => p.name);
   const available = PARTICIPANTS_LIST.filter(p => !joinedNames.includes(p.name));
+  
+  // Store current selection before rebuilding
+  const currentValue = select.value;
   
   select.innerHTML = '<option value="">-- Choose your name --</option>';
   available.forEach(p => {
@@ -359,26 +355,32 @@ function populateDropdown() {
     select.appendChild(option);
   });
   
+  // Restore selection if still valid
+  if (currentValue && available.some(p => JSON.stringify(p) === currentValue)) {
+    select.value = currentValue;
+  }
+  
   if (available.length === 0) {
     select.innerHTML = '<option value="">-- All participants have joined --</option>';
     select.disabled = true;
+    document.getElementById('info-message').innerHTML = '✅ All participants have joined! Waiting for facilitator to start...';
   } else {
     select.disabled = false;
   }
 }
 
-// Render participants list in UI
+// Render participants list
 function renderParticipants() {
   const container = document.getElementById('participants-list');
-  const count = document.getElementById('participant-count');
+  const countSpan = document.getElementById('participant-count');
   
   if (joinedParticipants.length === 0) {
     container.innerHTML = '<div class="empty-message">⏳ Waiting for participants to join...</div>';
-    count.textContent = '0 joined';
+    countSpan.textContent = '0 joined';
     return;
   }
   
-  count.textContent = `${joinedParticipants.length} / ${PARTICIPANTS_LIST.length} joined`;
+  countSpan.textContent = `${joinedParticipants.length} / ${PARTICIPANTS_LIST.length} joined`;
   
   container.innerHTML = joinedParticipants.map(p => `
     <div class="participant-item">
@@ -397,7 +399,16 @@ function joinGame() {
   const selectedValue = select.value;
   
   if (!selectedValue) {
-    alert('Please select your name from the list');
+    document.getElementById('info-message').innerHTML = '⚠️ Please select your name from the dropdown before continuing.';
+    document.getElementById('info-message').style.background = 'rgba(230, 57, 70, 0.15)';
+    document.getElementById('info-message').style.borderColor = 'rgba(230, 57, 70, 0.3)';
+    document.getElementById('info-message').style.color = '#e63946';
+    setTimeout(() => {
+      document.getElementById('info-message').innerHTML = 'ℹ️ Select your name from the dropdown below to join the session';
+      document.getElementById('info-message').style.background = 'rgba(69, 179, 255, 0.1)';
+      document.getElementById('info-message').style.borderColor = 'rgba(69, 179, 255, 0.3)';
+      document.getElementById('info-message').style.color = '#45b3ff';
+    }, 3000);
     return;
   }
   
@@ -405,7 +416,16 @@ function joinGame() {
   
   // Check if already joined
   if (joinedParticipants.some(p => p.name === playerData.name)) {
-    alert(`${playerData.name} has already joined. Please contact the facilitator if this is an error.`);
+    document.getElementById('info-message').innerHTML = `⚠️ ${playerData.name} has already joined. Please contact the facilitator if this is an error.`;
+    document.getElementById('info-message').style.background = 'rgba(230, 57, 70, 0.15)';
+    document.getElementById('info-message').style.borderColor = 'rgba(230, 57, 70, 0.3)';
+    document.getElementById('info-message').style.color = '#e63946';
+    setTimeout(() => {
+      document.getElementById('info-message').innerHTML = 'ℹ️ Select your name from the dropdown below to join the session';
+      document.getElementById('info-message').style.background = 'rgba(69, 179, 255, 0.1)';
+      document.getElementById('info-message').style.borderColor = 'rgba(69, 179, 255, 0.3)';
+      document.getElementById('info-message').style.color = '#45b3ff';
+    }, 3000);
     return;
   }
   
@@ -423,11 +443,19 @@ function joinGame() {
   localStorage.setItem('hf-participants', JSON.stringify(joinedParticipants));
   localStorage.setItem('hf-current-player', JSON.stringify(newParticipant));
   
-  // Redirect to case study page
-  window.location.href = 'casestudy.html';
+  // Update message
+  document.getElementById('info-message').innerHTML = `✅ Welcome ${playerData.name}! Redirecting to case study...`;
+  document.getElementById('info-message').style.background = 'rgba(46, 196, 182, 0.15)';
+  document.getElementById('info-message').style.borderColor = 'rgba(46, 196, 182, 0.3)';
+  document.getElementById('info-message').style.color = '#2ec4b6';
+  
+  // Redirect after short delay
+  setTimeout(() => {
+    window.location.href = 'casestudy.html';
+  }, 1000);
 }
 
-// Utility function
+// Escape HTML
 function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/[&<>]/g, function(m) {
@@ -450,16 +478,19 @@ function updateOnlineStatus() {
   }
 }
 
-// Initialize and auto-refresh
+// Initialize
 populateDropdown();
 renderParticipants();
 updateOnlineStatus();
 
-// Refresh participants list periodically (for facilitator updates)
+// Refresh participants list without resetting dropdown selection
 setInterval(() => {
-  joinedParticipants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
-  populateDropdown();
-  renderParticipants();
+  const newParticipants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+  if (JSON.stringify(joinedParticipants) !== JSON.stringify(newParticipants)) {
+    joinedParticipants = newParticipants;
+    populateDropdown(); // This preserves selection
+    renderParticipants();
+  }
 }, 3000);
 
 window.addEventListener('online', updateOnlineStatus);
