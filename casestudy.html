@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>Flight 261 | Human Factors Dossier</title>
+  <title>Flight 261 | Human Factors Case Study</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
@@ -266,24 +266,6 @@
       font-size: 0.85rem;
     }
     
-    textarea {
-      width: 100%;
-      background: rgba(13, 27, 42, 0.8);
-      border: 1px solid rgba(69, 179, 255, 0.3);
-      border-radius: 12px;
-      color: #e0e1dd;
-      padding: 0.8rem;
-      font-size: 0.85rem;
-      resize: vertical;
-      min-height: 80px;
-      margin-bottom: 1rem;
-    }
-    
-    textarea:focus {
-      outline: none;
-      border-color: #45b3ff;
-    }
-    
     .btn-submit {
       background: linear-gradient(135deg, #45b3ff, #1a6bc3);
       color: white;
@@ -447,12 +429,34 @@
       margin-top: 1rem;
       text-align: center;
     }
+    
+    /* Success message that fades */
+    .success-message {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(46, 196, 182, 0.9);
+      color: #000;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      z-index: 2000;
+      animation: fadeOut 2s ease forwards;
+    }
+    
+    @keyframes fadeOut {
+      0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+      70% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-50%) translateY(-20px); visibility: hidden; }
+    }
   </style>
 </head>
 <body id="app-body">
   <div class="header">
     <div class="logo">
-      <h1>✈️ FLIGHT 261 | HUMAN FACTORS DOSSIER</h1>
+      <h1>✈️ FLIGHT 261 | HUMAN FACTORS CASE STUDY</h1>
       <p>NCAR Part 145 • Alaska Airlines • 31 January 2000</p>
     </div>
     <div class="player-info">
@@ -472,8 +476,9 @@
 
   <script>
     // ============================================
-    // COMPLETE DOSSIER CARDS - 500 Points Total
-    // Covers Dirty Dozen, Swiss Cheese, Dekker, Edmondson, Conklin
+    // COMPLETE CASE STUDY CARDS - 500 Points Total
+    // 5 Cards x 100 Points = 500 Points
+    // Covers: Dirty Dozen, Swiss Cheese, Dekker, Edmondson, Conklin
     // ============================================
     const DOSSIER_CARDS = [
       {
@@ -585,6 +590,14 @@
       }
     }
     
+    function showSuccessMessage(message) {
+      const div = document.createElement('div');
+      div.className = 'success-message';
+      div.textContent = message;
+      document.body.appendChild(div);
+      setTimeout(() => div.remove(), 2000);
+    }
+    
     // Global state
     let currentPlayer = null;
     let allPlayers = [];
@@ -618,7 +631,7 @@
         updateScoreDisplay();
       }
       
-      const saved = localStorage.getItem(`dossier-progress-${currentPlayer.id}`);
+      const saved = localStorage.getItem(`case-progress-${currentPlayer.id}`);
       if (saved) {
         const progress = JSON.parse(saved);
         submittedCards = progress.submittedCards || [];
@@ -659,6 +672,7 @@
     }
     
     function renderParticipantView(container) {
+      // Check if all 5 cards completed
       if (currentCardIndex >= DOSSIER_CARDS.length) {
         const finalScore = currentPlayer.score || 0;
         const grade = getGrade(finalScore);
@@ -666,8 +680,8 @@
           <div class="dossier-card" style="grid-column: 1/-1;">
             <div class="complete-card">
               <div class="complete-icon">✓</div>
-              <h2 style="margin-bottom: 0.5rem;">Dossier Complete!</h2>
-              <p style="color: #7b8a9b; margin-bottom: 1rem;">You have completed all 5 framework cards.</p>
+              <h2 style="margin-bottom: 0.5rem;">Case Study Complete!</h2>
+              <p style="color: #7b8a9b; margin-bottom: 1rem;">You have completed all 5 framework questions.</p>
               <div style="background: rgba(69, 179, 255, 0.1); padding: 1rem; border-radius: 12px; margin-bottom: 1rem;">
                 <div style="font-size: 1.5rem; font-weight: 700; color: #ffd166;">${finalScore} / 500 points</div>
                 <div class="grade-badge ${grade.class}" style="font-size: 0.9rem; margin-top: 0.5rem;">${grade.icon} ${grade.name}</div>
@@ -689,6 +703,7 @@
       }
       
       const card = DOSSIER_CARDS[currentCardIndex];
+      const totalCards = DOSSIER_CARDS.length;
       
       container.innerHTML = `
         <div>
@@ -710,7 +725,7 @@
           
           <div class="dossier-card">
             <div class="dossier-header">
-              <span class="dossier-number">Card ${currentCardIndex + 1}/${DOSSIER_CARDS.length}</span>
+              <span class="dossier-number">Question ${currentCardIndex + 1}/${totalCards}</span>
               <span class="dossier-framework">Framework: ${card.framework}</span>
             </div>
             <div class="dossier-title">${card.title}</div>
@@ -728,8 +743,8 @@
               `).join('')}
             </div>
             
-            <button class="btn-submit" onclick="submitCard(${currentCardIndex})">✈️ SUBMIT RESPONSE →</button>
-            <div class="scoring-info">💡 Each question worth ${card.pointsPossible} points. Select the best answer.</div>
+            <button class="btn-submit" onclick="submitResponse(${currentCardIndex})">✈️ SUBMIT RESPONSE →</button>
+            <div class="scoring-info">💡 Each question worth ${card.pointsPossible} points (${totalCards} questions × 100 = 500 total points)</div>
           </div>
         </div>
         
@@ -744,19 +759,20 @@
           <div class="sidebar-card">
             <div class="sidebar-title">📊 YOUR PROGRESS</div>
             <div style="margin-bottom: 0.5rem;">
-              <div style="font-size: 0.7rem; color: #7b8a9b;">Cards Completed</div>
-              <div style="font-size: 1.2rem; font-weight: 700;">${submittedCards.length}/${DOSSIER_CARDS.length}</div>
+              <div style="font-size: 0.7rem; color: #7b8a9b;">Questions Completed</div>
+              <div style="font-size: 1.2rem; font-weight: 700;">${submittedCards.length}/${totalCards}</div>
             </div>
             <div style="margin-bottom: 0.5rem;">
               <div style="font-size: 0.7rem; color: #7b8a9b;">Current Score</div>
               <div style="font-size: 1.2rem; font-weight: 700; color: #ffd166;">${currentPlayer.score || 0} / 500 pts</div>
             </div>
-            <div class="integrity-bar"><div class="integrity-fill" style="width: ${(submittedCards.length / DOSSIER_CARDS.length) * 100}%; background: #45b3ff;"></div></div>
+            <div class="integrity-bar"><div class="integrity-fill" style="width: ${(submittedCards.length / totalCards) * 100}%; background: #45b3ff;"></div></div>
             <div class="grade-container">
-              <div style="font-size: 0.6rem; color: #7b8a9b;">Grade Thresholds:</div>
+              <div style="font-size: 0.6rem; color: #7b8a9b;">Grade Thresholds (500 pts max):</div>
               <div style="display: flex; justify-content: space-between; font-size: 0.6rem;">
-                <span>⬇️ 350 = Completed</span>
-                <span>400+ = 🏆 Distinction</span>
+                <span>📋 Attended: &lt;350</span>
+                <span>✅ Completed: 350-399</span>
+                <span>🏆 Distinction: 400+</span>
               </div>
             </div>
           </div>
@@ -811,7 +827,7 @@
         return `
           <div class="insight-item">
             <div class="insight-name">${escapeHtml(insight.playerName)} • ${insight.cardFramework}</div>
-            <div class="insight-text">Answered Card ${insight.cardId}: ${insight.isCorrect ? '✓ Correct' : '✗ Incorrect'}</div>
+            <div class="insight-text">Question ${insight.cardId}: ${insight.isCorrect ? '✓ Correct' : '✗ Incorrect'}</div>
             <div class="insight-factors">
               <span class="insight-factor">Score: ${insight.pointsEarned}/${insight.pointsPossible} pts</span>
               <span class="insight-factor" style="background: rgba(255, 209, 102, 0.15); color: #ffd166;">Total: ${insight.totalScore} pts ${grade.icon}</span>
@@ -853,7 +869,6 @@
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem;">
-              <!-- Framework Performance -->
               <div>
                 <h4 style="margin-bottom: 0.75rem;">🎯 Framework Performance</h4>
                 <div class="analytics-chart">
@@ -870,7 +885,6 @@
                 </div>
               </div>
               
-              <!-- Participant Leaderboard -->
               <div>
                 <h4 style="margin-bottom: 0.75rem;">👥 Participant Results (500 pts max)</h4>
                 <div class="analytics-chart">
@@ -887,7 +901,6 @@
               </div>
             </div>
             
-            <!-- All Responses -->
             <div style="margin-top: 1.5rem;">
               <h4 style="margin-bottom: 0.75rem;">📝 All Participant Responses</h4>
               <div style="max-height: 400px; overflow-y: auto;">
@@ -905,7 +918,6 @@
               </div>
             </div>
             
-            <!-- Session Control -->
             <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
               <button class="btn-warning" onclick="resetAllProgress()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🔄 Reset All Progress</button>
               <button class="btn-warning" onclick="clearAllResponses()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🗑️ Clear All Responses</button>
@@ -915,12 +927,12 @@
       `;
     }
     
-    async function submitCard(cardIndex) {
+    async function submitResponse(cardIndex) {
       const card = DOSSIER_CARDS[cardIndex];
       
       const selectedRadio = document.querySelector('input[name="answer"]:checked');
       if (!selectedRadio) {
-        alert('Please select an answer before submitting.');
+        showSuccessMessage('⚠️ Please select an answer before submitting');
         return;
       }
       
@@ -950,7 +962,7 @@
         pointsPossible: card.pointsPossible
       });
       
-      localStorage.setItem(`dossier-progress-${currentPlayer.id}`, JSON.stringify({
+      localStorage.setItem(`case-progress-${currentPlayer.id}`, JSON.stringify({
         submittedCards: submittedCards,
         completedAt: new Date().toISOString()
       }));
@@ -977,11 +989,11 @@
       currentCardIndex++;
       renderMainContent();
       
-      // Show feedback
+      // Show success message (no alert popup)
       if (isCorrect) {
-        alert(`✓ Correct! +${pointsEarned} points.\n\n${card.explanation}`);
+        showSuccessMessage(`✓ Correct! +${pointsEarned} points`);
       } else {
-        alert(`✗ Incorrect. The correct answer was:\n\n${card.correctAnswer}\n\n${card.explanation}`);
+        showSuccessMessage(`✗ Incorrect. The correct answer was: ${card.correctAnswer}`);
       }
     }
     
@@ -1005,7 +1017,7 @@
       if (confirm('⚠️ Reset all participant progress? This will clear all scores and submissions.')) {
         const keys = Object.keys(localStorage);
         keys.forEach(key => {
-          if (key.startsWith('dossier-progress-')) {
+          if (key.startsWith('case-progress-')) {
             localStorage.removeItem(key);
           }
         });
@@ -1024,7 +1036,7 @@
         
         updateScoreDisplay();
         renderMainContent();
-        alert('Session reset complete.');
+        showSuccessMessage('Session reset complete');
       }
     }
     
@@ -1033,7 +1045,7 @@
         localStorage.removeItem('hf-session-responses');
         sessionResponses = [];
         renderMainContent();
-        alert('All responses cleared.');
+        showSuccessMessage('All responses cleared');
       }
     }
     
