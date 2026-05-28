@@ -5,7 +5,56 @@
   Developer: Ghanshyam Acharya, 2026
   Description: Shared helper functions used across all modules
 */
-
+  /**
+   * Check if app is installed as PWA
+   * @returns {boolean} True if in standalone mode (installed)
+   */
+  isPWAInstalled: function() {
+    return window.matchMedia('(display-mode: standalone)').matches || 
+           window.navigator.standalone === true;
+  },
+  
+  /**
+   * Prompt user to install PWA (trigger beforeinstallprompt)
+   * @param {Event} event - The beforeinstallprompt event
+   */
+  promptInstall: function(event) {
+    event.preventDefault();
+    const deferredPrompt = event;
+    deferredPrompt.prompt();
+    deferredPrompt.userChoice.then((choiceResult) => {
+      if (choiceResult.outcome === 'accepted') {
+        console.log('User accepted install prompt');
+      }
+      Utils.saveToLocalStorage('pwa-install-prompt-shown', true);
+    });
+  },
+  
+  /**
+   * Check if app is online
+   * @returns {boolean}
+   */
+  isOnline: function() {
+    return navigator.onLine;
+  },
+  
+  /**
+   * Show offline warning if needed
+   */
+  checkOnlineStatus: function() {
+    if (!this.isOnline()) {
+      const warning = document.createElement('div');
+      warning.style.cssText = `
+        position: fixed; bottom: 20px; right: 20px;
+        background: var(--red); color: white; padding: 0.5rem 1rem;
+        border-radius: 8px; font-size: 0.7rem; z-index: 1000;
+        font-family: monospace;
+      `;
+      warning.textContent = '⚠️ Offline Mode - Some features limited';
+      document.body.appendChild(warning);
+      setTimeout(() => warning.remove(), 5000);
+    }
+  }
 const Utils = {
   /**
    * Generate a unique ID for cases, players, etc.
