@@ -14,6 +14,41 @@
       min-height: 100vh;
     }
     
+    /* Announcement Banner */
+    .announcement-banner {
+      background: linear-gradient(135deg, #1a6bc3, #0d3b5e);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-align: center;
+      font-size: 0.85rem;
+      font-weight: 500;
+      position: relative;
+      display: none;
+    }
+    
+    .announcement-banner.show {
+      display: block;
+      animation: slideDown 0.3s ease;
+    }
+    
+    .announcement-close {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: white;
+      cursor: pointer;
+      font-size: 1.2rem;
+      opacity: 0.7;
+    }
+    
+    @keyframes slideDown {
+      from { transform: translateY(-100%); }
+      to { transform: translateY(0); }
+    }
+    
     .header {
       background: rgba(13, 27, 42, 0.95);
       backdrop-filter: blur(10px);
@@ -71,7 +106,7 @@
     .grade-completed { background: rgba(69, 179, 255, 0.2); color: #45b3ff; border: 1px solid rgba(69, 179, 255, 0.3); }
     .grade-distinction { background: rgba(46, 196, 182, 0.2); color: #2ec4b6; border: 1px solid rgba(46, 196, 182, 0.3); }
     
-    .exit-btn {
+    .exit-btn, .results-btn, .cert-btn {
       background: transparent;
       border: 1px solid #7b8a9b;
       color: #7b8a9b;
@@ -80,6 +115,12 @@
       cursor: pointer;
       font-size: 0.6rem;
       margin-top: 0.2rem;
+      margin-left: 0.3rem;
+    }
+    
+    .exit-btn:hover, .results-btn:hover, .cert-btn:hover {
+      border-color: #ffd166;
+      color: #ffd166;
     }
     
     .score-bar {
@@ -126,14 +167,6 @@
       border-radius: 20px;
       padding: 1.25rem;
       margin-bottom: 1.5rem;
-    }
-    
-    .wear-title {
-      font-size: 0.7rem;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #7b8a9b;
-      margin-bottom: 1rem;
     }
     
     .svg-container {
@@ -213,8 +246,6 @@
       background: rgba(69, 179, 255, 0.1);
       padding: 0.2rem 0.5rem;
       border-radius: 20px;
-      white-space: normal;
-      word-break: keep-all;
     }
     
     .dossier-title {
@@ -286,6 +317,16 @@
     .btn-submit:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 15px rgba(69, 179, 255, 0.3);
+    }
+    
+    .btn-secondary {
+      background: rgba(69, 179, 255, 0.15);
+      border: 1px solid rgba(69, 179, 255, 0.3);
+      color: #45b3ff;
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-size: 0.7rem;
     }
     
     .complete-card {
@@ -418,8 +459,6 @@
       width: 140px;
       flex-shrink: 0;
       font-size: 0.7rem;
-      white-space: normal;
-      word-break: keep-all;
     }
     
     .chart-bar-fill {
@@ -473,7 +512,7 @@
       font-size: 0.75rem;
       font-weight: 600;
       z-index: 2000;
-      animation: fadeOut 2s ease forwards;
+      animation: fadeOut 3s ease forwards;
     }
     
     @keyframes fadeOut {
@@ -481,9 +520,92 @@
       70% { opacity: 1; }
       100% { opacity: 0; transform: translateX(-50%) translateY(-20px); visibility: hidden; }
     }
+    
+    /* Results Modal */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+    }
+    
+    .modal-overlay.open {
+      display: flex;
+    }
+    
+    .modal {
+      background: #1b263b;
+      border: 1px solid rgba(69, 179, 255, 0.3);
+      border-radius: 24px;
+      max-width: 700px;
+      width: 90%;
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+    
+    .modal-header {
+      padding: 1rem 1.5rem;
+      border-bottom: 1px solid rgba(69, 179, 255, 0.2);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: #ffd166;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .modal-body {
+      padding: 1.5rem;
+    }
+    
+    .review-question {
+      background: rgba(13, 27, 42, 0.5);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .review-question.correct {
+      border-left: 3px solid #2ec4b6;
+    }
+    
+    .review-question.incorrect {
+      border-left: 3px solid #e63946;
+    }
+    
+    .review-question-title {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    .review-answer {
+      font-size: 0.8rem;
+      margin-top: 0.3rem;
+    }
+    
+    .timer-display {
+      font-size: 0.8rem;
+      font-family: monospace;
+      color: #ffd166;
+      margin-left: 0.5rem;
+    }
+    
+    .session-ended {
+      text-align: center;
+      padding: 3rem;
+    }
   </style>
 </head>
 <body id="app-body">
+  <!-- Announcement Banner -->
+  <div id="announcement-banner" class="announcement-banner">
+    <span id="announcement-text">📢 Facilitator announcement</span>
+    <button class="announcement-close" onclick="dismissAnnouncement()">×</button>
+  </div>
+  
   <div class="header">
     <div class="logo">
       <h1>✈️ FLIGHT 261 | HUMAN FACTORS CASE STUDY</h1>
@@ -492,23 +614,44 @@
     <div class="player-info">
       <div class="player-name" id="player-name">Loading...</div>
       <div class="player-score" id="player-score">Score: 0 pts</div>
-      <button class="exit-btn" onclick="exitToJoin()">✕ Exit Session</button>
+      <div>
+        <button class="results-btn" onclick="showMyResults()">📋 My Results</button>
+        <button class="cert-btn" onclick="generateCertificate()">🏆 Certificate</button>
+        <button class="exit-btn" onclick="exitToJoin()">✕ Exit</button>
+      </div>
     </div>
   </div>
   
   <div class="score-bar" id="score-bar"></div>
+  
+  <div id="session-ended-message" class="hidden">
+    <div class="session-ended">
+      <div class="complete-icon">⏰</div>
+      <h2>Session Has Ended</h2>
+      <p>The training session has concluded. Please see the facilitator for your certificate.</p>
+    </div>
+  </div>
   
   <div class="main-grid" id="main-content"></div>
   
   <div class="mode-toggle">
     <button class="mode-btn" onclick="toggleMode()" id="mode-toggle-btn">👨‍🏫 Facilitator Mode</button>
   </div>
+  
+  <!-- Results Modal -->
+  <div id="results-modal" class="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <span>📋 My Results - Flight 261 Case Study</span>
+        <button onclick="closeResultsModal()" style="background: none; border: none; color: #7b8a9b; cursor: pointer;">✕</button>
+      </div>
+      <div class="modal-body" id="results-modal-body"></div>
+    </div>
+  </div>
 
   <script>
     // ============================================
     // COMPLETE CASE STUDY CARDS - 500 Points Total
-    // 5 Cards x 100 Points = 500 Points
-    // Covers: Dirty Dozen, Swiss Cheese, Dekker, Edmondson, Conklin
     // ============================================
     const DOSSIER_CARDS = [
       {
@@ -610,6 +753,11 @@
       attended: 0
     };
     
+    // Session timer (30 minutes = 1800 seconds)
+    let sessionEndTime = null;
+    let sessionTimer = null;
+    let isSessionActive = true;
+    
     function getGrade(score) {
       if (score >= GRADING.distinction) {
         return { name: "Completed with Distinction", class: "grade-distinction", icon: "🏆" };
@@ -628,6 +776,83 @@
       setTimeout(() => div.remove(), 3000);
     }
     
+    function showAnnouncement(message) {
+      const banner = document.getElementById('announcement-banner');
+      const text = document.getElementById('announcement-text');
+      text.textContent = message;
+      banner.classList.add('show');
+      setTimeout(() => {
+        banner.classList.remove('show');
+      }, 10000);
+    }
+    
+    function dismissAnnouncement() {
+      document.getElementById('announcement-banner').classList.remove('show');
+    }
+    
+    // Session timer functions
+    function startSessionTimer() {
+      if (sessionTimer) clearInterval(sessionTimer);
+      
+      sessionEndTime = localStorage.getItem('hf-session-end-time');
+      if (!sessionEndTime) {
+        sessionEndTime = Date.now() + (30 * 60 * 1000);
+        localStorage.setItem('hf-session-end-time', sessionEndTime);
+      }
+      
+      sessionTimer = setInterval(() => {
+        const now = Date.now();
+        const timeLeft = sessionEndTime - now;
+        
+        if (timeLeft <= 0 && isSessionActive) {
+          endSession();
+        } else if (isSessionActive) {
+          const minutes = Math.floor(timeLeft / 60000);
+          const seconds = Math.floor((timeLeft % 60000) / 1000);
+          const timerDisplay = document.getElementById('session-timer-display');
+          if (timerDisplay) {
+            timerDisplay.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+          }
+        }
+      }, 1000);
+    }
+    
+    function endSession() {
+      isSessionActive = false;
+      clearInterval(sessionTimer);
+      document.getElementById('session-ended-message').classList.remove('hidden');
+      document.getElementById('main-content').innerHTML = `
+        <div class="dossier-card" style="grid-column: 1/-1;">
+          <div class="session-ended">
+            <div class="complete-icon">⏰</div>
+            <h2>Session Has Ended</h2>
+            <p>The 30-minute training session has concluded.</p>
+            <p>Your final score: ${currentPlayer?.score || 0} / 500 points</p>
+            <button class="btn-secondary" style="margin-top: 1rem;" onclick="generateCertificate()">🏆 Download Certificate</button>
+          </div>
+        </div>
+      `;
+    }
+    
+    function checkAllParticipantsComplete() {
+      const allPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+      const allComplete = allPlayers.every(p => {
+        const progress = localStorage.getItem(`case-progress-${p.id}`);
+        if (progress) {
+          const data = JSON.parse(progress);
+          return data.submittedCards.length >= DOSSIER_CARDS.length;
+        }
+        return false;
+      });
+      
+      if (allComplete && allPlayers.length > 0 && isSessionActive) {
+        showAnnouncement("🎉 All participants have completed the case study! Session will end in 30 seconds.");
+        setTimeout(() => {
+          if (isSessionActive) endSession();
+        }, 30000);
+      }
+    }
+    
     let currentPlayer = null;
     let allPlayers = [];
     let currentCardIndex = 0;
@@ -644,6 +869,15 @@
       currentPlayer = JSON.parse(saved);
       document.getElementById('player-name').textContent = currentPlayer.name;
       updateScoreDisplay();
+      
+      // Check if session is still active
+      const sessionEnd = localStorage.getItem('hf-session-end-time');
+      if (sessionEnd && Date.now() > parseInt(sessionEnd)) {
+        isSessionActive = false;
+        document.getElementById('session-ended-message').classList.remove('hidden');
+      } else {
+        startSessionTimer();
+      }
     }
     
     function updateScoreDisplay() {
@@ -691,6 +925,21 @@
     }
     
     function renderMainContent() {
+      if (!isSessionActive) {
+        document.getElementById('main-content').innerHTML = `
+          <div class="dossier-card" style="grid-column: 1/-1;">
+            <div class="session-ended">
+              <div class="complete-icon">⏰</div>
+              <h2>Session Has Ended</h2>
+              <p>The training session has concluded.</p>
+              <p>Your final score: ${currentPlayer?.score || 0} / 500 points</p>
+              <button class="btn-secondary" style="margin-top: 1rem;" onclick="generateCertificate()">🏆 Download Certificate</button>
+            </div>
+          </div>
+        `;
+        return;
+      }
+      
       const container = document.getElementById('main-content');
       
       if (isFacilitatorMode) {
@@ -714,7 +963,11 @@
                 <div style="font-size: 1.5rem; font-weight: 700; color: #ffd166;">${finalScore} / 500 points</div>
                 <div class="grade-badge ${grade.class}" style="font-size: 0.9rem; margin-top: 0.5rem;">${grade.icon} ${grade.name}</div>
               </div>
-              <p style="font-size: 0.75rem; color: #7b8a9b;">The facilitator will now lead the debrief discussion.</p>
+              <div style="display: flex; gap: 0.5rem; justify-content: center;">
+                <button class="btn-secondary" onclick="showMyResults()">📋 Review My Answers</button>
+                <button class="btn-secondary" onclick="generateCertificate()">🏆 Download Certificate</button>
+              </div>
+              <p style="font-size: 0.75rem; color: #7b8a9b; margin-top: 1rem;">The facilitator will now lead the debrief discussion.</p>
             </div>
           </div>
           <div class="sidebar-card">
@@ -732,11 +985,14 @@
       
       const card = DOSSIER_CARDS[currentCardIndex];
       const totalCards = DOSSIER_CARDS.length;
+      const timeLeft = sessionEndTime ? Math.max(0, Math.floor((sessionEndTime - Date.now()) / 1000)) : 1800;
+      const minutes = Math.floor(timeLeft / 60);
+      const seconds = timeLeft % 60;
       
       container.innerHTML = `
         <div>
           <div class="wear-card">
-            <div class="wear-title">🔧 JACKSCREW ACME THREAD TELEMETRY</div>
+            <div class="wear-title">🔧 JACKSCREW ACME THREAD TELEMETRY <span class="timer-display">⏱️ Time remaining: ${minutes}:${seconds.toString().padStart(2, '0')}</span></div>
             <div class="svg-container" id="thread-svg-container"></div>
             <div class="wear-stats">
               <div class="wear-stat">
@@ -896,6 +1152,20 @@
               <span class="dossier-framework">500 Points | 5 Frameworks</span>
             </div>
             
+            <!-- Announcement Control -->
+            <div style="margin-bottom: 1rem; padding: 0.75rem; background: rgba(69, 179, 255, 0.1); border-radius: 12px;">
+              <label style="font-size: 0.7rem; color: #ffd166;">📢 Send Announcement to All Participants:</label>
+              <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                <input type="text" id="announcement-input" placeholder="Type your announcement..." style="flex: 1; background: rgba(13, 27, 42, 0.8); border: 1px solid rgba(69, 179, 255, 0.3); border-radius: 8px; padding: 0.5rem; color: white;">
+                <button onclick="sendAnnouncement()" class="btn-secondary" style="padding: 0.5rem 1rem;">Send</button>
+              </div>
+              <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                <button onclick="sendQuickAnnouncement('5 minutes remaining! Please complete your answers.')" class="btn-secondary" style="font-size: 0.6rem;">⏰ 5 min warning</button>
+                <button onclick="sendQuickAnnouncement('Please move to the next question.')" class="btn-secondary" style="font-size: 0.6rem;">➡️ Next question</button>
+                <button onclick="sendQuickAnnouncement('Great discussion points coming up!')" class="btn-secondary" style="font-size: 0.6rem;">💬 Discussion</button>
+              </div>
+            </div>
+            
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1rem;">
               <div>
                 <h4 style="margin-bottom: 0.75rem;">🎯 Framework Performance</h4>
@@ -944,7 +1214,6 @@
                         <span class="insight-factor">${resp.pointsEarned}/${resp.pointsPossible} pts</span>
                       </div>
                       ${!resp.isCorrect && card ? `<div class="correct-answer" style="background: rgba(69, 179, 255, 0.1); padding: 0.3rem; margin-top: 0.3rem; border-radius: 8px;">📌 <strong>Correct answer:</strong> ${card.correctAnswer}</div>` : ''}
-                      ${!resp.isCorrect && card ? `<div style="font-size: 0.65rem; color: #7b8a9b; margin-top: 0.3rem;">📖 ${card.explanation}</div>` : ''}
                     </div>
                   `;
                 }).join('')}
@@ -954,10 +1223,161 @@
             <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
               <button onclick="resetAllProgress()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🔄 Reset All Progress</button>
               <button onclick="clearAllResponses()" style="background: rgba(230, 57, 70, 0.2); border: 1px solid rgba(230, 57, 70, 0.3); color: #e63946; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">🗑️ Clear All Responses</button>
+              <button onclick="extendSessionTime()" style="background: rgba(69, 179, 255, 0.2); border: 1px solid rgba(69, 179, 255, 0.3); color: #45b3ff; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">⏰ Extend Session (+5 min)</button>
             </div>
           </div>
         </div>
       `;
+    }
+    
+    function sendAnnouncement() {
+      const input = document.getElementById('announcement-input');
+      const message = input.value.trim();
+      if (message) {
+        localStorage.setItem('hf-announcement', JSON.stringify({
+          message: message,
+          timestamp: Date.now()
+        }));
+        showSuccessMessage('Announcement sent to all participants');
+        input.value = '';
+      }
+    }
+    
+    function sendQuickAnnouncement(message) {
+      localStorage.setItem('hf-announcement', JSON.stringify({
+        message: message,
+        timestamp: Date.now()
+      }));
+      showSuccessMessage('Announcement sent');
+    }
+    
+    function checkForAnnouncements() {
+      const saved = localStorage.getItem('hf-announcement');
+      if (saved) {
+        const announcement = JSON.parse(saved);
+        if (Date.now() - announcement.timestamp < 5000) {
+          showAnnouncement(announcement.message);
+          localStorage.removeItem('hf-announcement');
+        }
+      }
+    }
+    
+    function extendSessionTime() {
+      const currentEnd = parseInt(localStorage.getItem('hf-session-end-time')) || Date.now();
+      const newEnd = currentEnd + (5 * 60 * 1000);
+      localStorage.setItem('hf-session-end-time', newEnd);
+      sessionEndTime = newEnd;
+      showSuccessMessage('Session extended by 5 minutes');
+    }
+    
+    function showMyResults() {
+      const modal = document.getElementById('results-modal');
+      const body = document.getElementById('results-modal-body');
+      const grade = getGrade(currentPlayer.score || 0);
+      
+      let resultsHtml = `
+        <div style="text-align: center; margin-bottom: 1rem;">
+          <div style="font-size: 1.5rem; font-weight: 700;">${currentPlayer.name}</div>
+          <div class="grade-badge ${grade.class}" style="font-size: 1rem; margin-top: 0.5rem;">${grade.icon} ${grade.name}</div>
+          <div style="font-size: 1.2rem; margin-top: 0.5rem;">${currentPlayer.score || 0} / 500 points</div>
+        </div>
+        <hr style="border-color: #2a2e3a; margin: 1rem 0;">
+      `;
+      
+      DOSSIER_CARDS.forEach((card, idx) => {
+        const submitted = submittedCards.find(s => s.cardId === card.id);
+        const isCorrect = submitted?.isCorrect || false;
+        const userAnswer = submitted?.selectedAnswer || 'Not answered';
+        const pointsEarned = submitted?.pointsEarned || 0;
+        
+        resultsHtml += `
+          <div class="review-question ${isCorrect ? 'correct' : 'incorrect'}">
+            <div class="review-question-title">Question ${idx + 1}: ${card.title}</div>
+            <div class="review-answer"><strong>Your answer:</strong> ${escapeHtml(userAnswer)}</div>
+            <div class="review-answer"><strong>Correct answer:</strong> ${card.correctAnswer}</div>
+            <div class="review-answer" style="color: ${isCorrect ? '#2ec4b6' : '#e63946'};">
+              <strong>Points earned:</strong> ${pointsEarned}/${card.pointsPossible}
+            </div>
+            <div class="review-answer" style="font-size: 0.7rem; color: #7b8a9b; margin-top: 0.5rem;">
+              <strong>Explanation:</strong> ${card.explanation}
+            </div>
+          </div>
+        `;
+      });
+      
+      body.innerHTML = resultsHtml;
+      modal.classList.add('open');
+    }
+    
+    function closeResultsModal() {
+      document.getElementById('results-modal').classList.remove('open');
+    }
+    
+    function generateCertificate() {
+      const grade = getGrade(currentPlayer.score || 0);
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({
+        orientation: 'landscape',
+        unit: 'mm',
+        format: 'a4'
+      });
+      
+      // Certificate design
+      doc.setFillColor(10, 42, 58);
+      doc.rect(0, 0, 297, 210, 'F');
+      
+      // Border
+      doc.setDrawColor(69, 179, 255);
+      doc.setLineWidth(1.5);
+      doc.rect(10, 10, 277, 190);
+      
+      doc.setDrawColor(255, 209, 102);
+      doc.setLineWidth(0.5);
+      doc.rect(13, 13, 271, 184);
+      
+      // Title
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(28);
+      doc.setTextColor(255, 209, 102);
+      doc.text('CERTIFICATE OF COMPLETION', 148.5, 50, { align: 'center' });
+      
+      // Subtitle
+      doc.setFontSize(12);
+      doc.setTextColor(69, 179, 255);
+      doc.text('NCAR Part 145 Human Factors Training', 148.5, 65, { align: 'center' });
+      
+      // Recipient
+      doc.setFontSize(18);
+      doc.setTextColor(255, 255, 255);
+      doc.text('This certificate is presented to', 148.5, 95, { align: 'center' });
+      
+      doc.setFontSize(24);
+      doc.setTextColor(255, 209, 102);
+      doc.text(currentPlayer.name, 148.5, 115, { align: 'center' });
+      
+      // Course
+      doc.setFontSize(12);
+      doc.setTextColor(255, 255, 255);
+      doc.text('for successful completion of the Flight 261 Human Factors Case Study', 148.5, 135, { align: 'center' });
+      
+      // Grade
+      doc.setFontSize(14);
+      doc.setTextColor(69, 179, 255);
+      doc.text(`Grade: ${grade.name} (${currentPlayer.score}/500 points)`, 148.5, 155, { align: 'center' });
+      
+      // Date
+      doc.setFontSize(10);
+      doc.setTextColor(123, 138, 155);
+      const today = new Date().toLocaleDateString();
+      doc.text(`Date: ${today}`, 148.5, 175, { align: 'center' });
+      
+      // Footer
+      doc.setFontSize(8);
+      doc.setTextColor(123, 138, 155);
+      doc.text('This certifies that the participant has demonstrated understanding of human factors principles', 148.5, 195, { align: 'center' });
+      doc.text('including Dirty Dozen, Swiss Cheese, Dekker, Edmondson, and Conklin frameworks.', 148.5, 200, { align: 'center' });
+      
+      doc.save(`Certificate_${currentPlayer.name.replace(/[^a-z0-9]/gi, '_')}.pdf`);
     }
     
     async function submitResponse(cardIndex) {
@@ -1016,6 +1436,7 @@
       updateScoreDisplay();
       currentCardIndex++;
       renderMainContent();
+      checkAllParticipantsComplete();
       
       if (isCorrect) {
         showSuccessMessage(`✓ Correct! +${pointsEarned} points`);
@@ -1113,11 +1534,15 @@
           renderMainContent();
         }
       }
+      
+      checkForAnnouncements();
     }
     
+    // Initialize
     loadPlayer();
     loadSessionData();
     setInterval(refreshData, 3000);
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 </body>
 </html>
