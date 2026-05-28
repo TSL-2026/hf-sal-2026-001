@@ -3,8 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case-Study | Facilitator Dashboard</title>
+<title>Facilitator Dashboard | HF Case Studio</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   
@@ -20,6 +21,7 @@
     --text-muted: #7b8a9b;
     --border-glow: rgba(69, 179, 255, 0.2);
     --red: #e63946;
+    --green: #2ec4b6;
   }
   
   body {
@@ -45,7 +47,7 @@
   .app-container { display: flex; min-height: 100vh; }
   
   .sidebar {
-    width: 280px;
+    width: 300px;
     background: rgba(13, 27, 42, 0.9);
     backdrop-filter: blur(10px);
     border-right: 1px solid var(--border-glow);
@@ -104,12 +106,10 @@
     color: var(--text-light);
   }
   .btn-secondary:hover { border-color: var(--blue-light); color: var(--blue-light); }
-  .btn-danger {
-    background: rgba(230, 57, 70, 0.15);
-    border: 1px solid rgba(230, 57, 70, 0.3);
-    color: var(--red);
+  .btn-success {
+    background: var(--green);
+    color: var(--bg-dark);
   }
-  .btn-danger:hover { background: rgba(230, 57, 70, 0.3); border-color: var(--red); }
   
   .case-list { display: flex; flex-direction: column; gap: 0.5rem; }
   .case-item {
@@ -157,40 +157,91 @@
     padding-left: 0.75rem;
   }
   
-  table { width: 100%; border-collapse: collapse; }
-  th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-glow); }
-  th { color: var(--yellow); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; }
+  .upload-zone {
+    border: 2px dashed var(--border-glow);
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .upload-zone:hover {
+    border-color: var(--blue-light);
+    background: rgba(69, 179, 255, 0.05);
+  }
+  .upload-zone.drag-over {
+    border-color: var(--green);
+    background: rgba(46, 196, 182, 0.1);
+  }
+  
+  .progress-bar {
+    height: 6px;
+    background: var(--border-glow);
+    border-radius: 3px;
+    overflow: hidden;
+    margin: 1rem 0;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--blue-light), var(--green));
+    transition: width 0.3s;
+  }
+  
+  /* Preview Cards */
+  .preview-card {
+    background: rgba(13, 27, 42, 0.5);
+    border: 1px solid var(--border-glow);
+    border-radius: 16px;
+    padding: 1rem;
+    margin-bottom: 1rem;
+  }
+  .preview-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border-glow);
+  }
+  .preview-framework {
+    font-family: monospace;
+    font-size: 0.65rem;
+    color: var(--blue-light);
+  }
+  .preview-points {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1rem;
+    color: var(--yellow);
+  }
+  .preview-question {
+    font-size: 0.85rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+  .preview-options {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 0.5rem;
+  }
+  .edit-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 0.7rem;
+    margin-left: 0.5rem;
+  }
+  .edit-btn:hover { color: var(--yellow); }
   
   .role-badge {
     display: inline-block;
     font-size: 0.6rem;
     padding: 0.2rem 0.6rem;
     border-radius: 20px;
-    font-weight: 600;
   }
-  .role-participant { background: rgba(69, 179, 255, 0.15); color: var(--blue-light); border: 1px solid rgba(69,179,255,0.3); }
-  .role-observer { background: rgba(255, 209, 102, 0.15); color: var(--yellow); border: 1px solid rgba(255,209,102,0.3); }
-  
-  .pending-card {
-    background: rgba(255, 209, 102, 0.08);
-    border-left: 3px solid var(--yellow);
-    padding: 1rem;
-    margin-bottom: 1rem;
-    border-radius: 12px;
-  }
-  
-  .btn-sm {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 0.7rem;
-    padding: 0.3rem 0.8rem;
-    border-radius: 8px;
-    cursor: pointer;
-    border: none;
-    margin-right: 0.5rem;
-  }
-  .btn-score-full { background: var(--blue-light); color: white; }
-  .btn-score-half { background: var(--yellow); color: var(--bg-dark); }
-  .btn-score-none { background: rgba(255,255,255,0.1); color: var(--text-muted); }
+  .role-participant { background: rgba(69, 179, 255, 0.15); color: var(--blue-light); }
+  .role-observer { background: rgba(255, 209, 102, 0.15); color: var(--yellow); }
   
   .float-tabs {
     position: fixed;
@@ -212,13 +263,31 @@
   .float-tab-primary { background: linear-gradient(135deg, var(--blue-light), var(--blue-dark)); color: white; }
   .float-tab-secondary { background: rgba(27, 38, 59, 0.9); backdrop-filter: blur(10px); color: var(--text-light); border: 1px solid var(--border-glow); }
   
-  .session-code-footer {
+  .developer-credit {
     margin-top: 1rem;
     padding-top: 1rem;
     border-top: 1px solid var(--border-glow);
-    font-size: 0.65rem;
-    color: var(--text-muted);
+    font-size: 0.6rem;
     text-align: center;
+    color: var(--text-muted);
+  }
+  .developer-credit a {
+    color: var(--yellow);
+    text-decoration: none;
+  }
+  .developer-credit a:hover {
+    text-decoration: underline;
+  }
+  
+  .badge-authentic {
+    display: inline-block;
+    background: rgba(46, 196, 182, 0.15);
+    border: 1px solid rgba(46, 196, 182, 0.3);
+    border-radius: 20px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.6rem;
+    color: var(--green);
+    margin-left: 0.5rem;
   }
   
   .empty-state {
@@ -228,29 +297,9 @@
     font-style: italic;
   }
   
-  .remove-btn {
-    background: rgba(230, 57, 70, 0.2);
-    border: 1px solid rgba(230, 57, 70, 0.3);
-    color: var(--red);
-    padding: 0.2rem 0.6rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 0.65rem;
-    transition: all 0.2s;
-  }
-  .remove-btn:hover {
-    background: rgba(230, 57, 70, 0.4);
-    border-color: var(--red);
-  }
-  
-  .action-buttons {
-    display: flex;
-    gap: 0.5rem;
-    justify-content: flex-end;
-    margin-top: 1rem;
-    padding-top: 1rem;
-    border-top: 1px solid var(--border-glow);
-  }
+  table { width: 100%; border-collapse: collapse; }
+  th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-glow); }
+  th { color: var(--yellow); font-size: 0.7rem; text-transform: uppercase; }
 </style>
 </head>
 <body>
@@ -259,18 +308,18 @@
 </div>
 
 <div class="app-container">
-  <!-- Sidebar -->
   <div class="sidebar">
     <div class="logo">
       <h1>CASE-STUDY</h1>
       <p>Facilitator Dashboard</p>
-      <p style="font-size:0.55rem;">Developer: Ghanshyam Acharya, 2026</p>
+      <p style="font-size:0.55rem;">NCAR Part 145 • Human Factors Training</p>
     </div>
     
     <a href="index.html" class="back-link">← Back to Join Page</a>
     
     <div>
-      <button class="btn btn-primary" onclick="alert('Upload PDF feature - Coming soon')">📄 Upload PDF</button>
+      <button class="btn btn-primary" onclick="document.getElementById('pdf-input').click()">📄 Upload PDF</button>
+      <input type="file" id="pdf-input" accept=".pdf" style="display:none;">
       <button class="btn btn-secondary" onclick="exportCase()">💾 Export Case JSON</button>
       <button class="btn btn-secondary" onclick="importCase()">📂 Import Case JSON</button>
       <button class="btn btn-secondary" onclick="createBlankCase()">📝 New Blank Case</button>
@@ -281,18 +330,49 @@
       <div class="case-list" id="case-list"></div>
     </div>
     
-    <div class="session-code-footer">
-      Session: <strong style="color: var(--blue-light);">HF-SAL-R29052026</strong>
+    <div class="developer-credit">
+      <span>🎓 Facilitator & Developer: </span>
+      <a href="https://gsacharya.com" target="_blank">Ghanshyam Acharya</a>
+      <span class="badge-authentic">✓ Verified</span>
+      <br>
+      <span>📅 2026 • NCAR Part 145 Compliant</span>
     </div>
   </div>
   
-  <!-- Main Content -->
   <div class="main">
     <!-- Builder Tab -->
     <div id="builder" class="screen active">
       <div class="card-glass">
         <div class="section-title">📝 Create / Edit Case Study</div>
-        <div class="empty-state">Upload a PDF or select a case from the library to edit.</div>
+        <div class="upload-zone" id="upload-zone">
+          <div style="font-size: 2.5rem;">📑</div>
+          <div>Click or drag PDF here</div>
+          <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 0.5rem;">Supports: NTSB reports, accident investigation summaries</div>
+        </div>
+        
+        <div id="progress-area" style="display: none;">
+          <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+          <p id="progress-text" style="font-size: 0.75rem; text-align: center;">Processing PDF...</p>
+        </div>
+        
+        <div id="preview-area" style="margin-top: 1rem; display: none;">
+          <div class="preview-card">
+            <div class="preview-card-header">
+              <span class="preview-framework">📖 CASE SCENARIO</span>
+              <button class="edit-btn" onclick="editScenario()">✏️ Edit</button>
+            </div>
+            <div id="preview-title" style="font-weight: 700; font-size: 1.1rem;"></div>
+            <div id="preview-scenario" style="font-size: 0.8rem; color: var(--text-muted); margin-top: 0.5rem; line-height: 1.5;"></div>
+          </div>
+          
+          <h4 style="margin: 1rem 0 0.5rem;">📋 Generated Questions (5 questions, 500 points)</h4>
+          <div id="preview-questions"></div>
+          
+          <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <button class="btn-success" style="flex: 1; padding: 0.75rem;" onclick="saveGeneratedCase()">💾 Save to Library</button>
+            <button class="btn-secondary" style="flex: 1;" onclick="regenerateQuestions()">🔄 Regenerate</button>
+          </div>
+        </div>
       </div>
     </div>
     
@@ -303,26 +383,23 @@
         <button class="btn-primary" style="width: auto; padding: 0.5rem 1.5rem;" onclick="startSession()">▶ Start Session</button>
       </div>
       
-      <!-- Expected Participants -->
       <div class="card-glass">
         <div class="section-title" style="font-size: 1.2rem;">📋 Participants</div>
         <div id="expected-participants-list"></div>
-        <div class="action-buttons">
-          <button class="btn-danger btn-sm" onclick="removeAllParticipants()">🗑️ Remove All Participants</button>
-          <button class="btn-secondary btn-sm" onclick="resetAllScores()">🔄 Reset All Scores</button>
+        <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+          <button class="btn-secondary btn-sm" onclick="removeAllParticipants()">🗑️ Remove All</button>
+          <button class="btn-secondary btn-sm" onclick="resetAllScores()">🔄 Reset Scores</button>
         </div>
       </div>
       
-      <!-- Pending Answers -->
       <div class="card-glass">
         <div class="section-title" style="font-size: 1.2rem;">⏳ Pending Answers <span id="pending-count" style="background: var(--yellow); color: var(--bg-dark); padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; margin-left: 0.5rem;">0</span></div>
         <div id="pending-answers"></div>
       </div>
       
-      <!-- Active Case -->
       <div class="card-glass">
         <div class="section-title" style="font-size: 1.2rem;">📖 Active Case Study</div>
-        <div id="active-case-display" class="empty-state">No case study selected. Select one from the library.</div>
+        <div id="active-case-display" class="empty-state">No case study selected. Create one in Builder or select from library.</div>
       </div>
     </div>
     
@@ -333,14 +410,13 @@
         <div id="results-podium"></div>
         <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
           <button class="btn-secondary" onclick="exportResultsCSV()">📄 Export CSV</button>
-          <button class="btn-danger" onclick="resetSession()">🔄 Reset Entire Session</button>
+          <button class="btn-secondary" onclick="resetSession()">🔄 Reset Session</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Float Tabs -->
 <div class="float-tabs">
   <button class="float-tab float-tab-secondary" onclick="showTab('builder')">📝 Builder</button>
   <button class="float-tab float-tab-primary" onclick="showTab('casestudy-mgmt')">🎯 Case Study</button>
@@ -348,23 +424,44 @@
 </div>
 
 <script>
-// ============================================
-// AUTHENTICATION CHECK
-// ============================================
-(function checkAuthentication() {
-  const isAuthenticated = sessionStorage.getItem('facilitator-authenticated');
-  if (!isAuthenticated || isAuthenticated !== 'true') {
-    document.getElementById('auth-error').style.display = 'block';
-    setTimeout(() => {
-      window.location.href = 'facilitator-login.html';
-    }, 1000);
-    return;
-  }
-})();
+// Configure PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
 
 // ============================================
-// EXPECTED PARTICIPANTS LIST
+// COMPLETE KEYWORD DICTIONARY - ALL FRAMEWORKS
 // ============================================
+const FRAMEWORK_KEYWORDS = {
+  "Dirty Dozen": {
+    "Pressure": ["pressure", "schedule", "deadline", "delay", "late", "cost", "budget", "financial", "target", "time constraint", "rush", "hurry", "production pressure"],
+    "Lack of Resources": ["not available", "out of stock", "shortage", "missing part", "no tool", "insufficient", "unavailable", "backorder", "no spare", "inadequate"],
+    "Norms": ["normally", "usual", "standard practice", "always done", "accepted", "common practice", "culture", "tradition", "typical", "routine", "habitual"],
+    "Lack of Assertiveness": ["did not speak", "failed to raise", "hesitated", "overruled", "afraid", "silent", "did not challenge", "accepted", "deferred", "reluctant"],
+    "Complacency": ["complacent", "routine", "always worked", "never happened", "familiar", "assumed", "normal", "did not check", "overconfident", "took for granted"]
+  },
+  "Swiss Cheese": {
+    "Regulatory": ["FAA", "EASA", "regulator", "approved", "certified", "authorized", "permitted", "regulation", "compliance", "oversight"],
+    "Organizational": ["management", "policy", "procedure", "culture", "leadership", "executive", "board", "director", "organization", "corporate"],
+    "Supervisory": ["supervisor", "manager", "oversight", "director", "chief", "lead", "override", "overruled", "directed", "ordered"],
+    "Inspection": ["inspection", "quality control", "check", "verify", "sign-off", "certify", "audit", "review", "examination"]
+  },
+  "Dekker": {
+    "Local Rationality": ["locally rational", "made sense", "understandable", "from their perspective", "reasonable at the time", "justified", "context", "situational"],
+    "Systemic Causes": ["system failure", "systemic", "root cause", "underlying", "contributing factors", "chain of events", "latent condition"],
+    "Error as Symptom": ["symptom", "not the cause", "indicator", "warning sign", "manifestation", "consequence", "result of"]
+  },
+  "Edmondson": {
+    "Psychological Safety": ["psychological safety", "speak up", "raise concern", "voice opinion", "speak freely", "comfortable", "safe to speak", "no fear"],
+    "Fear of Retaliation": ["fear", "retaliation", "punishment", "blame", "consequences", "afraid", "intimidated", "hesitant", "reluctant"],
+    "Silence": ["silence", "did not speak", "remained quiet", "withheld", "stayed silent", "no report", "unspoken"]
+  },
+  "Conklin": {
+    "Work-as-Imagined": ["procedure", "protocol", "manual", "guideline", "documented", "written", "supposed to", "expected", "ideal", "theoretical"],
+    "Work-as-Done": ["actual", "reality", "real world", "practice", "execution", "performance", "lived experience", "day-to-day", "operational"],
+    "The Gap": ["gap", "disconnect", "difference", "discrepancy", "misalignment", "mismatch", "variance", "divergence"]
+  }
+};
+
+// Expected participants list
 const EXPECTED_PARTICIPANTS = [
   { name: "Akash Sunder Pradhan", role: "Participant" },
   { name: "Shambhu Kaji Dotel", role: "Participant" },
@@ -378,25 +475,399 @@ const EXPECTED_PARTICIPANTS = [
   { name: "CAAN Representative", role: "Observer" }
 ];
 
-// Default case
-let defaultCase = {
-  id: "alaska261",
-  title: "Alaska Airlines Flight 261",
-  year: "2000",
-  scenario: "Alaska Airlines Flight 261 crashed into the Pacific Ocean on January 31, 2000, killing all 88 aboard. The cause was failure of the jackscrew assembly due to inadequate lubrication.",
-  cards: [
-    { category: "Scenario", title: "The Override", points: 1, question: "Which Dirty Dozen factors explain the supervisor's decision?", hint: "Schedule pressure", modelAnswer: "Pressure, Lack of Resources, Norms" },
-    { category: "Dirty Dozen", title: "Complacency", points: 1, question: "How did previous successes create complacency?", hint: "Familiarity", modelAnswer: "Familiarity bred assumption nothing would go wrong" },
-    { category: "Wildcard", title: "Root Cause", points: 3, question: "Using any framework, explain why this incident occurred.", hint: "Systemic factors", modelAnswer: "Apply frameworks with specific evidence" }
-  ]
-};
-
-let library = JSON.parse(localStorage.getItem('hf-case-library') || JSON.stringify([defaultCase]));
 let currentCase = null;
+let generatedQuestions = [];
+let extractedText = "";
+let fileName = "";
+
+// ============================================
+// PDF PROCESSING & QUESTION GENERATION
+// ============================================
+
+async function processPDF(file) {
+  if (!file) return;
+  
+  fileName = file.name;
+  document.getElementById('progress-area').style.display = 'block';
+  document.getElementById('preview-area').style.display = 'none';
+  updateProgress(10, 'Loading PDF...');
+  
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+    
+    let fullText = "";
+    for (let i = 1; i <= Math.min(pdf.numPages, 20); i++) {
+      updateProgress(10 + Math.floor((i / Math.min(pdf.numPages, 20)) * 60), `Processing page ${i}/${Math.min(pdf.numPages, 20)}...`);
+      const page = await pdf.getPage(i);
+      const textContent = await page.getTextContent();
+      const pageText = textContent.items.map(item => item.str).join(' ');
+      fullText += pageText + "\n";
+    }
+    
+    extractedText = fullText;
+    updateProgress(75, 'Analyzing text and generating questions...');
+    
+    // Generate case and questions
+    generateCaseFromText(fullText, fileName);
+    
+  } catch (error) {
+    console.error("PDF processing error:", error);
+    alert("Error processing PDF. Please check the file format.");
+    document.getElementById('progress-area').style.display = 'none';
+  }
+}
+
+function updateProgress(percent, text) {
+  document.getElementById('progress-fill').style.width = percent + '%';
+  document.getElementById('progress-text').textContent = text;
+}
+
+function generateCaseFromText(text, filename) {
+  // Extract title
+  let title = filename.replace('.pdf', '').replace(/_/g, ' ').replace(/-/g, ' ');
+  if (title.length > 60) title = title.substring(0, 60);
+  
+  // Extract year
+  let year = new Date().getFullYear().toString();
+  const yearMatch = text.match(/\b(19[0-9]{2}|20[0-9]{2})\b/);
+  if (yearMatch) year = yearMatch[0];
+  
+  // Extract scenario (first 500 chars)
+  let scenario = text.replace(/\s+/g, ' ').trim().substring(0, 800);
+  if (text.length > 800) scenario += "...";
+  
+  // Detect frameworks
+  const frameworkMatches = detectFrameworks(text);
+  
+  // Generate 5 questions
+  const questions = [];
+  
+  // Question 1: Dirty Dozen
+  if (frameworkMatches["Dirty Dozen"].detected) {
+    const factors = frameworkMatches["Dirty Dozen"].matchedCategories.map(c => c.category);
+    questions.push({
+      framework: "Dirty Dozen (Gordon Dupont)",
+      question: `Which Dirty Dozen factors were most clearly at work in this incident? Based on the document, identify the key contributing factors.`,
+      options: generateDirtyDozenOptions(factors),
+      correctAnswer: factors.slice(0, 3).join(", "),
+      explanation: `Based on the document analysis, ${factors.slice(0, 3).join(", ")} were identified as key contributing factors.`,
+      points: 100
+    });
+  } else {
+    questions.push(generateGenericQuestion("Dirty Dozen"));
+  }
+  
+  // Question 2: Swiss Cheese
+  if (frameworkMatches["Swiss Cheese"].detected) {
+    const layers = frameworkMatches["Swiss Cheese"].matchedCategories.map(c => c.category);
+    questions.push({
+      framework: "Swiss Cheese Model (James Reason)",
+      question: `According to Reason's Swiss Cheese Model, how many defensive layers failed in this incident? Identify the specific holes in each layer.`,
+      options: generateSwissCheeseOptions(layers),
+      correctAnswer: `${layers.length} layers failed: ${layers.join(", ")}`,
+      explanation: `The document indicates failures at the ${layers.join(", ")} levels.`,
+      points: 100
+    });
+  } else {
+    questions.push(generateGenericQuestion("Swiss Cheese"));
+  }
+  
+  // Question 3: Dekker
+  if (frameworkMatches["Dekker"].detected) {
+    questions.push({
+      framework: "Safety Differently (Sidney Dekker)",
+      question: `What does Dekker mean by "human error is a symptom, not a cause"? Apply this concept to the key decision-makers in this incident.`,
+      options: [
+        "The decision was locally rational given the pressures, resources, and information available",
+        "The individuals involved were incompetent and should be blamed",
+        "Human error cannot be prevented, so we should accept it",
+        "Only the front-line workers are responsible for the outcome"
+      ],
+      correctAnswer: "The decision was locally rational given the pressures, resources, and information available",
+      explanation: "Dekker argues that blaming individuals hides systemic causes. Decisions that seem wrong in hindsight often made sense given the local context.",
+      points: 100
+    });
+  } else {
+    questions.push(generateGenericQuestion("Dekker"));
+  }
+  
+  // Question 4: Edmondson
+  if (frameworkMatches["Edmondson"].detected) {
+    questions.push({
+      framework: "Psychological Safety (Amy Edmondson)",
+      question: `Using Edmondson's framework, what does this incident tell us about psychological safety in the organization?`,
+      options: [
+        "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous",
+        "The organization had excellent safety culture",
+        "Only the individual workers are responsible for not speaking up",
+        "Psychological safety is irrelevant to this incident"
+      ],
+      correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous",
+      explanation: "Edmondson's research shows that when psychological safety is absent, people choose silence over speaking up about safety concerns.",
+      points: 100
+    });
+  } else {
+    questions.push(generateGenericQuestion("Edmondson"));
+  }
+  
+  // Question 5: Conklin
+  if (frameworkMatches["Conklin"].detected) {
+    questions.push({
+      framework: "Work-as-Done (Todd Conklin)",
+      question: `What is the gap between "work-as-imagined" and "work-as-done" in this incident?`,
+      options: [
+        "Work-as-imagined assumes ideal conditions; work-as-done happened under real-world constraints like pressure, fatigue, and resource shortages",
+        "The paperwork was forged or falsified",
+        "The workers were not trained properly",
+        "There is no gap - compliance equals safety"
+      ],
+      correctAnswer: "Work-as-imagined assumes ideal conditions; work-as-done happened under real-world constraints like pressure, fatigue, and resource shortages",
+      explanation: "Conklin teaches that work-as-imagined (procedure) and work-as-done (reality) always differ. The signature looked the same, but the safety outcome was different.",
+      points: 100
+    });
+  } else {
+    questions.push(generateGenericQuestion("Conklin"));
+  }
+  
+  generatedQuestions = questions;
+  
+  // Display preview
+  document.getElementById('preview-title').innerHTML = `${escapeHtml(title)} (${year})`;
+  document.getElementById('preview-scenario').innerHTML = escapeHtml(scenario);
+  
+  const questionsContainer = document.getElementById('preview-questions');
+  questionsContainer.innerHTML = generatedQuestions.map((q, idx) => `
+    <div class="preview-card">
+      <div class="preview-card-header">
+        <span class="preview-framework">📚 ${escapeHtml(q.framework)}</span>
+        <span class="preview-points">${q.points} points</span>
+        <button class="edit-btn" onclick="editQuestion(${idx})">✏️ Edit</button>
+      </div>
+      <div class="preview-question"><strong>Q${idx + 1}:</strong> ${escapeHtml(q.question)}</div>
+      <div class="preview-options"><strong>Correct Answer:</strong> ${escapeHtml(q.correctAnswer)}</div>
+    </div>
+  `).join('');
+  
+  updateProgress(100, 'Complete! Review and edit before saving.');
+  setTimeout(() => {
+    document.getElementById('progress-area').style.display = 'none';
+    document.getElementById('preview-area').style.display = 'block';
+  }, 500);
+}
+
+function detectFrameworks(text) {
+  const results = {};
+  const lowerText = text.toLowerCase();
+  
+  for (const [framework, categories] of Object.entries(FRAMEWORK_KEYWORDS)) {
+    let totalMatches = 0;
+    let matchedCategories = [];
+    
+    for (const [category, keywords] of Object.entries(categories)) {
+      let categoryMatches = 0;
+      for (const keyword of keywords) {
+        const regex = new RegExp(`\\b${keyword.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')}\\b`, 'gi');
+        const matches = (lowerText.match(regex) || []).length;
+        if (matches > 0) categoryMatches += matches;
+      }
+      if (categoryMatches > 0) {
+        matchedCategories.push({ category, count: categoryMatches });
+        totalMatches += categoryMatches;
+      }
+    }
+    
+    const score = Math.min(1, totalMatches / 15);
+    results[framework] = {
+      score: score,
+      totalMatches: totalMatches,
+      matchedCategories: matchedCategories,
+      detected: score > 0.25
+    };
+  }
+  
+  return results;
+}
+
+function generateDirtyDozenOptions(detectedFactors) {
+  const allFactors = ["Pressure", "Lack of Resources", "Norms", "Lack of Assertiveness", "Complacency", "Lack of Communication", "Distraction", "Fatigue", "Stress"];
+  const correctFactors = detectedFactors.slice(0, 3);
+  const otherFactors = allFactors.filter(f => !correctFactors.includes(f)).slice(0, 2);
+  return [`${correctFactors.join(", ")}`, `${otherFactors.join(", ")}`, "Only one factor was present", "No human factors were involved"];
+}
+
+function generateSwissCheeseOptions(detectedLayers) {
+  if (detectedLayers.length >= 3) {
+    return [
+      `${detectedLayers.length} layers: ${detectedLayers.slice(0, 3).join(", ")}`,
+      "Only 1 layer failed",
+      "2 layers: Technical and Human",
+      "No layers failed - it was inevitable"
+    ];
+  }
+  return [
+    "Multiple layers failed including regulatory and organizational",
+    "Only the front-line worker failed",
+    "Only management failed",
+    "The system was designed to fail"
+  ];
+}
+
+function generateGenericQuestion(framework) {
+  const genericQuestions = {
+    "Dirty Dozen": {
+      framework: "Dirty Dozen (Gordon Dupont)",
+      question: "Which Dirty Dozen factors typically contribute to maintenance errors in complex operations?",
+      options: ["Pressure, Lack of Resources, and Norms", "Fatigue and Distraction only", "Lack of Communication only", "Stress and Complacency only"],
+      correctAnswer: "Pressure, Lack of Resources, and Norms",
+      explanation: "These three factors frequently combine to create conditions where safety margins are eroded.",
+      points: 100
+    },
+    "Swiss Cheese": {
+      framework: "Swiss Cheese Model (James Reason)",
+      question: "According to Reason's Swiss Cheese Model, how do accidents typically occur?",
+      options: ["When holes in multiple defensive layers align", "When one person makes a single mistake", "When equipment fails", "When procedures are not followed"],
+      correctAnswer: "When holes in multiple defensive layers align",
+      explanation: "Reason's model shows that accidents require multiple failures across different defensive layers.",
+      points: 100
+    },
+    "Dekker": {
+      framework: "Safety Differently (Sidney Dekker)",
+      question: "What does Dekker mean by 'human error is a symptom, not a cause'?",
+      options: [
+        "Human error indicates deeper systemic problems that need investigation",
+        "Workers should be blamed for their mistakes",
+        "Human error cannot be prevented",
+        "Only management causes errors"
+      ],
+      correctAnswer: "Human error indicates deeper systemic problems that need investigation",
+      explanation: "Dekker argues that blaming individuals hides the true systemic causes of incidents.",
+      points: 100
+    },
+    "Edmondson": {
+      framework: "Psychological Safety (Amy Edmondson)",
+      question: "What is psychological safety in the workplace?",
+      options: [
+        "The belief that one can speak up without fear of punishment or humiliation",
+        "Having safety equipment available",
+        "Following all safety procedures",
+        "Having a safety committee"
+      ],
+      correctAnswer: "The belief that one can speak up without fear of punishment or humiliation",
+      explanation: "Psychological safety enables learning, innovation, and speaking up about concerns.",
+      points: 100
+    },
+    "Conklin": {
+      framework: "Work-as-Done (Todd Conklin)",
+      question: "What does Conklin mean by the gap between 'work-as-imagined' and 'work-as-done'?",
+      options: [
+        "Procedures describe ideal conditions; real work happens under constraints",
+        "Workers intentionally ignore procedures",
+        "Procedures are always wrong",
+        "There is no gap between procedure and practice"
+      ],
+      correctAnswer: "Procedures describe ideal conditions; real work happens under constraints",
+      explanation: "Conklin emphasizes finding gaps between procedures and reality before accidents happen.",
+      points: 100
+    }
+  };
+  return genericQuestions[framework];
+}
+
+function editQuestion(index) {
+  const q = generatedQuestions[index];
+  const newQuestion = prompt("Edit question:", q.question);
+  if (newQuestion) q.question = newQuestion;
+  const newAnswer = prompt("Edit correct answer:", q.correctAnswer);
+  if (newAnswer) q.correctAnswer = newAnswer;
+  const newPoints = prompt("Edit points (max 100):", q.points);
+  if (newPoints && !isNaN(newPoints)) q.points = Math.min(100, parseInt(newPoints));
+  
+  // Refresh preview
+  const questionsContainer = document.getElementById('preview-questions');
+  questionsContainer.innerHTML = generatedQuestions.map((q, idx) => `
+    <div class="preview-card">
+      <div class="preview-card-header">
+        <span class="preview-framework">📚 ${escapeHtml(q.framework)}</span>
+        <span class="preview-points">${q.points} points</span>
+        <button class="edit-btn" onclick="editQuestion(${idx})">✏️ Edit</button>
+      </div>
+      <div class="preview-question"><strong>Q${idx + 1}:</strong> ${escapeHtml(q.question)}</div>
+      <div class="preview-options"><strong>Correct Answer:</strong> ${escapeHtml(q.correctAnswer)}</div>
+    </div>
+  `).join('');
+}
+
+function editScenario() {
+  const newTitle = prompt("Edit case title:", document.getElementById('preview-title').innerText.split('(')[0].trim());
+  if (newTitle) document.getElementById('preview-title').innerHTML = `${escapeHtml(newTitle)} (${extractYearFromTitle()})`;
+  const newScenario = prompt("Edit scenario text:", document.getElementById('preview-scenario').innerText);
+  if (newScenario) document.getElementById('preview-scenario').innerHTML = escapeHtml(newScenario);
+}
+
+function extractYearFromTitle() {
+  const title = document.getElementById('preview-title').innerHTML;
+  const match = title.match(/\((\d{4})\)/);
+  return match ? match[1] : new Date().getFullYear().toString();
+}
+
+function saveGeneratedCase() {
+  const title = document.getElementById('preview-title').innerHTML.split('(')[0].trim();
+  const year = extractYearFromTitle();
+  const scenario = document.getElementById('preview-scenario').innerHTML;
+  
+  const newCase = {
+    id: Date.now().toString(),
+    title: title,
+    year: year,
+    scenario: scenario,
+    cards: generatedQuestions.map((q, idx) => ({
+      id: idx + 1,
+      title: q.framework.split('(')[0].trim(),
+      framework: q.framework,
+      question: q.question,
+      options: q.options || generateDefaultOptions(q),
+      correctAnswer: q.correctAnswer,
+      explanation: q.explanation,
+      pointsPossible: q.points
+    }))
+  };
+  
+  let library = JSON.parse(localStorage.getItem('hf-case-library') || '[]');
+  library.push(newCase);
+  localStorage.setItem('hf-case-library', JSON.stringify(library));
+  
+  alert(`Case "${title}" saved to library!`);
+  document.getElementById('preview-area').style.display = 'none';
+  renderCaseList();
+}
+
+function generateDefaultOptions(q) {
+  return [
+    q.correctAnswer,
+    "An incorrect option based on common misconceptions",
+    "Another plausible but incorrect option",
+    "A distractor option"
+  ];
+}
+
+function regenerateQuestions() {
+  if (extractedText) {
+    generateCaseFromText(extractedText, fileName);
+  } else {
+    alert("No PDF text available. Please upload a PDF first.");
+  }
+}
+
+// ============================================
+// CASE LIBRARY MANAGEMENT
+// ============================================
+
+let library = JSON.parse(localStorage.getItem('hf-case-library') || '[]');
+let selectedCase = null;
 
 function renderCaseList() {
   const container = document.getElementById('case-list');
-  if (!container) return;
   container.innerHTML = library.map((c, i) => `
     <div class="case-item" onclick="selectCase(${i})">
       <div class="case-item-title">${escapeHtml(c.title)}</div>
@@ -406,88 +877,26 @@ function renderCaseList() {
 }
 
 function selectCase(index) {
-  currentCase = JSON.parse(JSON.stringify(library[index]));
-  const displayDiv = document.getElementById('active-case-display');
-  if (displayDiv) {
-    displayDiv.innerHTML = `
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <strong style="color: var(--blue-light);">${escapeHtml(currentCase.title)}</strong><br>
-          ${currentCase.year} · ${currentCase.cards.length} case cards
-        </div>
-        <span style="color: var(--yellow);">✓ Selected</span>
+  selectedCase = JSON.parse(JSON.stringify(library[index]));
+  document.getElementById('active-case-display').innerHTML = `
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <strong style="color: var(--blue-light);">${escapeHtml(selectedCase.title)}</strong><br>
+        ${selectedCase.year} · ${selectedCase.cards.length} questions · 500 points
       </div>
-    `;
-  }
-  alert(`Selected: ${currentCase.title}`);
+      <span style="color: var(--yellow);">✓ Selected</span>
+    </div>
+  `;
+  alert(`Selected: ${selectedCase.title}`);
 }
 
 function startSession() {
-  if (!currentCase) {
+  if (!selectedCase) {
     alert('Please select a case study from the library first.');
     return;
   }
-  localStorage.setItem('hf-active-case', JSON.stringify(currentCase));
-  alert(`✅ Case study "${currentCase.title}" is now active. Participants can join and begin.`);
-}
-
-// ============================================
-// PARTICIPANT MANAGEMENT FUNCTIONS
-// ============================================
-
-function removeParticipant(playerId, playerName) {
-  if (confirm(`Remove ${playerName} from the session? This will delete their progress and scores.`)) {
-    let participants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
-    participants = participants.filter(p => p.id !== playerId);
-    localStorage.setItem('hf-participants', JSON.stringify(participants));
-    
-    // Also remove their progress
-    localStorage.removeItem(`progress-${playerId}`);
-    
-    // Remove any pending answers from this participant
-    let pending = JSON.parse(localStorage.getItem('hf-pending-answers') || '[]');
-    pending = pending.filter(a => a.playerId !== playerId);
-    localStorage.setItem('hf-pending-answers', JSON.stringify(pending));
-    
-    // Refresh displays
-    renderExpectedParticipants();
-    refreshPendingAnswers();
-    renderResults();
-    
-    alert(`${playerName} has been removed from the session.`);
-  }
-}
-
-function removeAllParticipants() {
-  if (confirm('⚠️ Remove ALL participants? This will delete all progress and scores for everyone.')) {
-    localStorage.removeItem('hf-participants');
-    localStorage.removeItem('hf-pending-answers');
-    
-    // Clear all individual progress
-    const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      if (key.startsWith('progress-')) {
-        localStorage.removeItem(key);
-      }
-    });
-    
-    renderExpectedParticipants();
-    refreshPendingAnswers();
-    renderResults();
-    alert('All participants have been removed.');
-  }
-}
-
-function resetAllScores() {
-  if (confirm('Reset all participant scores to zero? Progress and answers will be preserved.')) {
-    let participants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
-    participants.forEach(p => { p.score = 0; });
-    localStorage.setItem('hf-participants', JSON.stringify(participants));
-    
-    renderExpectedParticipants();
-    renderResults();
-    alert('All scores have been reset to zero.');
-  }
+  localStorage.setItem('hf-active-case', JSON.stringify(selectedCase));
+  alert(`✅ Case study "${selectedCase.title}" is now active. Participants can join and begin.`);
 }
 
 function showTab(tabName) {
@@ -500,33 +909,30 @@ function showTab(tabName) {
     renderExpectedParticipants();
     refreshPendingAnswers();
   }
-  if (tabName === 'results') {
-    renderResults();
-  }
+  if (tabName === 'results') renderResults();
 }
+
+// ============================================
+// PARTICIPANT MANAGEMENT
+// ============================================
 
 function renderExpectedParticipants() {
   const joined = JSON.parse(localStorage.getItem('hf-participants') || '[]');
   const joinedNames = joined.map(p => p.name);
   const container = document.getElementById('expected-participants-list');
-  if (!container) return;
   
   container.innerHTML = `
     <table>
-      <thead>
-        <tr><th>Name</th><th>Role</th><th>Status</th><th>Score</th><th>Action</th></tr>
-      </thead>
+      <thead><tr><th>Name</th><th>Role</th><th>Status</th><th>Score</th></tr></thead>
       <tbody>
         ${EXPECTED_PARTICIPANTS.map(p => {
           const joinedPlayer = joined.find(j => j.name === p.name);
-          const isJoined = !!joinedPlayer;
           return `
             <tr>
               <td>${escapeHtml(p.name)}</td>
               <td><span class="role-badge ${p.role === 'Observer' ? 'role-observer' : 'role-participant'}">${p.role}</span></td>
-              <td>${isJoined ? '<span style="color: var(--blue-light);">✓ Joined</span>' : '<span style="color: var(--text-muted);">⏳ Not joined</span>'}</td>
-              <td><strong>${isJoined ? joinedPlayer.score : '-'}</strong></td>
-              <td>${isJoined ? `<button class="remove-btn" onclick="removeParticipant('${joinedPlayer.id}', '${escapeHtml(p.name)}')">✕ Remove</button>` : '-'}</td>
+              <td>${joinedPlayer ? '<span style="color: var(--green);">✓ Joined</span>' : '<span style="color: var(--text-muted);">⏳ Waiting</span>'}</td>
+              <td><strong>${joinedPlayer ? joinedPlayer.score : '-'}</strong></td>
             </tr>
           `;
         }).join('')}
@@ -537,25 +943,22 @@ function renderExpectedParticipants() {
 
 function refreshPendingAnswers() {
   const pending = JSON.parse(localStorage.getItem('hf-pending-answers') || '[]');
-  const countSpan = document.getElementById('pending-count');
-  if (countSpan) countSpan.textContent = pending.length;
+  document.getElementById('pending-count').textContent = pending.length;
   
   const container = document.getElementById('pending-answers');
-  if (!container) return;
-  
   if (pending.length === 0) {
-    container.innerHTML = '<div class="empty-state">No pending answers. Participants will submit answers here.</div>';
+    container.innerHTML = '<div class="empty-state">No pending answers.</div>';
     return;
   }
   
   container.innerHTML = pending.map((a, idx) => `
-    <div class="pending-card">
+    <div class="preview-card">
       <div><strong>${escapeHtml(a.playerName)}</strong> answered <strong>${escapeHtml(a.cardTitle)}</strong></div>
       <div style="margin: 0.5rem 0; padding: 0.5rem; background: rgba(0,0,0,0.3); border-radius: 8px;">"${escapeHtml(a.answer)}"</div>
-      <div style="display: flex; gap: 0.5rem;">
-        <button class="btn-sm btn-score-full" onclick="scoreAnswer(${idx}, ${a.possiblePoints})">Full (${a.possiblePoints})</button>
-        ${a.possiblePoints >= 2 ? `<button class="btn-sm btn-score-half" onclick="scoreAnswer(${idx}, ${Math.ceil(a.possiblePoints/2)})">Half (${Math.ceil(a.possiblePoints/2)})</button>` : ''}
-        <button class="btn-sm btn-score-none" onclick="scoreAnswer(${idx}, 0)">None (0)</button>
+      <div>
+        <button class="btn-secondary btn-sm" onclick="scoreAnswer(${idx}, ${a.possiblePoints})">Full (${a.possiblePoints})</button>
+        <button class="btn-secondary btn-sm" onclick="scoreAnswer(${idx}, ${Math.ceil(a.possiblePoints/2)})">Half</button>
+        <button class="btn-secondary btn-sm" onclick="scoreAnswer(${idx}, 0)">None</button>
       </div>
     </div>
   `).join('');
@@ -567,7 +970,6 @@ function scoreAnswer(pendingIndex, points) {
   
   const answer = pending[pendingIndex];
   const playerIndex = participants.findIndex(p => p.id === answer.playerId);
-  
   if (playerIndex !== -1) {
     participants[playerIndex].score += points;
     localStorage.setItem('hf-participants', JSON.stringify(participants));
@@ -579,7 +981,6 @@ function scoreAnswer(pendingIndex, points) {
   refreshPendingAnswers();
   renderExpectedParticipants();
   renderResults();
-  
   alert(`Awarded ${points} points to ${answer.playerName}`);
 }
 
@@ -587,21 +988,17 @@ function renderResults() {
   const participants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
   const sorted = [...participants].sort((a, b) => b.score - a.score);
   const container = document.getElementById('results-podium');
-  if (!container) return;
   
   if (sorted.length === 0) {
-    container.innerHTML = '<div class="empty-state">No participants have joined yet.</div>';
+    container.innerHTML = '<div class="empty-state">No participants yet.</div>';
     return;
   }
   
   container.innerHTML = sorted.map((p, i) => `
-    <div style="background: rgba(27,38,59,0.6); border-radius: 12px; padding: 1rem; margin-bottom: 0.5rem; ${i === 0 ? 'border: 1px solid var(--yellow);' : ''}">
-      <div style="display: flex; justify-content: space-between; align-items: center;">
-        <div>
-          <span style="font-size: 1.2rem; font-weight: bold;">${i + 1}. ${escapeHtml(p.name)}</span>
-          <span class="role-badge ${p.role === 'observer' ? 'role-observer' : 'role-participant'}" style="margin-left: 0.5rem;">${p.role === 'observer' ? 'Observer' : 'Participant'}</span>
-        </div>
-        <div style="font-size: 1.5rem; font-family: 'Bebas Neue'; color: var(--yellow);">${p.score} pts</div>
+    <div class="preview-card" style="${i === 0 ? 'border-color: var(--gold);' : ''}">
+      <div style="display: flex; justify-content: space-between;">
+        <div><strong>${i + 1}. ${escapeHtml(p.name)}</strong> <span class="role-badge ${p.role === 'observer' ? 'role-observer' : 'role-participant'}">${p.role}</span></div>
+        <div style="font-size: 1.2rem; color: var(--yellow);">${p.score} pts</div>
       </div>
     </div>
   `).join('');
@@ -610,9 +1007,7 @@ function renderResults() {
 function exportResultsCSV() {
   const participants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
   let csv = "Name,Role,Score\n";
-  participants.forEach(p => {
-    csv += `"${p.name}",${p.role === 'observer' ? 'Observer' : 'Participant'},${p.score}\n`;
-  });
+  participants.forEach(p => csv += `"${p.name}",${p.role === 'observer' ? 'Observer' : 'Participant'},${p.score}\n`);
   const blob = new Blob([csv], { type: 'text/csv' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
@@ -621,33 +1016,44 @@ function exportResultsCSV() {
 }
 
 function resetSession() {
-  if (confirm('⚠️ Reset entire session? This will clear all participants, scores, and pending answers.')) {
+  if (confirm('Reset entire session?')) {
     localStorage.removeItem('hf-participants');
     localStorage.removeItem('hf-pending-answers');
     localStorage.removeItem('hf-current-player');
-    
-    // Clear all progress
-    const keys = Object.keys(localStorage);
-    keys.forEach(key => {
-      if (key.startsWith('progress-')) {
-        localStorage.removeItem(key);
-      }
-    });
-    
-    alert('Session reset complete.');
+    alert('Session reset.');
     renderExpectedParticipants();
     refreshPendingAnswers();
     renderResults();
   }
 }
 
+function removeAllParticipants() {
+  if (confirm('Remove all participants?')) {
+    localStorage.removeItem('hf-participants');
+    localStorage.removeItem('hf-pending-answers');
+    renderExpectedParticipants();
+    refreshPendingAnswers();
+    renderResults();
+  }
+}
+
+function resetAllScores() {
+  if (confirm('Reset all scores?')) {
+    let participants = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+    participants.forEach(p => p.score = 0);
+    localStorage.setItem('hf-participants', JSON.stringify(participants));
+    renderExpectedParticipants();
+    renderResults();
+  }
+}
+
 function exportCase() {
-  if (!currentCase) { alert('No case selected'); return; }
-  const data = JSON.stringify(currentCase, null, 2);
+  if (!selectedCase) { alert('No case selected'); return; }
+  const data = JSON.stringify(selectedCase, null, 2);
   const blob = new Blob([data], { type: 'application/json' });
   const a = document.createElement('a');
   a.href = URL.createObjectURL(blob);
-  a.download = `${currentCase.title.replace(/[^a-z0-9]/gi, '_')}.json`;
+  a.download = `${selectedCase.title.replace(/[^a-z0-9]/gi, '_')}.json`;
   a.click();
 }
 
@@ -683,24 +1089,51 @@ function createBlankCase() {
     year: new Date().getFullYear().toString(),
     scenario: "Case study description goes here...",
     cards: [
-      { category: "Scenario", title: "The Incident", points: 1, question: "Summarize the key events.", hint: "What happened?", modelAnswer: "[Complete]" },
-      { category: "Wildcard", title: "Analysis", points: 3, question: "Apply human factors frameworks.", hint: "Use Dirty Dozen, Swiss Cheese, etc.", modelAnswer: "[Complete]" }
+      { id: 1, title: "Dirty Dozen Analysis", framework: "Dirty Dozen (Gordon Dupont)", question: "Analyze the Dirty Dozen factors in this case.", correctAnswer: "Based on case evidence", pointsPossible: 100 },
+      { id: 2, title: "Swiss Cheese Analysis", framework: "Swiss Cheese Model (James Reason)", question: "Identify the failed defensive layers.", correctAnswer: "Based on case evidence", pointsPossible: 100 },
+      { id: 3, title: "Dekker Analysis", framework: "Safety Differently (Sidney Dekker)", question: "Apply Dekker's local rationality concept.", correctAnswer: "Based on case evidence", pointsPossible: 100 },
+      { id: 4, title: "Edmondson Analysis", framework: "Psychological Safety (Amy Edmondson)", question: "Evaluate psychological safety in this case.", correctAnswer: "Based on case evidence", pointsPossible: 100 },
+      { id: 5, title: "Conklin Analysis", framework: "Work-as-Done (Todd Conklin)", question: "Identify the work-as-imagined vs work-as-done gap.", correctAnswer: "Based on case evidence", pointsPossible: 100 }
     ]
   };
   library.push(newCase);
   localStorage.setItem('hf-case-library', JSON.stringify(library));
   renderCaseList();
-  alert(`Blank case "${title}" created. Edit it in the builder.`);
+  alert(`Blank case "${title}" created. Edit questions in Builder.`);
 }
 
-function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;'); }
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+}
+
+// Authentication check
+(function checkAuth() {
+  const isAuth = sessionStorage.getItem('facilitator-authenticated');
+  if (!isAuth || isAuth !== 'true') {
+    document.getElementById('auth-error').style.display = 'block';
+    setTimeout(() => window.location.href = 'facilitator-login.html', 1000);
+  }
+})();
 
 // Initialize
 renderCaseList();
 renderExpectedParticipants();
 refreshPendingAnswers();
 
-// Auto-refresh
+// Setup drag-and-drop
+const dropZone = document.getElementById('upload-zone');
+dropZone.addEventListener('dragover', (e) => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', (e) => {
+  e.preventDefault();
+  dropZone.classList.remove('drag-over');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type === 'application/pdf') processPDF(file);
+  else alert('Please drop a PDF file.');
+});
+document.getElementById('pdf-input').onchange = (e) => { if (e.target.files[0]) processPDF(e.target.files[0]); };
+
 setInterval(() => {
   if (document.getElementById('casestudy-mgmt').classList.contains('active')) {
     renderExpectedParticipants();
