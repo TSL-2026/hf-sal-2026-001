@@ -1,695 +1,1061 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Case-Study | Human Factor Refresher Training</title>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  
-  body {
-    font-family: 'IBM Plex Sans', sans-serif;
-    background: linear-gradient(135deg, #0a2a3a 0%, #0d1b2a 50%, #1b263b 100%);
-    color: #e0e1dd;
-    min-height: 100vh;
-  }
-  
-  .header {
-    background: rgba(13, 27, 42, 0.9);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid rgba(69, 179, 255, 0.2);
-    padding: 1rem;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    flex-wrap: wrap;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  
-  .logo h2 {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    background: linear-gradient(135deg, #ffffff 0%, #45b3ff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-  }
-  
-  .player-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    color: #ffd166;
-  }
-  
-  .player-score {
-    font-size: 0.7rem;
-    color: #7b8a9b;
-  }
-  
-  .score-bar {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    overflow-x: auto;
-    border-bottom: 1px solid rgba(69, 179, 255, 0.2);
-  }
-  
-  .score-chip {
-    font-family: monospace;
-    font-size: 0.65rem;
-    padding: 0.25rem 0.6rem;
-    background: rgba(27, 38, 59, 0.6);
-    border: 1px solid rgba(69, 179, 255, 0.2);
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-  
-  .score-chip.active {
-    border-color: #ffd166;
-    background: rgba(255, 209, 102, 0.1);
-    color: #ffd166;
-  }
-  
-  .tabs {
-    display: flex;
-    gap: 0.5rem;
-    padding: 0.5rem 1rem;
-    border-bottom: 1px solid rgba(69, 179, 255, 0.2);
-  }
-  
-  .tab {
-    background: none;
-    border: none;
-    color: #7b8a9b;
-    padding: 0.4rem 1rem;
-    cursor: pointer;
-    font-family: monospace;
-    font-size: 0.7rem;
-    border-radius: 4px;
-  }
-  
-  .tab.active {
-    background: rgba(27, 38, 59, 0.6);
-    color: #45b3ff;
-  }
-  
-  .scenario-panel {
-    background: rgba(27, 38, 59, 0.6);
-    backdrop-filter: blur(10px);
-    margin: 1rem;
-    padding: 1.5rem;
-    border-radius: 20px;
-    border-left: 3px solid #45b3ff;
-  }
-  
-  .scenario-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    margin-bottom: 0.5rem;
-  }
-  
-  .scenario-text {
-    font-size: 0.85rem;
-    line-height: 1.6;
-    color: #7b8a9b;
-  }
-  
-  .cards-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 1rem;
-    padding: 1rem;
-  }
-  
-  .card {
-    aspect-ratio: 2/3;
-    background: linear-gradient(145deg, #1b263b, #0d1b2a);
-    border: 1px solid rgba(69, 179, 255, 0.2);
-    border-radius: 16px;
-    padding: 1rem;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    transition: all 0.2s;
-  }
-  
-  .card:hover:not(.used) {
-    transform: translateY(-4px);
-    border-color: #45b3ff;
-  }
-  
-  .card.used {
-    opacity: 0.3;
-    cursor: not-allowed;
-  }
-  
-  .card.used::after {
-    content: "✓ ANSWERED";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%) rotate(-15deg);
-    font-size: 0.6rem;
-    background: rgba(0,0,0,0.7);
-    padding: 0.2rem 0.5rem;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-  
-  .card-category {
-    font-size: 0.5rem;
-    font-family: monospace;
-    color: #7b8a9b;
-    text-transform: uppercase;
-  }
-  
-  .card-title {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    color: #ffffff;
-    margin: 0.5rem 0;
-  }
-  
-  .card-points {
-    font-size: 0.7rem;
-    color: #ffd166;
-    margin-top: auto;
-    text-align: right;
-  }
-  
-  .framework-grid {
-    display: grid;
-    gap: 0.75rem;
-    padding: 1rem;
-  }
-  
-  .framework-item {
-    background: rgba(27, 38, 59, 0.6);
-    border: 1px solid rgba(69, 179, 255, 0.2);
-    border-radius: 12px;
-    padding: 1rem;
-  }
-  
-  .framework-name {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-    margin-bottom: 0.3rem;
-  }
-  
-  .framework-desc {
-    font-size: 0.7rem;
-    color: #7b8a9b;
-    line-height: 1.5;
-  }
-  
-  .modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.95);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-  
-  .modal-overlay.open {
-    display: flex;
-  }
-  
-  .modal {
-    background: #1b263b;
-    border: 1px solid rgba(69, 179, 255, 0.3);
-    border-radius: 24px;
-    max-width: 500px;
-    width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-  }
-  
-  .modal-header {
-    padding: 1rem;
-    border-bottom: 1px solid rgba(69, 179, 255, 0.2);
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.3rem;
-    color: #45b3ff;
-  }
-  
-  .modal-body {
-    padding: 1rem;
-  }
-  
-  .modal-question {
-    background: #0d1b2a;
-    padding: 1rem;
-    border-radius: 12px;
-    margin-bottom: 1rem;
-    font-size: 0.9rem;
-    line-height: 1.6;
-  }
-  
-  .modal-hint {
-    font-size: 0.75rem;
-    color: #7b8a9b;
-    margin-bottom: 1rem;
-    padding: 0.5rem;
-    border-left: 2px solid #ffd166;
-  }
-  
-  .answer-input {
-    width: 100%;
-    background: #0d1b2a;
-    border: 1px solid rgba(69, 179, 255, 0.3);
-    border-radius: 12px;
-    color: #e0e1dd;
-    padding: 0.8rem;
-    min-height: 100px;
-    outline: none;
-  }
-  
-  .answer-input:focus {
-    border-color: #45b3ff;
-  }
-  
-  .modal-actions {
-    display: flex;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-  
-  .btn-submit {
-    background: linear-gradient(135deg, #45b3ff, #1a6bc3);
-    color: white;
-    border: none;
-    padding: 0.6rem;
-    border-radius: 12px;
-    cursor: pointer;
-    flex: 1;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1rem;
-  }
-  
-  .btn-cancel {
-    background: transparent;
-    border: 1px solid rgba(69, 179, 255, 0.3);
-    color: #7b8a9b;
-    padding: 0.6rem;
-    border-radius: 12px;
-    cursor: pointer;
-  }
-  
-  .waiting-screen {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 60vh;
-    text-align: center;
-  }
-  
-  .spinner {
-    width: 40px;
-    height: 40px;
-    border: 3px solid rgba(69, 179, 255, 0.2);
-    border-top-color: #45b3ff;
-    border-radius: 50%;
-    animation: spin 1s linear infinite;
-    margin: 0 auto 1rem;
-  }
-  
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  .log-entry {
-    background: rgba(27, 38, 59, 0.6);
-    border: 1px solid rgba(69, 179, 255, 0.2);
-    border-radius: 12px;
-    margin-bottom: 0.5rem;
-  }
-  
-  .log-header {
-    display: flex;
-    justify-content: space-between;
-    padding: 0.75rem;
-    cursor: pointer;
-  }
-  
-  .log-body {
-    padding: 0.75rem;
-    display: none;
-    font-size: 0.75rem;
-    border-top: 1px solid rgba(69, 179, 255, 0.2);
-    background: rgba(13, 27, 42, 0.5);
-    border-radius: 0 0 12px 12px;
-  }
-  
-  .log-body.open {
-    display: block;
-  }
-  
-  .hidden {
-    display: none;
-  }
-  
-  .exit-btn {
-    background: transparent;
-    border: 1px solid #7b8a9b;
-    color: #7b8a9b;
-    padding: 0.3rem 0.8rem;
-    border-radius: 20px;
-    cursor: pointer;
-    font-size: 0.7rem;
-    margin-top: 0.3rem;
-  }
-  
-  .exit-btn:hover {
-    border-color: #ffd166;
-    color: #ffd166;
-  }
-  
-  .refresh-note {
-    text-align: center;
-    padding: 0.5rem;
-    font-size: 0.7rem;
-    color: #ffd166;
-    background: rgba(255, 209, 102, 0.1);
-    border-bottom: 1px solid rgba(255, 209, 102, 0.2);
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Flight 261 | Human Factors Dossier</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      background: linear-gradient(135deg, #0a2a3a 0%, #0d1b2a 50%, #1b263b 100%);
+      color: #e0e1dd;
+      min-height: 100vh;
+    }
+    
+    /* Header */
+    .header {
+      background: rgba(13, 27, 42, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid rgba(69, 179, 255, 0.3);
+      padding: 1rem 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    
+    .logo h1 {
+      font-family: 'Inter', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      background: linear-gradient(135deg, #ffffff 0%, #45b3ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    
+    .logo p {
+      font-size: 0.6rem;
+      color: #7b8a9b;
+    }
+    
+    .player-info {
+      text-align: right;
+    }
+    
+    .player-name {
+      font-size: 1rem;
+      font-weight: 600;
+      color: #ffd166;
+    }
+    
+    .player-score {
+      font-size: 0.75rem;
+      color: #45b3ff;
+    }
+    
+    .exit-btn {
+      background: transparent;
+      border: 1px solid #7b8a9b;
+      color: #7b8a9b;
+      padding: 0.2rem 0.6rem;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.6rem;
+      margin-top: 0.2rem;
+    }
+    
+    /* Score Bar */
+    .score-bar {
+      display: flex;
+      gap: 0.5rem;
+      padding: 0.5rem 1.5rem;
+      overflow-x: auto;
+      background: rgba(13, 27, 42, 0.5);
+      border-bottom: 1px solid rgba(69, 179, 255, 0.2);
+    }
+    
+    .score-chip {
+      font-size: 0.7rem;
+      padding: 0.25rem 0.7rem;
+      background: rgba(27, 38, 59, 0.8);
+      border: 1px solid rgba(69, 179, 255, 0.3);
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+    
+    .score-chip.active {
+      border-color: #ffd166;
+      background: rgba(255, 209, 102, 0.15);
+      color: #ffd166;
+    }
+    
+    /* Main Layout */
+    .main-grid {
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 1.5rem;
+      padding: 1.5rem;
+    }
+    
+    @media (max-width: 900px) {
+      .main-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Thread Wear Visualizer */
+    .wear-card {
+      background: rgba(27, 38, 59, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(69, 179, 255, 0.2);
+      border-radius: 20px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .wear-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #7b8a9b;
+      margin-bottom: 1rem;
+    }
+    
+    .svg-container {
+      background: rgba(13, 27, 42, 0.8);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+    
+    .wear-stats {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    
+    .wear-stat {
+      flex: 1;
+      background: rgba(13, 27, 42, 0.5);
+      padding: 0.75rem;
+      border-radius: 12px;
+      text-align: center;
+    }
+    
+    .wear-stat-label {
+      font-size: 0.6rem;
+      color: #7b8a9b;
+    }
+    
+    .wear-stat-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #ffd166;
+    }
+    
+    .integrity-bar {
+      height: 8px;
+      background: #2a2e3a;
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 0.5rem;
+    }
+    
+    .integrity-fill {
+      height: 100%;
+      width: 100%;
+      transition: width 0.5s ease;
+    }
+    
+    /* Dossier Card */
+    .dossier-card {
+      background: rgba(27, 38, 59, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(69, 179, 255, 0.2);
+      border-radius: 20px;
+      padding: 1.5rem;
+    }
+    
+    .dossier-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid rgba(69, 179, 255, 0.2);
+    }
+    
+    .dossier-number {
+      font-size: 0.7rem;
+      color: #ffd166;
+      font-family: monospace;
+    }
+    
+    .dossier-framework {
+      font-size: 0.65rem;
+      color: #45b3ff;
+      font-family: monospace;
+    }
+    
+    .dossier-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.75rem;
+    }
+    
+    .dossier-scenario {
+      background: rgba(13, 27, 42, 0.5);
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      margin-bottom: 1.25rem;
+    }
+    
+    .prompt-label {
+      font-size: 0.7rem;
+      color: #ffd166;
+      margin-bottom: 0.5rem;
+    }
+    
+    .factors-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    
+    .factor-checkbox {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(13, 27, 42, 0.5);
+      padding: 0.4rem 0.8rem;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    
+    .factor-checkbox:hover {
+      background: rgba(69, 179, 255, 0.2);
+    }
+    
+    .factor-checkbox input {
+      accent-color: #45b3ff;
+      width: 14px;
+      height: 14px;
+    }
+    
+    textarea {
+      width: 100%;
+      background: rgba(13, 27, 42, 0.8);
+      border: 1px solid rgba(69, 179, 255, 0.3);
+      border-radius: 12px;
+      color: #e0e1dd;
+      padding: 0.8rem;
+      font-size: 0.85rem;
+      resize: vertical;
+      min-height: 90px;
+      margin-bottom: 1rem;
+    }
+    
+    textarea:focus {
+      outline: none;
+      border-color: #45b3ff;
+    }
+    
+    .btn-submit {
+      background: linear-gradient(135deg, #45b3ff, #1a6bc3);
+      color: white;
+      border: none;
+      padding: 0.75rem;
+      border-radius: 40px;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      transition: all 0.2s;
+    }
+    
+    .btn-submit:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 15px rgba(69, 179, 255, 0.3);
+    }
+    
+    .complete-card {
+      text-align: center;
+      padding: 2rem;
+    }
+    
+    .complete-icon {
+      width: 60px;
+      height: 60px;
+      background: rgba(46, 196, 182, 0.15);
+      border: 2px solid #2ec4b6;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      font-size: 2rem;
+    }
+    
+    /* Sidebar */
+    .sidebar-card {
+      background: rgba(27, 38, 59, 0.7);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(69, 179, 255, 0.2);
+      border-radius: 20px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .sidebar-title {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: #ffd166;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+    }
+    
+    .insight-feed {
+      max-height: 400px;
+      overflow-y: auto;
+    }
+    
+    .insight-item {
+      background: rgba(13, 27, 42, 0.5);
+      padding: 0.75rem;
+      border-radius: 12px;
+      margin-bottom: 0.75rem;
+    }
+    
+    .insight-name {
+      font-size: 0.7rem;
+      color: #45b3ff;
+      margin-bottom: 0.3rem;
+    }
+    
+    .insight-text {
+      font-size: 0.75rem;
+      line-height: 1.4;
+      font-style: italic;
+    }
+    
+    .insight-factors {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.5rem;
+    }
+    
+    .insight-factor {
+      font-size: 0.6rem;
+      background: rgba(69, 179, 255, 0.15);
+      padding: 0.15rem 0.5rem;
+      border-radius: 12px;
+    }
+    
+    .waiting {
+      text-align: center;
+      padding: 2rem;
+      color: #7b8a9b;
+    }
+    
+    .hidden {
+      display: none;
+    }
+    
+    /* Facilitator specific */
+    .facilitator-only {
+      display: none;
+    }
+    
+    body.facilitator .facilitator-only {
+      display: block;
+    }
+    
+    .analytics-chart {
+      background: rgba(13, 27, 42, 0.5);
+      border-radius: 12px;
+      padding: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .chart-bars {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-top: 0.75rem;
+    }
+    
+    .chart-bar {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.7rem;
+    }
+    
+    .chart-bar-label {
+      width: 110px;
+      flex-shrink: 0;
+    }
+    
+    .chart-bar-fill {
+      height: 20px;
+      background: linear-gradient(90deg, #45b3ff, #1a6bc3);
+      border-radius: 10px;
+      transition: width 0.3s ease;
+    }
+    
+    .stage-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .stage-btn {
+      flex: 1;
+      background: rgba(13, 27, 42, 0.5);
+      border: 1px solid rgba(69, 179, 255, 0.3);
+      padding: 0.5rem;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      text-align: center;
+    }
+    
+    .stage-btn.active {
+      background: rgba(69, 179, 255, 0.2);
+      border-color: #45b3ff;
+      color: #45b3ff;
+    }
+    
+    .timer-display {
+      font-size: 1.8rem;
+      font-weight: 700;
+      font-family: monospace;
+      color: #ffd166;
+      text-align: center;
+    }
+    
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+    
+    .btn-warning {
+      background: rgba(230, 57, 70, 0.2);
+      border: 1px solid rgba(230, 57, 70, 0.3);
+      color: #e63946;
+      padding: 0.4rem;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      cursor: pointer;
+      flex: 1;
+      text-align: center;
+    }
+    
+    .mode-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 1000;
+    }
+    
+    .mode-btn {
+      background: rgba(13, 27, 42, 0.9);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(69, 179, 255, 0.3);
+      padding: 0.5rem 1rem;
+      border-radius: 30px;
+      font-size: 0.7rem;
+      cursor: pointer;
+    }
+  </style>
 </head>
-<body>
-<div id="waiting-screen" class="waiting-screen">
-  <div>
-    <div class="spinner"></div>
-    <h3>Waiting for Facilitator</h3>
-    <p style="color: #7b8a9b; margin-top: 0.5rem;">Please wait for the session to start</p>
-    <p style="color: #ffd166; font-size: 0.7rem; margin-top: 1rem;">🔄 Auto-refreshing every 5 seconds...</p>
-  </div>
-</div>
-
-<div id="case-container" class="hidden">
-  <div class="refresh-note" id="refresh-note">
-    🔄 Session active! Refresh page if cards don't appear.
-  </div>
-  
+<body id="app-body">
   <div class="header">
     <div class="logo">
-      <h2>CASE-STUDY</h2>
+      <h1>✈️ FLIGHT 261 | HUMAN FACTORS DOSSIER</h1>
+      <p>NCAR Part 145 • Alaska Airlines • 31 January 2000</p>
     </div>
-    <div>
+    <div class="player-info">
       <div class="player-name" id="player-name">Loading...</div>
-      <div class="player-score" id="player-score">Score: 0</div>
-      <button class="exit-btn" onclick="exitGame()">✕ Exit</button>
+      <div class="player-score" id="player-score">Score: 0 pts</div>
+      <button class="exit-btn" onclick="exitToJoin()">✕ Exit Session</button>
     </div>
   </div>
   
   <div class="score-bar" id="score-bar"></div>
   
-  <div class="tabs">
-    <button class="tab active" onclick="switchTab('scenario', this)">📖 Case Scenario</button>
-    <button class="tab" onclick="switchTab('cards', this)">🎴 Case Cards</button>
-    <button class="tab" onclick="switchTab('frameworks', this)">📚 Frameworks</button>
-    <button class="tab" onclick="switchTab('log', this)">📋 My Answers</button>
+  <div class="main-grid" id="main-content"></div>
+  
+  <div class="mode-toggle">
+    <button class="mode-btn" onclick="toggleMode()" id="mode-toggle-btn">👨‍🏫 Facilitator Mode</button>
   </div>
-  
-  <div id="scenario-tab" class="scenario-panel"></div>
-  <div id="cards-tab" class="cards-grid hidden"></div>
-  <div id="frameworks-tab" class="framework-grid hidden"></div>
-  <div id="log-tab" style="padding: 1rem;" class="hidden"></div>
-</div>
 
-<div class="modal-overlay" id="modal">
-  <div class="modal">
-    <div class="modal-header" id="modal-title">Case Card</div>
-    <div class="modal-body">
-      <div class="modal-question" id="modal-question"></div>
-      <div class="modal-hint" id="modal-hint"></div>
-      <textarea class="answer-input" id="answer" placeholder="Type your answer here..."></textarea>
-      <div class="modal-actions">
-        <button class="btn-submit" onclick="submitAnswer()">Submit Answer</button>
-        <button class="btn-cancel" onclick="closeModal()">Cancel</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<script>
-let player = null;
-let caseData = null;
-let cards = [];
-let answers = [];
-let allPlayers = [];
-let activeCard = null;
-
-// Auto-refresh to detect session start
-let checkInterval = null;
-
-function loadPlayer() {
-  const saved = localStorage.getItem('hf-current-player');
-  if (!saved) {
-    window.location.href = 'index.html';
-    return;
-  }
-  player = JSON.parse(saved);
-  document.getElementById('player-name').textContent = player.name;
-  updateScore();
-}
-
-function updateScore() {
-  document.getElementById('player-score').textContent = `Score: ${player.score || 0}`;
-}
-
-function checkForActiveCase() {
-  const activeCase = localStorage.getItem('hf-active-case');
-  
-  if (activeCase && !caseData) {
-    // Session just started!
-    console.log('Session detected! Loading case...');
-    caseData = JSON.parse(activeCase);
-    loadCaseData();
-  } else if (!activeCase && caseData) {
-    // Session ended
-    console.log('Session ended');
-    caseData = null;
-    document.getElementById('waiting-screen').classList.remove('hidden');
-    document.getElementById('case-container').classList.add('hidden');
-  }
-}
-
-function loadCaseData() {
-  if (!caseData) return;
-  
-  document.getElementById('waiting-screen').classList.add('hidden');
-  document.getElementById('case-container').classList.remove('hidden');
-  
-  const saved = localStorage.getItem(`progress-${player.id}`);
-  if (saved) {
-    const p = JSON.parse(saved);
-    cards = caseData.cards.map(c => ({ ...c, used: p.used?.includes(c.title) || false }));
-    answers = p.answers || [];
-  } else {
-    cards = caseData.cards.map(c => ({ ...c, used: false }));
-    answers = [];
-  }
-  
-  renderScenario();
-  renderScoreBar();
-  renderCards();
-  renderFrameworks();
-  renderLog();
-}
-
-function renderScenario() {
-  const container = document.getElementById('scenario-tab');
-  container.innerHTML = `
-    <div class="scenario-title">📖 ${escapeHtml(caseData.title)} (${caseData.year})</div>
-    <div class="scenario-text">${escapeHtml(caseData.scenario)}</div>
-  `;
-}
-
-function renderScoreBar() {
-  allPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
-  const container = document.getElementById('score-bar');
-  if (allPlayers.length === 0) {
-    container.innerHTML = '<div class="score-chip">Waiting for participants...</div>';
-    return;
-  }
-  container.innerHTML = allPlayers.map(p => `
-    <div class="score-chip ${p.id === player.id ? 'active' : ''}">
-      ${escapeHtml(p.name)}: ${p.score} pts
-    </div>
-  `).join('');
-}
-
-function renderCards() {
-  const container = document.getElementById('cards-tab');
-  if (!cards.length) {
-    container.innerHTML = '<p style="text-align:center; padding:2rem; color:#7b8a9b;">No cards available.</p>';
-    return;
-  }
-  container.innerHTML = cards.map((c, i) => `
-    <div class="card ${c.used ? 'used' : ''}" onclick="${!c.used ? `openCard(${i})` : ''}">
-      <div class="card-category">${escapeHtml(c.category)}</div>
-      <div class="card-title">${escapeHtml(c.title)}</div>
-      <div class="card-points">${c.points} pts</div>
-      <div style="font-size:0.6rem; color:#7b8a9b; margin-top:0.5rem;">${c.used ? '✓ Answered' : 'Tap to answer'}</div>
-    </div>
-  `).join('');
-}
-
-function renderFrameworks() {
-  const frameworks = [
-    { name: "Dirty Dozen", desc: "12 human factors: Communication, Complacency, Knowledge, Distraction, Teamwork, Fatigue, Resources, Pressure, Assertiveness, Stress, Awareness, Norms." },
-    { name: "Swiss Cheese", desc: "Accidents occur when holes in multiple defensive layers align simultaneously." },
-    { name: "Dekker", desc: "Human error is a symptom, not a cause. People act rationally given their local context." },
-    { name: "Conklin", desc: "Work-as-imagined ≠ work-as-done. Find gaps before accidents." },
-    { name: "Hollnagel", desc: "Study why work usually succeeds. Accidents emerge from normal variability." },
-    { name: "Edmondson", desc: "Teams perform best when members can speak up without fear." }
-  ];
-  const container = document.getElementById('frameworks-tab');
-  container.innerHTML = frameworks.map(f => `
-    <div class="framework-item">
-      <div class="framework-name">${escapeHtml(f.name)}</div>
-      <div class="framework-desc">${escapeHtml(f.desc)}</div>
-    </div>
-  `).join('');
-}
-
-function renderLog() {
-  const container = document.getElementById('log-tab');
-  if (!answers.length) {
-    container.innerHTML = '<p style="text-align:center; padding:2rem; color:#7b8a9b;">No answers yet. Tap a card to begin.</p>';
-    return;
-  }
-  container.innerHTML = answers.map((a, i) => `
-    <div class="log-entry">
-      <div class="log-header" onclick="this.nextElementSibling.classList.toggle('open')">
-        <span>${escapeHtml(a.title)}</span>
-        <span style="color: ${a.awarded > 0 ? '#45b3ff' : '#ffd166'}">${a.awarded}/${a.possible} pts</span>
-      </div>
-      <div class="log-body">
-        <strong>Your answer:</strong><br>${escapeHtml(a.answer)}
-        ${a.pending ? '<br><span style="color:#ffd166;">⏳ Waiting for facilitator scoring...</span>' : ''}
-      </div>
-    </div>
-  `).join('');
-}
-
-function openCard(idx) {
-  const card = cards[idx];
-  if (card.used) {
-    alert('You have already answered this card.');
-    return;
-  }
-  activeCard = { idx, card };
-  document.getElementById('modal-title').textContent = card.title;
-  document.getElementById('modal-question').textContent = card.question;
-  document.getElementById('modal-hint').innerHTML = `💡 Hint: ${card.hint}`;
-  document.getElementById('answer').value = '';
-  document.getElementById('modal').classList.add('open');
-}
-
-function submitAnswer() {
-  const answer = document.getElementById('answer').value.trim();
-  if (!answer) {
-    alert('Please type an answer.');
-    return;
-  }
-  
-  const card = activeCard.card;
-  card.used = true;
-  
-  answers.push({
-    title: card.title,
-    answer: answer,
-    awarded: 0,
-    possible: card.points,
-    pending: true
-  });
-  
-  // Save progress
-  localStorage.setItem(`progress-${player.id}`, JSON.stringify({
-    used: cards.filter(c => c.used).map(c => c.title),
-    answers: answers
-  }));
-  
-  // Add to pending answers for facilitator
-  const pending = JSON.parse(localStorage.getItem('hf-pending-answers') || '[]');
-  pending.push({
-    id: Date.now(),
-    playerId: player.id,
-    playerName: player.name,
-    cardTitle: card.title,
-    answer: answer,
-    possiblePoints: card.points
-  });
-  localStorage.setItem('hf-pending-answers', JSON.stringify(pending));
-  
-  closeModal();
-  renderCards();
-  renderLog();
-  alert('✓ Answer submitted! Facilitator will review and award points.');
-}
-
-function closeModal() {
-  document.getElementById('modal').classList.remove('open');
-  activeCard = null;
-}
-
-function switchTab(tabName, btn) {
-  document.querySelectorAll('.tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  
-  document.getElementById('scenario-tab').classList.add('hidden');
-  document.getElementById('cards-tab').classList.add('hidden');
-  document.getElementById('frameworks-tab').classList.add('hidden');
-  document.getElementById('log-tab').classList.add('hidden');
-  
-  if (tabName === 'scenario') document.getElementById('scenario-tab').classList.remove('hidden');
-  if (tabName === 'cards') document.getElementById('cards-tab').classList.remove('hidden');
-  if (tabName === 'frameworks') document.getElementById('frameworks-tab').classList.remove('hidden');
-  if (tabName === 'log') document.getElementById('log-tab').classList.remove('hidden');
-}
-
-function exitGame() {
-  if (confirm('Exit this case study?')) {
-    window.location.href = 'index.html';
-  }
-}
-
-function escapeHtml(str) {
-  if (!str) return '';
-  return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
-}
-
-function refreshData() {
-  // Refresh player score
-  const updatedPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
-  const updatedPlayer = updatedPlayers.find(p => p.id === player.id);
-  if (updatedPlayer && updatedPlayer.score !== player.score) {
-    player.score = updatedPlayer.score;
-    updateScore();
-    renderScoreBar();
-  }
-  
-  // Check for session changes
-  checkForActiveCase();
-}
-
-// Initialize
-loadPlayer();
-
-// Start checking for active case every 2 seconds
-checkInterval = setInterval(() => {
-  checkForActiveCase();
-  refreshData();
-}, 2000);
-
-// Initial check
-checkForActiveCase();
-</script>
+  <script>
+    // ============================================
+    // DOSSIER CARDS - Complete Flight 261 Analysis
+    // ============================================
+    const DOSSIER_CARDS = [
+      {
+        id: 1,
+        title: "The C-Check Pressure & Override",
+        framework: "Swiss Cheese & Conklin Theory",
+        scenario: "During a routine C-Check in September 1997, a technician measures the jackscrew end-play at its maximum allowable limit (0.040 inches). The technician recommends replacing the entire jackscrew assembly. However, the replacement part is not in stock. The aircraft is already two days behind schedule. A maintenance supervisor, facing pressure to return the aircraft to service, overrides the technician's recommendation and signs the aircraft back to active service.",
+        prompt: "What organizational pressure or system override have you observed in your workplace when parts are delayed or schedules are tight?",
+        factors: ["Pressure", "Lack of Resources", "Norms", "Lack of Assertiveness", "Complacency", "Communication Breakdown"],
+        targetFactors: ["Pressure", "Lack of Resources", "Lack of Assertiveness"],
+        wearLevel: 0.033,
+        integrity: 78,
+        pointsPossible: 150
+      },
+      {
+        id: 2,
+        title: "The Approved Extension Cycle",
+        framework: "Hollnagel's Variability & Normalization of Deviance",
+        scenario: "The FAA approved an extension of the jackscrew lubrication interval from 650 to 2,550 flight hours - a nearly 4x increase. Over the following years, this extension became the organizational standard. Technicians treated the extended interval as routine compliance rather than critical protection against physical abrasion. Each successful flight without incident reinforced the new normal.",
+        prompt: "Can you identify a task or procedure in your routine where complete compliance on paper masks an actual degradation in safety margins?",
+        factors: ["Complacency", "Norms", "Lack of Knowledge", "Lack of Communication", "Stress", "Distraction"],
+        targetFactors: ["Complacency", "Norms"],
+        wearLevel: 0.055,
+        integrity: 50,
+        pointsPossible: 150
+      },
+      {
+        id: 3,
+        title: "The Silent Defense Line",
+        framework: "Amy Edmondson's Psychological Safety",
+        scenario: "The technician who identified the end-play issue spoke up once but was dismissed by the supervisor. Having raised the concern and been overruled, the technician did not escalate further. The organizational culture made compliance easier than challenge. Speaking up felt futile and potentially career-limiting. Silence became the rational choice.",
+        prompt: "When you believe an unsafe sign-off is imminent, what structural barrier makes you hesitate to escalate?",
+        factors: ["Lack of Assertiveness", "Norms", "Pressure", "Lack of Teamwork", "Complacency", "Stress"],
+        targetFactors: ["Lack of Assertiveness", "Norms", "Pressure"],
+        wearLevel: 0.082,
+        integrity: 22,
+        pointsPossible: 150
+      },
+      {
+        id: 4,
+        title: "The Stripped Reality",
+        framework: "Dekker's Local Rationality & The Broken System",
+        scenario: "On 31 January 2000, at 31,000 feet over the Pacific Ocean, the final remaining thread shear forces strip the acme nut completely. The horizontal stabilizer jams, rendering aircraft pitch unrecoverable. The aircraft plunges into the ocean. All 88 people on board perish. The maintenance system had accepted 100% compliance on paper, while ignoring the physical reality of cumulative degradation.",
+        prompt: "When the system is broken long before anyone picks up a tool, how should maintenance organizations safeguard their engineers and the flying public?",
+        factors: ["Norms", "Complacency", "Lack of Knowledge", "Lack of Resources", "Lack of Teamwork", "Fatigue"],
+        targetFactors: ["Norms", "Complacency", "Lack of Resources"],
+        wearLevel: 0.115,
+        integrity: 0,
+        pointsPossible: 150
+      }
+    ];
+    
+    // Global state
+    let currentPlayer = null;
+    let allPlayers = [];
+    let currentCardIndex = 0;
+    let submittedCards = [];
+    let isFacilitatorMode = false;
+    let sessionResponses = [];
+    
+    // Load player from localStorage
+    function loadPlayer() {
+      const saved = localStorage.getItem('hf-current-player');
+      if (!saved) {
+        window.location.href = 'index.html';
+        return;
+      }
+      currentPlayer = JSON.parse(saved);
+      document.getElementById('player-name').textContent = currentPlayer.name;
+      updateScoreDisplay();
+    }
+    
+    function updateScoreDisplay() {
+      document.getElementById('player-score').textContent = `Score: ${currentPlayer.score || 0} pts`;
+    }
+    
+    function loadSessionData() {
+      // Load all participants
+      allPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+      const updatedPlayer = allPlayers.find(p => p.id === currentPlayer.id);
+      if (updatedPlayer) {
+        currentPlayer.score = updatedPlayer.score;
+        updateScoreDisplay();
+      }
+      
+      // Load submitted cards for this player
+      const saved = localStorage.getItem(`dossier-progress-${currentPlayer.id}`);
+      if (saved) {
+        const progress = JSON.parse(saved);
+        submittedCards = progress.submittedCards || [];
+        currentCardIndex = submittedCards.length;
+      }
+      
+      // Load all session responses (for facilitator view)
+      sessionResponses = JSON.parse(localStorage.getItem('hf-session-responses') || '[]');
+      
+      renderScoreBar();
+      renderMainContent();
+    }
+    
+    function renderScoreBar() {
+      const container = document.getElementById('score-bar');
+      if (allPlayers.length === 0) {
+        container.innerHTML = '<div class="score-chip">Waiting for participants...</div>';
+        return;
+      }
+      container.innerHTML = allPlayers.map(p => `
+        <div class="score-chip ${p.id === currentPlayer.id ? 'active' : ''}">
+          ${escapeHtml(p.name)}: ${p.score} pts
+        </div>
+      `).join('');
+    }
+    
+    function renderMainContent() {
+      const container = document.getElementById('main-content');
+      
+      if (isFacilitatorMode) {
+        renderFacilitatorView(container);
+      } else {
+        renderParticipantView(container);
+      }
+    }
+    
+    function renderParticipantView(container) {
+      // Check if all cards completed
+      if (currentCardIndex >= DOSSIER_CARDS.length) {
+        container.innerHTML = `
+          <div class="dossier-card" style="grid-column: 1/-1;">
+            <div class="complete-card">
+              <div class="complete-icon">✓</div>
+              <h2 style="margin-bottom: 0.5rem;">Dossier Complete!</h2>
+              <p style="color: #7b8a9b; margin-bottom: 1rem;">You have completed all 4 case study cards.</p>
+              <div style="background: rgba(69, 179, 255, 0.1); padding: 1rem; border-radius: 12px;">
+                <span style="color: #ffd166;">Final Score: ${currentPlayer.score} / 600 points</span>
+              </div>
+              <p style="margin-top: 1rem; font-size: 0.75rem; color: #7b8a9b;">The facilitator will now lead the debrief discussion.</p>
+            </div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sidebar-title">📋 Completed Cards</div>
+            ${DOSSIER_CARDS.map((card, idx) => `
+              <div style="padding: 0.5rem; margin-bottom: 0.5rem; background: rgba(46, 196, 182, 0.1); border-radius: 8px;">
+                <strong>Card ${idx + 1}:</strong> ${card.title}<br>
+                <span style="font-size: 0.65rem; color: #2ec4b6;">✓ Completed</span>
+              </div>
+            `).join('')}
+          </div>
+        `;
+        return;
+      }
+      
+      const card = DOSSIER_CARDS[currentCardIndex];
+      
+      container.innerHTML = `
+        <div>
+          <!-- Thread Wear Visualizer -->
+          <div class="wear-card">
+            <div class="wear-title">🔧 JACKSCREW ACME THREAD TELEMETRY</div>
+            <div class="svg-container" id="thread-svg-container">
+              <!-- SVG will be rendered here -->
+            </div>
+            <div class="wear-stats">
+              <div class="wear-stat">
+                <div class="wear-stat-label">End-Play Measurement</div>
+                <div class="wear-stat-value" id="wear-value">${card.wearLevel.toFixed(3)} in</div>
+              </div>
+              <div class="wear-stat">
+                <div class="wear-stat-label">Thread Integrity</div>
+                <div class="wear-stat-value" id="integrity-value">${card.integrity}%</div>
+                <div class="integrity-bar"><div class="integrity-fill" id="integrity-fill" style="width: ${card.integrity}%; background: ${card.integrity > 60 ? '#2ec4b6' : card.integrity > 20 ? '#ffd166' : '#e63946'};"></div></div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Dossier Card -->
+          <div class="dossier-card">
+            <div class="dossier-header">
+              <span class="dossier-number">Dossier ${currentCardIndex + 1}/${DOSSIER_CARDS.length}</span>
+              <span class="dossier-framework">Framework: ${card.framework}</span>
+            </div>
+            <div class="dossier-title">${card.title}</div>
+            <div class="dossier-scenario">${card.scenario}</div>
+            
+            <div class="prompt-label">📝 Step 1: Identify Active Dirty Dozen Factors</div>
+            <div class="factors-grid" id="factors-grid">
+              ${card.factors.map(factor => `
+                <label class="factor-checkbox">
+                  <input type="checkbox" name="factor" value="${factor}">
+                  <span>${factor}</span>
+                </label>
+              `).join('')}
+            </div>
+            
+            <div class="prompt-label">💭 Step 2: Operational Insight</div>
+            <textarea id="reflection-input" placeholder="${card.prompt}"></textarea>
+            
+            <button class="btn-submit" onclick="submitCard(${currentCardIndex})">✈️ SUBMIT DOSSIER →</button>
+          </div>
+        </div>
+        
+        <!-- Sidebar -->
+        <div>
+          <div class="sidebar-card">
+            <div class="sidebar-title">📡 LIVE CREW INSIGHTS</div>
+            <div class="insight-feed" id="insight-feed">
+              <div class="waiting">Waiting for crew insights...</div>
+            </div>
+          </div>
+          <div class="sidebar-card">
+            <div class="sidebar-title">📊 PROGRESS</div>
+            <div style="margin-bottom: 0.5rem;">
+              <div style="font-size: 0.7rem; color: #7b8a9b;">Cards Completed</div>
+              <div style="font-size: 1.2rem; font-weight: 700;">${submittedCards.length}/${DOSSIER_CARDS.length}</div>
+            </div>
+            <div style="margin-bottom: 0.5rem;">
+              <div style="font-size: 0.7rem; color: #7b8a9b;">Current Score</div>
+              <div style="font-size: 1.2rem; font-weight: 700; color: #ffd166;">${currentPlayer.score} pts</div>
+            </div>
+            <div class="integrity-bar"><div class="integrity-fill" style="width: ${(submittedCards.length / DOSSIER_CARDS.length) * 100}%; background: #45b3ff;"></div></div>
+          </div>
+        </div>
+      `;
+      
+      renderThreadVisualizer(card);
+      renderInsightFeed();
+    }
+    
+    function renderThreadVisualizer(card) {
+      const container = document.getElementById('thread-svg-container');
+      if (!container) return;
+      
+      const wearRatio = Math.min(1, Math.max(0, card.wearLevel / 0.12));
+      const threadOpacity = Math.max(0.2, 1 - wearRatio);
+      const nutColor = card.integrity > 60 ? '#2ec4b6' : card.integrity > 20 ? '#ffd166' : '#e63946';
+      
+      container.innerHTML = `
+        <svg width="100%" height="100" viewBox="0 0 500 80" xmlns="http://www.w3.org/2000/svg">
+          <!-- Shaft -->
+          <rect x="10" y="30" width="480" height="20" fill="#27272a" stroke="#52525b" stroke-width="1" />
+          
+          <!-- Threads (damaged based on wear level) -->
+          ${Array.from({ length: 15 }, (_, i) => {
+            const x = 25 + (i * 30);
+            const threadHeight = 12 * (1 - wearRatio * 0.7);
+            const threadColor = wearRatio > 0.7 ? '#e63946' : wearRatio > 0.4 ? '#ffd166' : '#d4d4d8';
+            return `
+              <path d="M ${x} 30 L ${x + 8} ${18 + (15 - threadHeight)} L ${x + 22} ${18 + (15 - threadHeight)} L ${x + 30} 30 Z" fill="${threadColor}" stroke="#71717a" stroke-width="0.5" opacity="${threadOpacity}" />
+              <path d="M ${x} 50 L ${x + 8} ${62 + (15 - threadHeight)} L ${x + 22} ${62 + (15 - threadHeight)} L ${x + 30} 50 Z" fill="${threadColor}" stroke="#71717a" stroke-width="0.5" opacity="${threadOpacity}" />
+            `;
+          }).join('')}
+          
+          <!-- Acme Nut -->
+          <g transform="translate(200, 15)">
+            <rect x="0" y="0" width="100" height="50" fill="rgba(69, 179, 255, 0.05)" stroke="${nutColor}" stroke-width="2" rx="4" />
+            <text x="50" y="28" fill="${nutColor}" font-size="9" font-family="monospace" text-anchor="middle">ACME NUT</text>
+            ${card.integrity === 0 ? '<text x="50" y="42" fill="#e63946" font-size="7" text-anchor="middle">STRIPPED</text>' : ''}
+          </g>
+        </svg>
+      `;
+    }
+    
+    function renderInsightFeed() {
+      const container = document.getElementById('insight-feed');
+      if (!container) return;
+      
+      const recentInsights = [...sessionResponses].reverse().slice(0, 8);
+      
+      if (recentInsights.length === 0) {
+        container.innerHTML = '<div class="waiting">No insights yet. Submit your first dossier to share with the crew.</div>';
+        return;
+      }
+      
+      container.innerHTML = recentInsights.map(insight => `
+        <div class="insight-item">
+          <div class="insight-name">${escapeHtml(insight.playerName)} • Card ${insight.cardId}</div>
+          <div class="insight-text">"${escapeHtml(insight.reflection.substring(0, 120))}${insight.reflection.length > 120 ? '...' : ''}"</div>
+          <div class="insight-factors">
+            ${insight.selectedFactors.map(f => `<span class="insight-factor">${escapeHtml(f)}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+    }
+    
+    function renderFacilitatorView(container) {
+      // Calculate analytics
+      const factorCounts = {};
+      sessionResponses.forEach(resp => {
+        resp.selectedFactors.forEach(f => {
+          factorCounts[f] = (factorCounts[f] || 0) + 1;
+        });
+      });
+      
+      const sortedFactors = Object.entries(factorCounts).sort((a, b) => b[1] - a[1]);
+      const maxCount = Math.max(...Object.values(factorCounts), 1);
+      
+      // Participant stats
+      const participantStats = {};
+      allPlayers.forEach(p => {
+        participantStats[p.name] = { score: p.score, cardsCompleted: 0 };
+      });
+      sessionResponses.forEach(resp => {
+        if (participantStats[resp.playerName]) {
+          participantStats[resp.playerName].cardsCompleted++;
+        }
+      });
+      
+      container.innerHTML = `
+        <div style="grid-column: 1/-1;">
+          <div class="dossier-card">
+            <div class="dossier-header">
+              <span class="dossier-number">📊 FACILITATOR ANALYTICS DASHBOARD</span>
+              <span class="dossier-framework">Live Session Data</span>
+            </div>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+              <!-- Dirty Dozen Analysis -->
+              <div>
+                <h4 style="margin-bottom: 0.75rem;">🎯 Dirty Dozen Identification</h4>
+                <div class="analytics-chart">
+                  ${sortedFactors.slice(0, 6).map(([factor, count]) => `
+                    <div class="chart-bar">
+                      <span class="chart-bar-label">${factor}</span>
+                      <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${(count / maxCount) * 100}%;"></div></div>
+                      <span style="width: 30px; text-align: right;">${count}</span>
+                    </div>
+                  `).join('')}
+                  ${sortedFactors.length === 0 ? '<div class="waiting">Waiting for submissions...</div>' : ''}
+                </div>
+              </div>
+              
+              <!-- Participant Progress -->
+              <div>
+                <h4 style="margin-bottom: 0.75rem;">👥 Participant Progress</h4>
+                <div class="analytics-chart">
+                  ${Object.entries(participantStats).map(([name, stats]) => `
+                    <div class="chart-bar">
+                      <span class="chart-bar-label">${name.substring(0, 15)}</span>
+                      <div style="flex: 1;"><div class="chart-bar-fill" style="width: ${(stats.cardsCompleted / DOSSIER_CARDS.length) * 100}%; background: #ffd166;"></div></div>
+                      <span style="width: 60px; text-align: right;">${stats.score} pts</span>
+                    </div>
+                  `).join('')}
+                  ${Object.keys(participantStats).length === 0 ? '<div class="waiting">No participants joined yet</div>' : ''}
+                </div>
+              </div>
+            </div>
+            
+            <!-- All Reflections Wall -->
+            <div style="margin-top: 1.5rem;">
+              <h4 style="margin-bottom: 0.75rem;">📝 All Crew Reflections</h4>
+              <div style="max-height: 400px; overflow-y: auto;">
+                ${sessionResponses.length === 0 ? '<div class="waiting">No reflections submitted yet</div>' : ''}
+                ${sessionResponses.map(resp => `
+                  <div class="insight-item" style="margin-bottom: 0.75rem;">
+                    <div class="insight-name">${escapeHtml(resp.playerName)} • Card ${resp.cardId}: ${escapeHtml(resp.cardTitle)}</div>
+                    <div class="insight-text">"${escapeHtml(resp.reflection)}"</div>
+                    <div class="insight-factors">
+                      ${resp.selectedFactors.map(f => `<span class="insight-factor">${escapeHtml(f)}</span>`).join('')}
+                    </div>
+                    <div style="font-size: 0.6rem; color: #ffd166; margin-top: 0.3rem;">+${resp.pointsEarned} pts</div>
+                  </div>
+                `).join('')}
+              </div>
+            </div>
+            
+            <!-- Session Control -->
+            <div style="margin-top: 1.5rem; display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <button class="stage-btn" onclick="resetAllProgress()">🔄 Reset All Progress</button>
+              <button class="btn-warning" onclick="clearAllResponses()">🗑️ Clear All Responses</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+    
+    async function submitCard(cardIndex) {
+      const card = DOSSIER_CARDS[cardIndex];
+      
+      // Get selected factors
+      const selectedCheckboxes = document.querySelectorAll('#factors-grid input:checked');
+      const selectedFactors = Array.from(selectedCheckboxes).map(cb => cb.value);
+      
+      if (selectedFactors.length === 0) {
+        alert('Please select at least one Dirty Dozen factor.');
+        return;
+      }
+      
+      const reflection = document.getElementById('reflection-input').value.trim();
+      if (!reflection) {
+        alert('Please provide your operational insight.');
+        return;
+      }
+      
+      // Calculate points
+      let matchCount = 0;
+      selectedFactors.forEach(f => {
+        if (card.targetFactors.includes(f)) {
+          matchCount++;
+        }
+      });
+      
+      const pointsEarned = Math.min(card.pointsPossible, (matchCount * 40) + 60);
+      
+      // Update player score
+      currentPlayer.score = (currentPlayer.score || 0) + pointsEarned;
+      
+      // Update in allPlayers array
+      const playerIndex = allPlayers.findIndex(p => p.id === currentPlayer.id);
+      if (playerIndex !== -1) {
+        allPlayers[playerIndex].score = currentPlayer.score;
+        localStorage.setItem('hf-participants', JSON.stringify(allPlayers));
+      }
+      
+      // Save progress
+      submittedCards.push({
+        cardId: card.id,
+        cardTitle: card.title,
+        selectedFactors: selectedFactors,
+        reflection: reflection,
+        pointsEarned: pointsEarned
+      });
+      
+      localStorage.setItem(`dossier-progress-${currentPlayer.id}`, JSON.stringify({
+        submittedCards: submittedCards,
+        completedAt: new Date().toISOString()
+      }));
+      
+      // Add to session responses
+      sessionResponses.push({
+        playerId: currentPlayer.id,
+        playerName: currentPlayer.name,
+        cardId: card.id,
+        cardTitle: card.title,
+        selectedFactors: selectedFactors,
+        reflection: reflection,
+        pointsEarned: pointsEarned,
+        timestamp: new Date().toISOString()
+      });
+      localStorage.setItem('hf-session-responses', JSON.stringify(sessionResponses));
+      
+      updateScoreDisplay();
+      
+      // Move to next card
+      currentCardIndex++;
+      renderMainContent();
+      
+      // Show success message
+      alert(`✓ Dossier submitted! +${pointsEarned} points earned.`);
+    }
+    
+    function toggleMode() {
+      isFacilitatorMode = !isFacilitatorMode;
+      const btn = document.getElementById('mode-toggle-btn');
+      const body = document.getElementById('app-body');
+      
+      if (isFacilitatorMode) {
+        btn.textContent = '👥 Participant Mode';
+        body.classList.add('facilitator');
+      } else {
+        btn.textContent = '👨‍🏫 Facilitator Mode';
+        body.classList.remove('facilitator');
+      }
+      
+      renderMainContent();
+    }
+    
+    function resetAllProgress() {
+      if (confirm('⚠️ Reset all participant progress? This will clear all scores and submissions.')) {
+        // Clear all dossier progress
+        const keys = Object.keys(localStorage);
+        keys.forEach(key => {
+          if (key.startsWith('dossier-progress-')) {
+            localStorage.removeItem(key);
+          }
+        });
+        localStorage.removeItem('hf-session-responses');
+        
+        // Reset current player score
+        currentPlayer.score = 0;
+        const playerIndex = allPlayers.findIndex(p => p.id === currentPlayer.id);
+        if (playerIndex !== -1) {
+          allPlayers[playerIndex].score = 0;
+          localStorage.setItem('hf-participants', JSON.stringify(allPlayers));
+        }
+        
+        submittedCards = [];
+        currentCardIndex = 0;
+        sessionResponses = [];
+        
+        updateScoreDisplay();
+        renderMainContent();
+        alert('Session reset complete.');
+      }
+    }
+    
+    function clearAllResponses() {
+      if (confirm('⚠️ Clear all participant responses? This cannot be undone.')) {
+        localStorage.removeItem('hf-session-responses');
+        sessionResponses = [];
+        renderMainContent();
+        alert('All responses cleared.');
+      }
+    }
+    
+    function exitToJoin() {
+      if (confirm('Exit this session? Your progress will be saved.')) {
+        window.location.href = 'index.html';
+      }
+    }
+    
+    function escapeHtml(str) {
+      if (!str) return '';
+      return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : m === '<' ? '&lt;' : '&gt;');
+    }
+    
+    // Refresh data periodically
+    function refreshData() {
+      const updatedPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+      const updatedPlayer = updatedPlayers.find(p => p.id === currentPlayer.id);
+      if (updatedPlayer && updatedPlayer.score !== currentPlayer.score) {
+        currentPlayer.score = updatedPlayer.score;
+        updateScoreDisplay();
+      }
+      
+      const updatedResponses = JSON.parse(localStorage.getItem('hf-session-responses') || '[]');
+      if (JSON.stringify(sessionResponses) !== JSON.stringify(updatedResponses)) {
+        sessionResponses = updatedResponses;
+        if (!isFacilitatorMode) {
+          renderInsightFeed();
+        } else {
+          renderMainContent();
+        }
+      }
+      
+      const updatedAllPlayers = JSON.parse(localStorage.getItem('hf-participants') || '[]');
+      if (JSON.stringify(allPlayers) !== JSON.stringify(updatedAllPlayers)) {
+        allPlayers = updatedAllPlayers;
+        renderScoreBar();
+        if (isFacilitatorMode) {
+          renderMainContent();
+        }
+      }
+    }
+    
+    // Initialize
+    loadPlayer();
+    loadSessionData();
+    setInterval(refreshData, 3000);
+  </script>
 </body>
 </html>
