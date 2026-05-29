@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Flight 261 | Human Factors Case Study</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'IBM Plex Sans', sans-serif;
       background: linear-gradient(135deg, #0a2a3a 0%, #0d1b2a 50%, #1b263b 100%);
       color: #e0e1dd;
       min-height: 100vh;
     }
     
-    /* Announcement Banner */
     .announcement-banner {
       background: linear-gradient(135deg, #1a6bc3, #0d3b5e);
       color: white;
@@ -600,7 +600,6 @@
   </style>
 </head>
 <body id="app-body">
-  <!-- Announcement Banner -->
   <div id="announcement-banner" class="announcement-banner">
     <span id="announcement-text">📢 Facilitator announcement</span>
     <button class="announcement-close" onclick="dismissAnnouncement()">×</button>
@@ -638,7 +637,6 @@
     <button class="mode-btn" onclick="toggleMode()" id="mode-toggle-btn">👨‍🏫 Facilitator Mode</button>
   </div>
   
-  <!-- Results Modal -->
   <div id="results-modal" class="modal-overlay">
     <div class="modal">
       <div class="modal-header">
@@ -661,10 +659,10 @@
         scenario: "During a C-Check in September 1997, a technician measures the jackscrew end-play at its maximum allowable limit (0.040 inches). The technician recommends replacement. However, the replacement part is not in stock. The aircraft is already two days behind schedule. A maintenance supervisor, facing pressure to return the aircraft to service, overrides the technician's recommendation and signs the aircraft back to active service.",
         question: "Which Dirty Dozen factors were most clearly at work in the supervisor's decision to override the technician?",
         options: [
-          { text: "Pressure, Lack of Resources, and Norms", correct: true, points: 100 },
-          { text: "Fatigue, Distraction, and Stress", correct: false, points: 0 },
-          { text: "Complacency and Lack of Teamwork only", correct: false, points: 0 },
-          { text: "Lack of Knowledge and Communication Breakdown", correct: false, points: 0 }
+          "Pressure, Lack of Resources, and Norms",
+          "Fatigue, Distraction, and Stress",
+          "Complacency and Lack of Teamwork only",
+          "Lack of Knowledge and Communication Breakdown"
         ],
         correctAnswer: "Pressure, Lack of Resources, and Norms",
         explanation: "The supervisor faced schedule pressure (aircraft already late), lack of resources (replacement part not in stock), and norms (deferral had become standard practice at the airline).",
@@ -679,10 +677,10 @@
         scenario: "The jackscrew lubrication interval had been extended from 650 to 2,550 flight hours with FAA approval. The supervisor overrode the replacement recommendation. The technician did not escalate further. The inspection sign-off was completed without physical verification of the thread condition.",
         question: "According to Reason's Swiss Cheese Model, how many defensive layers failed in this accident? Name the specific holes in each layer.",
         options: [
-          { text: "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)", correct: true, points: 100 },
-          { text: "2 layers: Only the technician and supervisor failed", correct: false, points: 0 },
-          { text: "5 layers including design flaw and pilot error", correct: false, points: 0 },
-          { text: "Only the FAA regulatory layer failed", correct: false, points: 0 }
+          "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)",
+          "2 layers: Only the technician and supervisor failed",
+          "5 layers including design flaw and pilot error",
+          "Only the FAA regulatory layer failed"
         ],
         correctAnswer: "4 layers: Regulatory (FAA approval), Organizational (deferral culture), Supervisory (override), and Inspection (paper compliance)",
         explanation: "Multiple layers failed: Regulatory (approved dangerous interval), Organizational (normalized deferral), Supervisory (overrode concern), Inspection (signed off without verification).",
@@ -697,10 +695,10 @@
         scenario: "The supervisor who overrode the technician's recommendation was not acting maliciously. From his perspective, the aircraft was already late, the part was not available, and previous deferrals had never caused an accident.",
         question: "What does Dekker mean by 'human error is a symptom, not a cause'? Apply this to the supervisor's decision.",
         options: [
-          { text: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time", correct: true, points: 100 },
-          { text: "The supervisor was lazy and should be fired", correct: false, points: 0 },
-          { text: "Only the technician is responsible for the accident", correct: false, points: 0 },
-          { text: "Human error cannot be prevented, so we should accept it", correct: false, points: 0 }
+          "The supervisor's decision was locally rational given the pressures, resources, and information available at the time",
+          "The supervisor was lazy and should be fired",
+          "Only the technician is responsible for the accident",
+          "Human error cannot be prevented, so we should accept it"
         ],
         correctAnswer: "The supervisor's decision was locally rational given the pressures, resources, and information available at the time",
         explanation: "Dekker argues that blaming individuals hides systemic causes. The supervisor's override made sense given schedule pressure, parts unavailability, and no prior failures from deferrals.",
@@ -715,10 +713,10 @@
         scenario: "The technician raised the concern once, was overruled, and did not escalate further. No safety report was filed. The organization had a history of valuing schedule compliance over safety concerns.",
         question: "Using Edmondson's framework, what does this tell us about psychological safety at Alaska Airlines?",
         options: [
-          { text: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement", correct: true, points: 100 },
-          { text: "The technician was simply afraid of the supervisor", correct: false, points: 0 },
-          { text: "The organization had excellent safety culture", correct: false, points: 0 },
-          { text: "Only the technician is responsible for not speaking up again", correct: false, points: 0 }
+          "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement",
+          "The technician was simply afraid of the supervisor",
+          "The organization had excellent safety culture",
+          "Only the technician is responsible for not speaking up again"
         ],
         correctAnswer: "The workplace lacked psychological safety, making speaking up feel futile and potentially dangerous for career advancement",
         explanation: "Edmondson's research shows that when psychological safety is absent, people choose silence over speaking up, even about serious safety concerns.",
@@ -733,10 +731,10 @@
         scenario: "The maintenance task card was signed and certified as complete. The lubrication was documented as performed. Yet the jackscrew failed catastrophically due to inadequate lubrication over years.",
         question: "What is the gap between 'work-as-imagined' and 'work-as-done' in this accident?",
         options: [
-          { text: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage", correct: true, points: 100 },
-          { text: "The paperwork was forged", correct: false, points: 0 },
-          { text: "The technicians were not trained properly", correct: false, points: 0 },
-          { text: "There is no gap - compliance equals safety", correct: false, points: 0 }
+          "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage",
+          "The paperwork was forged",
+          "The technicians were not trained properly",
+          "There is no gap - compliance equals safety"
         ],
         correctAnswer: "Work-as-imagined assumes ideal conditions (rested tech, time, resources); work-as-done happened under pressure, fatigue, and parts shortage",
         explanation: "Conklin teaches that work-as-imagined (the procedure) and work-as-done (reality) always differ. The signature looked the same, but the safety outcome was completely different.",
@@ -790,7 +788,6 @@
       document.getElementById('announcement-banner').classList.remove('show');
     }
     
-    // Session timer functions
     function startSessionTimer() {
       if (sessionTimer) clearInterval(sessionTimer);
       
@@ -870,7 +867,6 @@
       document.getElementById('player-name').textContent = currentPlayer.name;
       updateScoreDisplay();
       
-      // Check if session is still active
       const sessionEnd = localStorage.getItem('hf-session-end-time');
       if (sessionEnd && Date.now() > parseInt(sessionEnd)) {
         isSessionActive = false;
@@ -1021,8 +1017,8 @@
             <div class="options-grid" id="options-grid">
               ${card.options.map((opt, idx) => `
                 <label class="option-radio">
-                  <input type="radio" name="answer" value="${idx}" data-points="${opt.points}" data-correct="${opt.correct}">
-                  <span class="option-text">${escapeHtml(opt.text)}</span>
+                  <input type="radio" name="answer" value="${idx}" data-points="${card.pointsPossible}" data-correct="${opt === card.correctAnswer}">
+                  <span class="option-text">${escapeHtml(opt)}</span>
                 </label>
               `).join('')}
             </div>
@@ -1152,7 +1148,6 @@
               <span class="dossier-framework">500 Points | 5 Frameworks</span>
             </div>
             
-            <!-- Announcement Control -->
             <div style="margin-bottom: 1rem; padding: 0.75rem; background: rgba(69, 179, 255, 0.1); border-radius: 12px;">
               <label style="font-size: 0.7rem; color: #ffd166;">📢 Send Announcement to All Participants:</label>
               <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
@@ -1271,38 +1266,66 @@
     }
     
     function showMyResults() {
+      // Check if any questions have been answered
+      const totalAnswered = submittedCards.length;
+      
+      if (totalAnswered === 0) {
+        alert('📋 No answers submitted yet.\n\nPlease answer at least one question before viewing your results.');
+        return;
+      }
+      
       const modal = document.getElementById('results-modal');
       const body = document.getElementById('results-modal-body');
       const grade = getGrade(currentPlayer.score || 0);
+      
+      const isComplete = totalAnswered === DOSSIER_CARDS.length;
+      const incompleteWarning = !isComplete ? `
+        <div style="background: rgba(255, 209, 102, 0.15); border: 1px solid rgba(255, 209, 102, 0.3); border-radius: 12px; padding: 0.75rem; margin-bottom: 1rem; text-align: center;">
+          ⚠️ You have completed ${totalAnswered}/${DOSSIER_CARDS.length} questions. Complete all 5 questions to see your full certificate eligibility.
+        </div>
+      ` : '';
       
       let resultsHtml = `
         <div style="text-align: center; margin-bottom: 1rem;">
           <div style="font-size: 1.5rem; font-weight: 700;">${currentPlayer.name}</div>
           <div class="grade-badge ${grade.class}" style="font-size: 1rem; margin-top: 0.5rem;">${grade.icon} ${grade.name}</div>
-          <div style="font-size: 1.2rem; margin-top: 0.5rem;">${currentPlayer.score || 0} / 500 points</div>
+          <div style="font-size: 1.2rem; margin-top: 0.5rem;">${currentPlayer.score || 0} / ${DOSSIER_CARDS.length * 100} points</div>
         </div>
+        ${incompleteWarning}
         <hr style="border-color: #2a2e3a; margin: 1rem 0;">
       `;
       
       DOSSIER_CARDS.forEach((card, idx) => {
         const submitted = submittedCards.find(s => s.cardId === card.id);
-        const isCorrect = submitted?.isCorrect || false;
-        const userAnswer = submitted?.selectedAnswer || 'Not answered';
-        const pointsEarned = submitted?.pointsEarned || 0;
+        const isAnswered = !!submitted;
         
-        resultsHtml += `
-          <div class="review-question ${isCorrect ? 'correct' : 'incorrect'}">
-            <div class="review-question-title">Question ${idx + 1}: ${card.title}</div>
-            <div class="review-answer"><strong>Your answer:</strong> ${escapeHtml(userAnswer)}</div>
-            <div class="review-answer"><strong>Correct answer:</strong> ${card.correctAnswer}</div>
-            <div class="review-answer" style="color: ${isCorrect ? '#2ec4b6' : '#e63946'};">
-              <strong>Points earned:</strong> ${pointsEarned}/${card.pointsPossible}
+        if (isAnswered) {
+          const isCorrect = submitted.isCorrect;
+          const userAnswer = submitted.selectedAnswer;
+          const pointsEarned = submitted.pointsEarned;
+          
+          resultsHtml += `
+            <div class="review-question ${isCorrect ? 'correct' : 'incorrect'}">
+              <div class="review-question-title">Question ${idx + 1}: ${card.title}</div>
+              <div class="review-answer"><strong>Your answer:</strong> ${escapeHtml(userAnswer)}</div>
+              <div class="review-answer"><strong>Correct answer:</strong> ${card.correctAnswer}</div>
+              <div class="review-answer" style="color: ${isCorrect ? '#2ec4b6' : '#e63946'};">
+                <strong>Points earned:</strong> ${pointsEarned}/${card.pointsPossible}
+              </div>
+              <div class="review-answer" style="font-size: 0.7rem; color: #7b8a9b; margin-top: 0.5rem;">
+                <strong>Explanation:</strong> ${card.explanation}
+              </div>
             </div>
-            <div class="review-answer" style="font-size: 0.7rem; color: #7b8a9b; margin-top: 0.5rem;">
-              <strong>Explanation:</strong> ${card.explanation}
+          `;
+        } else {
+          resultsHtml += `
+            <div class="review-question" style="opacity: 0.6; border-left: 3px solid #4a5068;">
+              <div class="review-question-title">🔒 Question ${idx + 1}: ${card.title}</div>
+              <div class="review-answer" style="color: #4a5068;"><em>Answer this question to see results</em></div>
+              <div class="review-answer"><strong>Points possible:</strong> ${card.pointsPossible}</div>
             </div>
-          </div>
-        `;
+          `;
+        }
       });
       
       body.innerHTML = resultsHtml;
@@ -1322,61 +1345,47 @@
         format: 'a4'
       });
       
-      // Background color
       doc.setFillColor(10, 42, 58);
       doc.rect(0, 0, 297, 210, 'F');
       
-      // Decorative top bar
       doc.setFillColor(69, 179, 255);
       doc.rect(0, 0, 297, 6, 'F');
-      
-      // Decorative bottom bar
-      doc.setFillColor(69, 179, 255);
       doc.rect(0, 204, 297, 6, 'F');
       
-      // Outer border
       doc.setDrawColor(255, 209, 102);
       doc.setLineWidth(1.5);
       doc.rect(10, 10, 277, 190);
       
-      // Inner border
       doc.setDrawColor(69, 179, 255);
       doc.setLineWidth(0.5);
       doc.rect(13, 13, 271, 184);
       
-      // Airline Name
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(12);
       doc.setTextColor(69, 179, 255);
       doc.text('SITA AIR LTD', 148.5, 28, { align: 'center' });
       
-      // Title
       doc.setFont('helvetica', 'bold');
       doc.setFontSize(28);
       doc.setTextColor(255, 209, 102);
       doc.text('CERTIFICATE OF COMPLETION', 148.5, 55, { align: 'center' });
       
-      // Decorative line
       doc.setDrawColor(255, 209, 102);
       doc.setLineWidth(0.5);
       doc.line(60, 62, 237, 62);
       
-      // Subtitle
       doc.setFontSize(11);
       doc.setTextColor(69, 179, 255);
       doc.text('NCAR Part 145 Human Factors Training', 148.5, 75, { align: 'center' });
       
-      // Recipient section
       doc.setFontSize(14);
       doc.setTextColor(255, 255, 255);
       doc.text('This certificate is presented to', 148.5, 100, { align: 'center' });
       
-      // Participant Name
       doc.setFontSize(26);
       doc.setTextColor(255, 209, 102);
       doc.text(currentPlayer.name, 148.5, 120, { align: 'center' });
       
-      // Course completion text
       doc.setFontSize(11);
       doc.setTextColor(255, 255, 255);
       doc.text('for successful completion of the', 148.5, 140, { align: 'center' });
@@ -1385,20 +1394,17 @@
       doc.setTextColor(69, 179, 255);
       doc.text('Flight 261 Human Factors Case Study', 148.5, 152, { align: 'center' });
       
-      // Grade
       doc.setFontSize(13);
       doc.setTextColor(255, 209, 102);
       const gradeText = grade.name === 'Completed with Distinction' ? 'DISTINCTION' : 
                         grade.name === 'Completed' ? 'COMPLETED' : 'ATTENDED';
       doc.text(`${gradeText} - ${currentPlayer.score}/500 points`, 148.5, 168, { align: 'center' });
       
-      // Date
       doc.setFontSize(9);
       doc.setTextColor(123, 138, 155);
       const today = new Date().toLocaleDateString('en-GB');
       doc.text(`Issue Date: ${today}`, 148.5, 183, { align: 'center' });
       
-      // Footer
       doc.setFontSize(7);
       doc.setTextColor(123, 138, 155);
       doc.text('This certifies that the participant has demonstrated understanding of human factors principles', 148.5, 196, { align: 'center' });
@@ -1418,7 +1424,7 @@
       
       const selectedIndex = parseInt(selectedRadio.value);
       const selectedOption = card.options[selectedIndex];
-      const isCorrect = selectedOption.correct;
+      const isCorrect = (selectedOption === card.correctAnswer);
       const pointsEarned = isCorrect ? card.pointsPossible : 0;
       
       currentPlayer.score = (currentPlayer.score || 0) + pointsEarned;
@@ -1433,7 +1439,7 @@
         cardId: card.id,
         cardTitle: card.title,
         cardFramework: card.framework,
-        selectedAnswer: selectedOption.text,
+        selectedAnswer: selectedOption,
         isCorrect: isCorrect,
         pointsEarned: pointsEarned,
         pointsPossible: card.pointsPossible
@@ -1450,7 +1456,7 @@
         cardId: card.id,
         cardTitle: card.title,
         cardFramework: card.framework,
-        selectedAnswer: selectedOption.text,
+        selectedAnswer: selectedOption,
         isCorrect: isCorrect,
         pointsEarned: pointsEarned,
         pointsPossible: card.pointsPossible,
@@ -1565,7 +1571,6 @@
       checkForAnnouncements();
     }
     
-    // Initialize
     loadPlayer();
     loadSessionData();
     setInterval(refreshData, 3000);
